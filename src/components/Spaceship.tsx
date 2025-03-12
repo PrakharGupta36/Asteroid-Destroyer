@@ -46,7 +46,7 @@ const Spaceship = forwardRef<RapierRigidBody, SpaceshipProps>((props, ref) => {
     };
   }, []);
 
-  useFrame(() => {
+  useFrame(({ pointer }) => {
     if (key === "w") {
       console.log("Tilting up...");
     } else if (key === "a") {
@@ -58,18 +58,23 @@ const Spaceship = forwardRef<RapierRigidBody, SpaceshipProps>((props, ref) => {
     } else if (key === " ") {
       console.log("Boosting...");
     }
+
+    if (cameraRef.current) {
+      cameraRef.current.rotation.y = -pointer.x;
+    }
   });
 
   return (
     <>
       <PerspectiveCamera
-        position={[0, 3, 20]}
+        position={[0, 3, 12]}
         makeDefault
         ref={cameraRef}
         rotation={[0, 0, 0]}
       />
       <RigidBody
         scale={0.0125 / 2}
+        position={[0, 0, 0]}
         ref={spaceshipRef}
         colliders='cuboid'
         type='fixed'

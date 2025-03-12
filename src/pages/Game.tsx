@@ -1,63 +1,99 @@
-import { Environment, Grid, Loader, Stars } from "@react-three/drei";
+import { Loader } from "@react-three/drei";
 import { Canvas } from "@react-three/fiber";
 import { Physics, RapierRigidBody } from "@react-three/rapier";
 import { Suspense, useEffect, useRef, useState } from "react";
 import Asteroid from "../components/Asteroid";
 import Spaceship from "../components/Spaceship";
+import Ambience from "@/components/Ambience";
 
 export default function Game() {
-  const [asteroidPosition, setAsteroidPosition] = useState([
-    { id: 1, position: [90, 0, 90] },
-  ]);
+  const spaceshipRef = useRef<RapierRigidBody>(null!);
 
-  function randomValue() {
-    const value = Math.random() * 40 + 50; // Generates a number between 50 and 90
-    return Math.random() < 0.5 ? -value : value; // Randomly makes it negative
+  function randomValue(max: number, min: number) {
+    const value = Math.random() * (max - min) + min;
+    return Math.random() < 0.5 ? -value : value;
   }
 
-  useEffect(() => {
-    const interval = setInterval(() => {
-      setAsteroidPosition((prev) => [
-        ...prev,
-        {
-          id: prev.length + 1,
-          position: [randomValue(), 0, randomValue()],
-        },
-      ]);
-    }, 2000);
+  const [asteroidPosition, setAsteroidPosition] = useState([
+    {
+      id: 1,
+      position: [randomValue(80, -80), 0, -300],
+      rotation: [0, 0, 0],
+      scale: 0.5,
+    },
+  ]);
 
-    return () => clearInterval(interval);
+  // Track current X position of spaceship for better asteroid spawning
+  const [spaceshipX, setSpaceshipX] = useState(0);
+
+  useEffect(() => {
+    const positionInterval = setInterval(() => {
+      if (spaceshipRef.current) {
+        const position = spaceshipRef.current.translation();
+        setSpaceshipX(position.x);
+      }
+    }, 100);
+
+    return () => clearInterval(positionInterval);
   }, []);
 
-  const spaceshipRef = useRef<RapierRigidBody>(null!);
+  // Spawn asteroids
+  useEffect(() => {
+    const asteroidInterval = setInterval(() => {
+      // Wider X range for distant asteroids
+      const asteroidX = spaceshipX + randomValue(100, -100);
+
+      // Much farther Z distance (-250 to -350)
+      const asteroidZ = -250 - Math.random() * 100;
+
+      // Variable scale to create depth perception
+      const scale = 0.5 + Math.random() * 0.5;
+
+      setAsteroidPosition((prev) => {
+        const newAsteroids = [
+          ...prev,
+          {
+            id: prev.length + 1,
+            position: [asteroidX, 0, asteroidZ],
+            rotation: [
+              randomValue(-Math.random() / 2, Math.random() / 2),
+              randomValue(-Math.random() / 2, Math.random() / 2),
+              randomValue(-Math.random() / 2, Math.random() / 2),
+            ],
+            scale,
+          },
+        ];
+
+        // Keep only the last 30 asteroids to prevent performance issues
+        if (newAsteroids.length > 30) {
+          return newAsteroids.slice(-30);
+        }
+
+        return newAsteroids;
+      });
+    }, 3000);
+
+    return () => clearInterval(asteroidInterval);
+  }, [spaceshipX]);
 
   return (
     <>
       <Canvas shadows>
-        <Stars fade={true} count={5000} speed={5} />
         <Physics gravity={[0, 0, 0]}>
           {asteroidPosition.map((e) => (
             <Asteroid
+              scale={e.scale || 1.25}
               key={e.id}
+              rotation={e.rotation as [number, number, number]}
               position={e.position as [number, number, number]}
             />
           ))}
-          <Suspense fallback={null}>
+          <Suspense fallback={<Loader />}>
             <Spaceship spaceshipRef={spaceshipRef} />
           </Suspense>
         </Physics>
-        <ambientLight intensity={0.5} />
-        <directionalLight
-          position={[10, 10, 10]}
-          intensity={1}
-          castShadow
-          shadow-mapSize-width={2048}
-          shadow-mapSize-height={2048}
-        />
-        <Grid infiniteGrid fadeDistance={100} fadeStrength={10} />
-        <Environment preset='sunset' />
+        <Ambience />
       </Canvas>
-      <Loader />
     </>
   );
 }

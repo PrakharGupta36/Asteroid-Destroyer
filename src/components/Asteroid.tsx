@@ -33,11 +33,19 @@ export default function Asteroid(props: RigidBodyProps) {
 
   useFrame(() => {
     if (asteroidRef.current) {
-      const position = asteroidRef.current.translation(); // Get current position
+      const position = asteroidRef.current.translation();
       const force = new THREE.Vector3(-position.x, -position.y, -position.z); // Pull towards center
-      force.normalize().multiplyScalar(0.02); // Small force for smooth movement
+      force.normalize().multiplyScalar(0.09);
 
-      asteroidRef.current.applyImpulse(force, true); // Apply force gently
+      asteroidRef.current.applyImpulse(force, true);
+
+      const rotationForce = new THREE.Vector3(
+        Math.random() * 0.02 - 0.01,
+        Math.random() * 0.02 - 0.01,
+        Math.random() * 0.02 - 0.01
+      );
+
+      asteroidRef.current.applyTorqueImpulse(rotationForce, true);
     }
   });
 
@@ -58,7 +66,7 @@ export default function Asteroid(props: RigidBodyProps) {
             receiveShadow
             geometry={nodes.Object_2.geometry}
             material={materials["Material.003"]}
-            rotation={[-Math.PI / 2, 0, 0]}
+            rotation={[0, 0, 0]}
           />
         </group>
       </RigidBody>
