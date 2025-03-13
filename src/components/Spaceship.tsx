@@ -33,7 +33,6 @@ const Spaceship = forwardRef<RapierRigidBody, SpaceshipProps>((props, ref) => {
 
   const [key, setKey] = useState<string | null>(null);
   const [horizontalAxis, setHorizontalAxis] = useState<number>(-Math.PI / 2);
-  const [laserClick, setLaserClick] = useState<boolean>(false);
 
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => setKey(e.key);
@@ -51,32 +50,31 @@ const Spaceship = forwardRef<RapierRigidBody, SpaceshipProps>((props, ref) => {
   useFrame(({ pointer }) => {
     if (key === "w") {
       console.log("Tilting up...");
-    } else if (key === "a") {
+    }
+    if (key === "a") {
       if (!(horizontalAxis > -1.01)) {
         setHorizontalAxis((prev) => prev + 0.07);
       }
-    } else if (key === "d") {
+    }
+    if (key === "d") {
       if (!(horizontalAxis < -2.3)) {
         setHorizontalAxis((prev) => prev - 0.07);
       }
-    } else if (key === "s") {
-      console.log("Tilting down...");
-    } else if (key === " ") {
-      setLaserClick(true);
     }
+    if (key === "s") {
+      console.log("Tilting down...");
+    }
+    if (key === " ") {
+      console.log("Space");
+      // setLaserClick(true);
+    }
+    // } else if (key !== " ") {
+    //   console.log("Not space");
+    //   setLaserClick(false);
+    // }
 
     if (cameraRef.current) {
       cameraRef.current.rotation.y = -pointer.x / 3;
-    }
-  });
-
-  useFrame(() => {
-    if (laserClick) {
-      const laserInterval = setTimeout(() => {
-        setLaserClick(false);
-      }, 500);
-
-      return () => clearInterval(laserInterval);
     }
   });
 
@@ -97,7 +95,7 @@ const Spaceship = forwardRef<RapierRigidBody, SpaceshipProps>((props, ref) => {
         type='fixed'
         rotation={[-Math.PI / 2, 0, horizontalAxis]}
       >
-        {laserClick && <Laser horizontalAxis={horizontalAxis} />}
+        <Laser />
 
         <group {...props} dispose={null}>
           <group>
