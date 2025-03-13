@@ -7,6 +7,7 @@ import {
 } from "@react-three/rapier";
 import { forwardRef, useEffect, useRef, useState } from "react";
 import * as THREE from "three";
+import Laser from "./Laser";
 
 type GLTFResult = {
   nodes: {
@@ -32,6 +33,7 @@ const Spaceship = forwardRef<RapierRigidBody, SpaceshipProps>((props, ref) => {
 
   const [key, setKey] = useState<string | null>(null);
   const [horizontalAxis, setHorizontalAxis] = useState<number>(-Math.PI / 2);
+  const [laserClick, setLaserClick] = useState<boolean>(false);
 
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => setKey(e.key);
@@ -50,17 +52,31 @@ const Spaceship = forwardRef<RapierRigidBody, SpaceshipProps>((props, ref) => {
     if (key === "w") {
       console.log("Tilting up...");
     } else if (key === "a") {
-      setHorizontalAxis((prev) => prev + 0.07);
+      if (!(horizontalAxis > -1.01)) {
+        setHorizontalAxis((prev) => prev + 0.07);
+      }
     } else if (key === "d") {
-      setHorizontalAxis((prev) => prev - 0.07);
+      if (!(horizontalAxis < -2.3)) {
+        setHorizontalAxis((prev) => prev - 0.07);
+      }
     } else if (key === "s") {
       console.log("Tilting down...");
     } else if (key === " ") {
-      console.log("Boosting...");
+      setLaserClick(true);
     }
 
     if (cameraRef.current) {
-      cameraRef.current.rotation.y = -pointer.x;
+      cameraRef.current.rotation.y = -pointer.x / 3;
+    }
+  });
+
+  useFrame(() => {
+    if (laserClick) {
+      const laserInterval = setTimeout(() => {
+        setLaserClick(false);
+      }, 500);
+
+      return () => clearInterval(laserInterval);
     }
   });
 
@@ -72,14 +88,17 @@ const Spaceship = forwardRef<RapierRigidBody, SpaceshipProps>((props, ref) => {
         ref={cameraRef}
         rotation={[0, 0, 0]}
       />
+
       <RigidBody
-        scale={0.0125 / 2}
+        scale={0.0125 / 2.2}
         position={[0, 0, 0]}
         ref={spaceshipRef}
         colliders='cuboid'
         type='fixed'
         rotation={[-Math.PI / 2, 0, horizontalAxis]}
       >
+        {laserClick && <Laser horizontalAxis={horizontalAxis} />}
+
         <group {...props} dispose={null}>
           <group>
             <group rotation={[Math.PI / 2, 0, 0]}>

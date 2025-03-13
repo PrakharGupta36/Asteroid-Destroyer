@@ -35,7 +35,7 @@ export default function Asteroid(props: RigidBodyProps) {
     if (asteroidRef.current) {
       const position = asteroidRef.current.translation();
       const force = new THREE.Vector3(-position.x, -position.y, -position.z); // Pull towards center
-      force.normalize().multiplyScalar(0.09);
+      force.normalize().multiplyScalar(0.07);
 
       asteroidRef.current.applyImpulse(force, true);
 

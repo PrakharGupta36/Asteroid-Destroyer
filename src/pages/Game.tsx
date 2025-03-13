@@ -1,10 +1,11 @@
-import { Loader } from "@react-three/drei";
+import { Loader, Preload } from "@react-three/drei";
 import { Canvas } from "@react-three/fiber";
 import { Physics, RapierRigidBody } from "@react-three/rapier";
 import { Suspense, useEffect, useRef, useState } from "react";
 import Asteroid from "../components/Asteroid";
 import Spaceship from "../components/Spaceship";
 import Ambience from "@/components/Ambience";
+
 
 export default function Game() {
   const spaceshipRef = useRef<RapierRigidBody>(null!);
@@ -76,24 +77,31 @@ export default function Game() {
     return () => clearInterval(asteroidInterval);
   }, [spaceshipX]);
 
+  const pause = true;
+
   return (
     <>
       <Canvas shadows>
-        <Physics gravity={[0, 0, 0]}>
-          {asteroidPosition.map((e) => (
-            <Asteroid
-              scale={e.scale || 1.25}
-              key={e.id}
-              rotation={e.rotation as [number, number, number]}
-              position={e.position as [number, number, number]}
-            />
-          ))}
-          <Suspense fallback={<Loader />}>
+        <Suspense fallback={null}>
+          <Preload />
+          <Physics gravity={[0, 0, 0]}>
+            {!pause &&
+              asteroidPosition.map((e) => (
+                <Asteroid
+                  scale={e.scale || 1.25}
+                  key={e.id}
+                  rotation={e.rotation as [number, number, number]}
+                  position={e.position as [number, number, number]}
+                />
+              ))}
+
             <Spaceship spaceshipRef={spaceshipRef} />
-          </Suspense>
-        </Physics>
-        <Ambience />
+          </Physics>
+          <Ambience />
+        </Suspense>
+
       </Canvas>
+      <Loader />
     </>
   );
 }

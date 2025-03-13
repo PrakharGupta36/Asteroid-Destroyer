@@ -1,27 +1,20 @@
 import { Stars, Environment, Grid } from "@react-three/drei";
-import { useThree } from "@react-three/fiber";
-import { useEffect } from "react";
-import * as THREE from "three";
+import { Bloom, EffectComposer, Noise } from "@react-three/postprocessing";
 
 export default function Ambience() {
-  const { scene } = useThree();
-
-  useEffect(() => {
-    // Create a fog effect
-    // Parameters: color, near, far
-    const fog = new THREE.FogExp2("#000020", 0.008);
-    scene.fog = fog;
-
-    return () => {
-      // Clean up when component unmounts
-      scene.fog = null;
-    };
-  }, [scene]);
+  function PostProcessing() {
+    return (
+      <EffectComposer multisampling={0} resolutionScale={0.5}>
+        <Bloom luminanceThreshold={0} luminanceSmoothing={0.9} height={500} />
+        <Noise opacity={0.05} />
+      </EffectComposer>
+    );
+  }
 
   return (
     <>
-      <Stars fade={true} count={5000} speed={5} />
-      <ambientLight intensity={0.5} />
+      <Stars fade={true} count={500} speed={1} />
+      <ambientLight intensity={1} />
       <directionalLight
         position={[10, 10, 10]}
         intensity={5}
@@ -31,11 +24,12 @@ export default function Ambience() {
       />
       <Grid
         infiniteGrid
-        fadeDistance={100}
-        fadeStrength={5}
-        position={[0, -2, 0]}
+        fadeDistance={200}
+        fadeStrength={25}
+        position={[0, -2, -10]}
       />
       <Environment preset='city' />
+      <PostProcessing />
     </>
   );
 }
