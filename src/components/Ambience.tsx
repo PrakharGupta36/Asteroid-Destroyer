@@ -6,7 +6,7 @@ export default function Ambience() {
     return (
       <EffectComposer multisampling={0} resolutionScale={0.5}>
         <Bloom luminanceThreshold={0} luminanceSmoothing={0.9} height={500} />
-        <Noise opacity={0.05} />
+        <Noise opacity={0.1} />
       </EffectComposer>
     );
   }
