@@ -1,15 +1,17 @@
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
 
+interface Setting {
+  id: number;
+  text: string;
+  value: boolean;
+}
+
 interface useGameTypes {
   start: boolean;
   setStart: (value: boolean) => void;
-  settings: {
-    id: number;
-    text: string;
-    value: boolean;
-    action: () => void;
-  }[];
+  settings: Setting[];
+  setSettings: (id: number, value: boolean) => void;
 }
 
 const useGame = create<useGameTypes>()(
@@ -22,49 +24,28 @@ const useGame = create<useGameTypes>()(
           id: 1,
           text: "Music",
           value: false,
-          action: () =>
-            set((state) => {
-              const settings = state.settings.map((e) =>
-                e.id === 1 ? { ...e, value: !e.value } : e
-              );
-              return {
-                settings,
-              };
-            }),
         },
         {
           id: 2,
           text: "Sounds",
           value: true,
-          action: () =>
-            set((state) => {
-              const settings = state.settings.map((e) =>
-                e.id === 2 ? { ...e, value: !e.value } : e
-              );
-              return {
-                settings,
-              };
-            }),
         },
         {
           id: 3,
           text: "Post Processing",
           value: true,
-          action: () =>
-            set((state) => {
-              const settings = state.settings.map((e) =>
-                e.id === 3 ? { ...e, value: !e.value } : e
-              );
-              return {
-                settings,
-              };
-            }),
         },
       ],
+      setSettings: (id: number, value: boolean) =>
+        set((state) => ({
+          settings: state.settings.map((setting) =>
+            setting.id === id ? { ...setting, value } : setting
+          ),
+        })),
     }),
     {
-      name: "game-settings", // name of the item in localStorage
-      partialize: (state) => ({ settings: state.settings }), // only store the settings array
+      name: "game-settings",
+      partialize: (state) => ({ settings: state.settings }),
     }
   )
 );

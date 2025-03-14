@@ -17,7 +17,7 @@ import { Separator } from "./ui/separator";
 import { Switch } from "./ui/switch";
 
 export default function Settings() {
-  const { settings } = useGame();
+  const { settings, setSettings } = useGame();
 
   return (
     <Dialog>
@@ -40,7 +40,7 @@ export default function Settings() {
               <Switch
                 disabled={e.id === 1}
                 checked={e.value}
-                onClick={e.action}
+                onClick={() => setSettings(e.id, !e.value)}
               />
             </div>
           ))}

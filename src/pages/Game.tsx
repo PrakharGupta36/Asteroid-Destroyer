@@ -77,7 +77,7 @@ export default function Game() {
     return () => clearInterval(asteroidInterval);
   }, [spaceshipX]);
 
-  const pause = true;
+  const pause = false;
 
   return (
     <>
