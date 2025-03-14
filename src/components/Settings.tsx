@@ -37,7 +37,11 @@ export default function Settings() {
           {settings.map((e) => (
             <div key={e.id} className='flex justify-between items-center'>
               <div>{e.text}</div>
-              <Switch checked={e.value} onClick={e.action} />
+              <Switch
+                disabled={e.id === 1}
+                checked={e.value}
+                onClick={e.action}
+              />
             </div>
           ))}
         </div>

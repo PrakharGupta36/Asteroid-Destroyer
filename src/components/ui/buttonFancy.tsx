@@ -2,6 +2,7 @@ import * as React from "react";
 import { Slot } from "@radix-ui/react-slot";
 import { cva, type VariantProps } from "class-variance-authority";
 import { cn } from "@/lib/utils";
+import useGame from "@/hooks/State";
 
 const buttonVariants = cva(
   "inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium transition-all duration-300 ease-in-out relative overflow-hidden \
@@ -49,6 +50,7 @@ function ButtonFancy({
   }) {
   const Comp = asChild ? Slot : "button";
   const btnAudio = React.useMemo(() => new Audio("/btnAudio.mp3"), []);
+  const { settings } = useGame();
 
   return (
     <Comp
@@ -64,8 +66,12 @@ function ButtonFancy({
       )}
       {...props}
       onClick={(event) => {
-        btnAudio.currentTime = 0;
-        btnAudio.play().catch((err) => console.log("Click audio error:", err));
+        if (settings[1].value) {
+          btnAudio.currentTime = 0;
+          btnAudio
+            .play()
+            .catch((err) => console.log("Click audio error:", err));
+        }
 
         if (onClick) {
           onClick(event);

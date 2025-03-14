@@ -1,7 +1,10 @@
+import useGame from "@/hooks/State";
 import { Stars, Environment, Grid } from "@react-three/drei";
 import { Bloom, EffectComposer, Noise } from "@react-three/postprocessing";
 
 export default function Ambience() {
+  const { settings } = useGame();
+
   function PostProcessing() {
     return (
       <EffectComposer multisampling={0} resolutionScale={0.5}>
@@ -29,7 +32,7 @@ export default function Ambience() {
         position={[0, -2, -10]}
       />
       <Environment preset='city' />
-      <PostProcessing />
+      {settings[2].value && <PostProcessing />}
     </>
   );
 }
