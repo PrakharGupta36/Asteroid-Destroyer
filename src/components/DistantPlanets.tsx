@@ -32,8 +32,6 @@ function GasGiant(props: JSX.IntrinsicElements["group"]) {
   useFrame(({ clock }) => {
     if (ref.current) {
       ref.current.rotation.z = clock.getElapsedTime() * 0.2;
-
-      ref.current.position.z = -clock.getElapsedTime() * 0.05;
     }
   });
 
@@ -41,9 +39,9 @@ function GasGiant(props: JSX.IntrinsicElements["group"]) {
     <group
       {...props}
       dispose={null}
-      position={[-800, 500, -1500]}
-      scale={30}
-      rotation={[0, 2, 0]}
+      position={[-2000, 1000, -2500]}
+      scale={120}
+      rotation={[0.0125, 2.2, 0]}
     >
       <group rotation={[-Math.PI / 2, -0.373, 0]}>
         <group rotation={[Math.PI / 2, 0, 0]}>
@@ -85,7 +83,7 @@ type GLTFResult_ExoPlanet = {
   };
 };
 
-export function ExoPlanet(props: JSX.IntrinsicElements["group"]) {
+function ExoPlanet(props: JSX.IntrinsicElements["group"]) {
   const { nodes, materials } = useGLTF(
     "ExoPlanet/scene.gltf"
   ) as unknown as GLTFResult_ExoPlanet;
@@ -94,7 +92,7 @@ export function ExoPlanet(props: JSX.IntrinsicElements["group"]) {
 
   useFrame(({ clock }) => {
     if (ref.current) {
-      ref.current.rotation.z = clock.getElapsedTime() * 0.1;
+      ref.current.rotation.z = clock.getElapsedTime() * 0.05;
 
       ref.current.position.z = clock.getElapsedTime() * 0.2;
     }
@@ -104,8 +102,8 @@ export function ExoPlanet(props: JSX.IntrinsicElements["group"]) {
     <group
       {...props}
       dispose={null}
-      position={[800, 300, -1500]}
-      scale={0.45}
+      position={[2000, 1000, -3000]}
+      scale={0.5}
       rotation={[0, 1.5, 0]}
     >
       <group

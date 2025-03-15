@@ -138,6 +138,7 @@
   padding: 0; */
 
   outline: none !important;
+
 }
 
 button,
@@ -157,4 +158,5 @@ main,
   margin: 0;
   padding: 0;
   background-color: black;
+  overflow: hidden !important;
 }

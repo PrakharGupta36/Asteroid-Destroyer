@@ -9,7 +9,7 @@ import { Physics, RapierRigidBody } from "@react-three/rapier";
 import { Suspense, useEffect, useRef, useState } from "react";
 import Asteroid from "../components/Asteroid";
 import Spaceship from "../components/Spaceship";
-import Ambience from "@/components/Ambience";
+import Ambience from "@/components/Ambience/Ambience";
 import * as THREE from "three";
 import useGame from "@/hooks/State";
 import SettingsGame from "@/components/Settings/SettingsGame";
