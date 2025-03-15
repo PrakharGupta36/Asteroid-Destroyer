@@ -1,4 +1,4 @@
-import { PerspectiveCamera, useGLTF } from "@react-three/drei";
+import { useGLTF } from "@react-three/drei";
 import { useFrame } from "@react-three/fiber";
 import {
   RapierRigidBody,
@@ -29,7 +29,6 @@ const Spaceship = forwardRef<RapierRigidBody, SpaceshipProps>((props, ref) => {
 
   const localRef = useRef<RapierRigidBody>(null!);
   const spaceshipRef = (ref as React.RefObject<RapierRigidBody>) || localRef;
-  const cameraRef = useRef<THREE.PerspectiveCamera>(null);
 
   const [key, setKey] = useState<string | null>(null);
   const [horizontalAxis, setHorizontalAxis] = useState<number>(-Math.PI / 2);
@@ -47,7 +46,7 @@ const Spaceship = forwardRef<RapierRigidBody, SpaceshipProps>((props, ref) => {
     };
   }, []);
 
-  useFrame(({ pointer }) => {
+  useFrame(() => {
     if (key === "w") {
       console.log("Tilting up...");
     }
@@ -72,21 +71,10 @@ const Spaceship = forwardRef<RapierRigidBody, SpaceshipProps>((props, ref) => {
     //   console.log("Not space");
     //   setLaserClick(false);
     // }
-
-    if (cameraRef.current) {
-      cameraRef.current.rotation.y = -pointer.x / 3;
-    }
   });
 
   return (
     <>
-      <PerspectiveCamera
-        position={[0, 3, 12]}
-        makeDefault
-        ref={cameraRef}
-        rotation={[0, 0, 0]}
-      />
-
       <RigidBody
         scale={0.0125 / 2.2}
         position={[0, 0, 0]}

@@ -1,11 +1,43 @@
-import { Loader, Preload } from "@react-three/drei";
-import { Canvas } from "@react-three/fiber";
+import {
+  Loader,
+  OrbitControls,
+  PerspectiveCamera,
+  Preload,
+} from "@react-three/drei";
+import { Canvas, useFrame } from "@react-three/fiber";
 import { Physics, RapierRigidBody } from "@react-three/rapier";
 import { Suspense, useEffect, useRef, useState } from "react";
 import Asteroid from "../components/Asteroid";
 import Spaceship from "../components/Spaceship";
 import Ambience from "@/components/Ambience";
+import * as THREE from "three";
+import useGame from "@/hooks/State";
+import SettingsGame from "@/components/Settings/SettingsGame";
 
+function Camera() {
+  useFrame(({ pointer }) => {
+    if (cameraRef.current) {
+      cameraRef.current.rotation.y = -pointer.x / 3;
+    }
+  });
+
+  const cameraRef = useRef<THREE.PerspectiveCamera>(null);
+
+  const a = false;
+
+  return a ? (
+    <OrbitControls />
+  ) : (
+    <PerspectiveCamera
+      position={[0, 3, 12]}
+      makeDefault
+      near={0.05}
+      far={10000}
+      ref={cameraRef}
+      rotation={[0, 0, 0]}
+    />
+  );
+}
 
 export default function Game() {
   const spaceshipRef = useRef<RapierRigidBody>(null!);
@@ -77,29 +109,30 @@ export default function Game() {
     return () => clearInterval(asteroidInterval);
   }, [spaceshipX]);
 
-  const pause = false;
+  const { pause } = useGame();
 
   return (
     <>
+      <SettingsGame />
       <Canvas shadows>
         <Suspense fallback={null}>
           <Preload />
-          <Physics gravity={[0, 0, 0]}>
-            {!pause &&
-              asteroidPosition.map((e) => (
-                <Asteroid
-                  scale={e.scale || 1.25}
-                  key={e.id}
-                  rotation={e.rotation as [number, number, number]}
-                  position={e.position as [number, number, number]}
-                />
-              ))}
+          <Camera />
+          <Physics gravity={[0, 0, 0]} paused={pause}>
+            {asteroidPosition.map((e) => (
+              <Asteroid
+                scale={e.scale || 1.25}
+                key={e.id}
+                rotation={e.rotation as [number, number, number]}
+                position={e.position as [number, number, number]}
+              />
+            ))}
 
             <Spaceship spaceshipRef={spaceshipRef} />
           </Physics>
+
           <Ambience />
         </Suspense>
-
       </Canvas>
       <Loader />
     </>

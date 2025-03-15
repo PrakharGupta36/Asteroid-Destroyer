@@ -12,6 +12,9 @@ interface useGameTypes {
   setStart: (value: boolean) => void;
   settings: Setting[];
   setSettings: (id: number, value: boolean) => void;
+
+  pause: boolean;
+  setPause: (value: boolean) => void;
 }
 
 const useGame = create<useGameTypes>()(
@@ -42,7 +45,10 @@ const useGame = create<useGameTypes>()(
             setting.id === id ? { ...setting, value } : setting
           ),
         })),
+      pause: false,
+      setPause: (value: boolean) => set({ pause: value }),
     }),
+
     {
       name: "game-settings",
       partialize: (state) => ({ settings: state.settings }),

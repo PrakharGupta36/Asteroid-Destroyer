@@ -1,4 +1,4 @@
-import Settings from "@/components/Settings";
+import SettingsMenu from "@/components/Settings/SettingsMenu";
 import { ButtonFancy } from "@/components/ui/buttonFancy";
 import useGame from "@/hooks/State";
 
@@ -11,7 +11,7 @@ export default function Intro() {
         Start
       </ButtonFancy>
 
-      <Settings />
+      <SettingsMenu />
     </div>
   );
 }
