@@ -1,9 +1,4 @@
-import {
-  OrbitControls,
-  PerspectiveCamera,
-  Preload,
-  useProgress,
-} from "@react-three/drei";
+import { PerspectiveCamera, Preload, useProgress } from "@react-three/drei";
 import { Canvas, useFrame } from "@react-three/fiber";
 import { Physics, RapierRigidBody } from "@react-three/rapier";
 import { Suspense, useEffect, useRef, useState } from "react";
@@ -12,7 +7,7 @@ import Spaceship from "../components/Spaceship";
 import Ambience from "@/components/Ambience/Ambience";
 import * as THREE from "three";
 import useGame from "@/hooks/State";
-import SettingsGame from "@/components/Settings/SettingsGame";
+import SettingsGame from "@/components/Settings/components/SettingsGame";
 import CustomLoader from "@/components/CustomLoader";
 
 function Camera() {
@@ -24,11 +19,7 @@ function Camera() {
 
   const cameraRef = useRef<THREE.PerspectiveCamera>(null);
 
-  const a = false;
-
-  return a ? (
-    <OrbitControls />
-  ) : (
+  return (
     <PerspectiveCamera
       position={[0, 3, 12]}
       makeDefault
@@ -133,8 +124,6 @@ export default function Game() {
     }
   }, [pause, spaceshipX]);
 
-  const a = false;
-
   return (
     <>
       <div
@@ -148,15 +137,14 @@ export default function Game() {
             <Preload />
             <Camera />
             <Physics gravity={[0, 0, 0]} paused={pause}>
-              {a &&
-                asteroidPosition.map((e) => (
-                  <Asteroid
-                    scale={e.scale || 1.25}
-                    key={e.id}
-                    rotation={e.rotation as [number, number, number]}
-                    position={e.position as [number, number, number]}
-                  />
-                ))}
+              {asteroidPosition.map((e) => (
+                <Asteroid
+                  scale={e.scale || 1.25}
+                  key={e.id}
+                  rotation={e.rotation as [number, number, number]}
+                  position={e.position as [number, number, number]}
+                />
+              ))}
 
               <Spaceship spaceshipRef={spaceshipRef} />
             </Physics>

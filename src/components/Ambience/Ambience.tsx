@@ -1,4 +1,3 @@
-import useGame from "@/hooks/State";
 import { Stars, Environment, Grid } from "@react-three/drei";
 import SpaceDust from "./components/SpaceDust";
 import DistantPlanets from "../DistantPlanets";
@@ -14,8 +13,6 @@ function Lighting() {
 }
 
 export default function Ambience() {
-  const { settings } = useGame();
-
   return (
     <>
       <Stars count={1000} factor={0.5} speed={0.25} radius={500} depth={0.5} />
@@ -40,7 +37,7 @@ export default function Ambience() {
 
       <Environment preset='city' background={false} />
 
-      {settings[2].value && <PostProcessing />}
+      <PostProcessing />
     </>
   );
 }
