@@ -6,7 +6,7 @@ import Intro from "./pages/Intro";
 
 export default function App() {
   const { start } = useGame();
-  const [allowed, setAllowed] = useState<null | boolean>(null); // Start with null
+  const [allowed, setAllowed] = useState<null | boolean>(null); 
 
   useEffect(() => {
     const hasMouse = window.matchMedia("(pointer: fine)").matches;
@@ -22,7 +22,7 @@ export default function App() {
       <main className='grid place-items-center w-[100dvw] h-[100dvh] bg-[#1d1d1d]'>
         <p className='text-white text-center'>
           This <span className='line-through'> website</span> game requires a
-          mouse and keyboard.
+          mouse and a keyboard.
         </p>
       </main>
     );

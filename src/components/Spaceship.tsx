@@ -47,21 +47,15 @@ const Spaceship = forwardRef<RapierRigidBody, SpaceshipProps>((props, ref) => {
   }, []);
 
   useFrame(() => {
-    if (key === "w") {
-      console.log("Tilting up...");
-    }
     if (key === "a") {
-      if (!(horizontalAxis > -1.01)) {
+      if (!(horizontalAxis > -1.02)) {
         setHorizontalAxis((prev) => prev + 0.07);
       }
     }
     if (key === "d") {
-      if (!(horizontalAxis < -2.3)) {
+      if (!(horizontalAxis < -2.00)) {
         setHorizontalAxis((prev) => prev - 0.07);
       }
-    }
-    if (key === "s") {
-      console.log("Tilting down...");
     }
     if (key === " ") {
       console.log("Space");
@@ -69,7 +63,8 @@ const Spaceship = forwardRef<RapierRigidBody, SpaceshipProps>((props, ref) => {
   });
 
   return (
-    <>
+    <group>
+      <Laser horizontalAxis={horizontalAxis} />
       <RigidBody
         scale={0.0125 / 2.2}
         position={[0, 0, 0]}
@@ -78,8 +73,6 @@ const Spaceship = forwardRef<RapierRigidBody, SpaceshipProps>((props, ref) => {
         type='fixed'
         rotation={[-Math.PI / 2, 0, horizontalAxis]}
       >
-        <Laser />
-
         <group {...props} dispose={null}>
           <group>
             <group rotation={[Math.PI / 2, 0, 0]}>
@@ -95,7 +88,7 @@ const Spaceship = forwardRef<RapierRigidBody, SpaceshipProps>((props, ref) => {
           </group>
         </group>
       </RigidBody>
-    </>
+    </group>
   );
 });
 

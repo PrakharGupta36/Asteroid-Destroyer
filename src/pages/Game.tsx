@@ -1,4 +1,9 @@
-import { PerspectiveCamera, Preload, useProgress } from "@react-three/drei";
+import {
+  OrbitControls,
+  PerspectiveCamera,
+  Preload,
+  useProgress,
+} from "@react-three/drei";
 import { Canvas, useFrame } from "@react-three/fiber";
 import { Physics, RapierRigidBody } from "@react-three/rapier";
 import { Suspense, useEffect, useRef, useState } from "react";
@@ -19,7 +24,11 @@ function Camera() {
 
   const cameraRef = useRef<THREE.PerspectiveCamera>(null);
 
-  return (
+  const a = false;
+
+  return a ? (
+    <OrbitControls />
+  ) : (
     <PerspectiveCamera
       position={[0, 3, 12]}
       makeDefault
@@ -37,25 +46,23 @@ export default function Game() {
   const [fadeOut, setFadeOut] = useState(false);
   const { progress } = useProgress();
   const [showLoader, setShowLoader] = useState(false);
+  const { pause } = useGame();
 
   useEffect(() => {
     const showLoaderTimer = setTimeout(() => {
       setShowLoader(true);
-    }, 100);
+    }, 300);
 
     return () => clearTimeout(showLoaderTimer);
   }, []);
 
-  // Handle loading state
   useEffect(() => {
     if (progress === 100) {
-      // Start fade out animation
       setFadeOut(true);
 
-      // After fade completes, set loading to false
       const timer = setTimeout(() => {
         setIsLoading(false);
-      }, 1000); // Duration of the fade-out animation
+      }, 1000);
 
       return () => clearTimeout(timer);
     }
@@ -75,7 +82,6 @@ export default function Game() {
     },
   ]);
 
-  // Track current X position of spaceship for better asteroid spawning
   const [spaceshipX, setSpaceshipX] = useState(0);
 
   useEffect(() => {
@@ -91,44 +97,43 @@ export default function Game() {
 
   // Spawn asteroids
   useEffect(() => {
-    const asteroidInterval = setInterval(() => {
-      // Wider X range for distant asteroids
-      const asteroidX = spaceshipX + randomValue(100, -100);
+    if (!pause) {
+      const asteroidInterval = setInterval(() => {
+        const asteroidX = spaceshipX + randomValue(100, -100);
 
-      // Much farther Z distance (-250 to -350)
-      const asteroidZ = -250 - Math.random() * 100;
+        const asteroidZ = -250 - Math.random() * 100;
 
-      // Variable scale to create depth perception
-      const scale = 0.5 + Math.random() * 0.5;
+        const scale = 0.5 + Math.random() * 0.5;
 
-      setAsteroidPosition((prev) => {
-        const newAsteroids = [
-          ...prev,
-          {
-            id: prev.length + 1,
-            position: [asteroidX, 0, asteroidZ],
-            rotation: [
-              randomValue(-Math.random() / 2, Math.random() / 2),
-              randomValue(-Math.random() / 2, Math.random() / 2),
-              randomValue(-Math.random() / 2, Math.random() / 2),
-            ],
-            scale,
-          },
-        ];
+        setAsteroidPosition((prev) => {
+          const newAsteroids = [
+            ...prev,
+            {
+              id: prev.length + 1,
+              position: [asteroidX, 0, asteroidZ],
+              rotation: [
+                randomValue(-Math.random() / 2, Math.random() / 2),
+                randomValue(-Math.random() / 2, Math.random() / 2),
+                randomValue(-Math.random() / 2, Math.random() / 2),
+              ],
+              scale,
+            },
+          ];
 
-        // Keep only the last 30 asteroids to prevent performance issues
-        if (newAsteroids.length > 30) {
-          return newAsteroids.slice(-30);
-        }
+          // Keep only the last 30 asteroids to prevent performance issues
+          if (newAsteroids.length > 30) {
+            return newAsteroids.slice(-30);
+          }
 
-        return newAsteroids;
-      });
-    }, 3000);
+          return newAsteroids;
+        });
+      }, 3000);
 
-    return () => clearInterval(asteroidInterval);
-  }, [spaceshipX]);
+      return () => clearInterval(asteroidInterval);
+    }
+  }, [pause, spaceshipX]);
 
-  const { pause } = useGame();
+  const a = false;
 
   return (
     <>
@@ -143,14 +148,15 @@ export default function Game() {
             <Preload />
             <Camera />
             <Physics gravity={[0, 0, 0]} paused={pause}>
-              {asteroidPosition.map((e) => (
-                <Asteroid
-                  scale={e.scale || 1.25}
-                  key={e.id}
-                  rotation={e.rotation as [number, number, number]}
-                  position={e.position as [number, number, number]}
-                />
-              ))}
+              {a &&
+                asteroidPosition.map((e) => (
+                  <Asteroid
+                    scale={e.scale || 1.25}
+                    key={e.id}
+                    rotation={e.rotation as [number, number, number]}
+                    position={e.position as [number, number, number]}
+                  />
+                ))}
 
               <Spaceship spaceshipRef={spaceshipRef} />
             </Physics>
