@@ -1,5 +1,5 @@
 import { create } from "zustand";
-// import { persist } from "zustand/middleware";
+import { persist } from "zustand/middleware";
 
 interface Setting {
   id: number;
@@ -19,36 +19,38 @@ interface useGameTypes {
 }
 
 const useGame = create<useGameTypes>()(
-  (set) => ({
-    start: false,
-    setStart: (value: boolean) => set(() => ({ start: value })),
+  persist(
+    (set) => ({
+      start: false,
+      setStart: (value: boolean) => set(() => ({ start: value })),
 
-    settings: [
-      // 🎵 Sound Settings
-      { id: 1, category: "sound", text: "Music", value: false },
-      { id: 2, category: "sound", text: "Sounds", value: true },
+      settings: [
+        // 🎵 Sound Settings
+        { id: 1, category: "sound", text: "Music", value: false },
+        { id: 2, category: "sound", text: "Sounds", value: true },
 
-      // 🎨 Graphics Settings
-      { id: 3, category: "graphics", text: "Bloom", value: true },
-      { id: 4, category: "graphics", text: "Vignette", value: true },
-      { id: 5, category: "graphics", text: "Noise", value: true },
-    ],
+        // 🎨 Graphics Settings
+        { id: 3, category: "graphics", text: "Bloom", value: true },
+        { id: 4, category: "graphics", text: "Vignette", value: true },
+        { id: 5, category: "graphics", text: "Noise", value: true },
+      ],
 
-    setSettings: (id: number, value: boolean) =>
-      set((state) => ({
-        settings: state.settings.map((setting) =>
-          setting.id === id ? { ...setting, value } : setting
-        ),
-      })),
+      setSettings: (id: number, value: boolean) =>
+        set((state) => ({
+          settings: state.settings.map((setting) =>
+            setting.id === id ? { ...setting, value } : setting
+          ),
+        })),
 
-    pause: false,
-    setPause: (value: boolean) => set({ pause: value }),
-  })
+      pause: false,
+      setPause: (value: boolean) => set({ pause: value }),
+    }),
 
-  // {
-  //   name: "game-settings",
-  //   partialize: (state) => ({ settings: state.settings }),
-  // }
+    {
+      name: "game-settings-----01",
+      partialize: (state) => ({ settings: state.settings }),
+    }
+  )
 );
 
 export default useGame;
