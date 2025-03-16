@@ -1,9 +1,4 @@
-import {
-  Loader,
-  OrbitControls,
-  PerspectiveCamera,
-  Preload,
-} from "@react-three/drei";
+import { PerspectiveCamera, Preload } from "@react-three/drei";
 import { Canvas, useFrame } from "@react-three/fiber";
 import { Physics, RapierRigidBody } from "@react-three/rapier";
 import { Suspense, useEffect, useRef, useState } from "react";
@@ -13,6 +8,7 @@ import Ambience from "@/components/Ambience/Ambience";
 import * as THREE from "three";
 import useGame from "@/hooks/State";
 import SettingsGame from "@/components/Settings/SettingsGame";
+import CustomLoader from "@/components/CustomLoader";
 
 function Camera() {
   useFrame(({ pointer }) => {
@@ -23,11 +19,7 @@ function Camera() {
 
   const cameraRef = useRef<THREE.PerspectiveCamera>(null);
 
-  const a = false;
-
-  return a ? (
-    <OrbitControls />
-  ) : (
+  return (
     <PerspectiveCamera
       position={[0, 3, 12]}
       makeDefault
@@ -114,6 +106,7 @@ export default function Game() {
   return (
     <>
       <SettingsGame />
+
       <Canvas shadows>
         <Suspense fallback={null}>
           <Preload />
@@ -134,7 +127,7 @@ export default function Game() {
           <Ambience />
         </Suspense>
       </Canvas>
-      <Loader />
+      <CustomLoader />
     </>
   );
 }

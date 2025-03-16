@@ -22,17 +22,17 @@ export default function Ambience() {
 
       <Lighting />
       <DistantPlanets />
-      <SpaceDust count={70} size={0.005} />
+      <SpaceDust count={20} size={0.005} />
 
       <Grid
         infiniteGrid
-        fadeDistance={300}
-        fadeStrength={20}
+        fadeDistance={400}
+        fadeStrength={40}
         cellSize={1}
-        cellThickness={0.1}
+        cellThickness={0.5}
         cellColor='#2563eb'
-        sectionSize={2}
-        sectionThickness={0.8}
+        sectionSize={1.5}
+        sectionThickness={2.0}
         sectionColor='#60a5fa'
         position={[0, -2, -10]}
         followCamera

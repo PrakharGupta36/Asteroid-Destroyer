@@ -40,7 +40,7 @@ function GasGiant(props: JSX.IntrinsicElements["group"]) {
       {...props}
       dispose={null}
       position={[-2000, 1000, -2500]}
-      scale={120}
+      scale={200}
       rotation={[0.0125, 2.2, 0]}
     >
       <group rotation={[-Math.PI / 2, -0.373, 0]}>

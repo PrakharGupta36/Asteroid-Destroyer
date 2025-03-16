@@ -38,7 +38,7 @@ export default function App() {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            transition={{ duration: 0.6, ease: "easeInOut" }}
+            transition={{ duration: 1.25, ease: "anticipate" }}
           >
             <Game />
           </motion.div>
@@ -48,7 +48,7 @@ export default function App() {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            transition={{ duration: 0.6, ease: "easeInOut" }}
+            transition={{ duration: 1.25, ease: "anticipate" }}
           >
             <Intro />
           </motion.div>

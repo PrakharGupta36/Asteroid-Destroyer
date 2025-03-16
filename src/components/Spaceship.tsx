@@ -65,12 +65,7 @@ const Spaceship = forwardRef<RapierRigidBody, SpaceshipProps>((props, ref) => {
     }
     if (key === " ") {
       console.log("Space");
-      // setLaserClick(true);
     }
-    // } else if (key !== " ") {
-    //   console.log("Not space");
-    //   setLaserClick(false);
-    // }
   });
 
   return (

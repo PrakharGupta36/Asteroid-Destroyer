@@ -7,7 +7,7 @@ export default function Intro() {
 
   return (
     <div className='grid gap-7'>
-      <ButtonFancy variant={"secondary"} onClick={() => setStart(true)}>
+      <ButtonFancy variant={"outline"} onClick={() => setStart(true)}>
         Start
       </ButtonFancy>
 
