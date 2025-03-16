@@ -9,12 +9,10 @@ export default function CustomLoader() {
   const [progressValue, setProgressValue] = useState(0);
 
   useEffect(() => {
-    // Smooth progress animation
     const timeout = setTimeout(() => {
       setProgressValue(progress);
     }, 100);
 
-    // Hide the loader when progress reaches 100%
     if (progress === 100) {
       const timer = setTimeout(() => setVisible(false), 500);
       return () => {
@@ -29,33 +27,32 @@ export default function CustomLoader() {
   if (!visible) return null;
 
   return (
-    <div className='fixed inset-0 z-50 flex flex-col items-center justify-center bg-black bg-opacity-80 backdrop-blur-sm'>
-      <div className='relative w-32 h-32 mb-8'>
-        {/* Circular orbit paths - MOVED TO RENDER FIRST */}
+    <div className='fixed inset-0 z-50 flex flex-col items-center justify-center bg-[#101010] backdrop-blur-sm'>
+      <div className='relative w-32 h-32 '>
         <div
-          className='absolute w-56 h-56 border border-gray-500 rounded-full opacity-20'
-          style={{ left: "calc(50% - 28px)", top: "calc(50% - 28px)" }}
+          className='absolute w-56 h-56 border  border-gray-500 rounded-full opacity-20'
+          style={{ left: "50%", top: "50%", transform: `translate(-50%,-50%)` }}
         ></div>
 
         <div
-          className='absolute w-40 h-40 border border-gray-500 rounded-full opacity-20'
-          style={{ left: "calc(50% - 20px)", top: "calc(50% - 20px)" }}
+          className='absolute w-40 h-40 border  border-gray-500 rounded-full opacity-20'
+          style={{ left: "50%", top: "50%", transform: `translate(-50%,-50%)` }}
         ></div>
 
         <div
           className='absolute w-24 h-24 border border-gray-500 rounded-full opacity-20'
-          style={{ left: "calc(50% - 12px)", top: "calc(50% - 12px)" }}
+          style={{ left: "50%", top: "50%", transform: `translate(-50%,-50%)` }}
         ></div>
 
         <div
-          className='absolute w-12 h-12 border border-gray-500 rounded-full opacity-20'
-          style={{ left: "calc(50% - 6px)", top: "calc(50% - 6px)" }}
+          className='absolute w-12 h-12 border  border-gray-500 rounded-full opacity-20'
+          style={{ left: "50%", top: "50%", transform: `translate(-50%,-50%)` }}
         ></div>
 
         {/* Central sun */}
         <div
-          className='absolute w-6 h-6 bg-amber-300 rounded-full animate-pulse z-10'
-          style={{ left: "calc(50% - 12px)", top: "calc(50% - 12px)" }}
+          className='absolute w-9 h-9 bg-amber-300 border-2 rounded-full animate-pulse z-10'
+          style={{ left: "50%", top: "50%", transform: `translate(-50%,-50%)` }}
         >
           <div className='absolute inset-0 bg-amber-500 rounded-full animate-pulse opacity-60'></div>
         </div>
@@ -63,22 +60,22 @@ export default function CustomLoader() {
         {/* Orbiting planets with z-index to appear above orbit paths */}
         <div className='absolute inset-0 animate-[spin_8s_linear_infinite] z-10'>
           <div
-            className='absolute w-3 h-3 bg-blue-400 rounded-full'
-            style={{ left: "calc(50% - 6px)", top: "4px" }}
+            className='absolute w-3 h-3 bg-blue-400  border rounded-full'
+            style={{ left: "calc(50% - 65px)", top: "4px" }}
           ></div>
         </div>
 
         <div className='absolute inset-0 animate-[spin_12s_linear_infinite] z-10'>
           <div
-            className='absolute w-4 h-4 bg-indigo-400 rounded-full'
-            style={{ left: "calc(50% - 8px)", top: "0px" }}
+            className='absolute w-4 h-4 bg-indigo-400 border rounded-full'
+            style={{ left: "calc(50% - 98px)", top: "0px" }}
           ></div>
         </div>
 
         <div className='absolute inset-0 animate-[spin_16s_linear_infinite] z-10'>
           <div
-            className='absolute w-2 h-2 bg-teal-400 rounded-full'
-            style={{ left: "calc(50% - 4px)", top: "2px" }}
+            className='absolute w-2 h-2 bg-teal-400 border rounded-full'
+            style={{ left: "calc(50% - 5px)", top: "10px" }}
           ></div>
         </div>
 
@@ -99,9 +96,9 @@ export default function CustomLoader() {
         <Progress
           value={progressValue}
           className={cn(
-            "h-1",
-            "bg-gray-800",
-            "[&>div]:bg-blue-500/50" // Semi-transparent blue indicator
+            "h-0.5",
+            "bg-gray-900", // Override background
+            "[&>div]:bg-gradient-to-r [&>div]:from-blue-600 [&>div]:to-indigo-600" // Style the indicator
           )}
         />
 

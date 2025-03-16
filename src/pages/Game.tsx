@@ -1,4 +1,4 @@
-import { PerspectiveCamera, Preload } from "@react-three/drei";
+import { PerspectiveCamera, Preload, useProgress } from "@react-three/drei";
 import { Canvas, useFrame } from "@react-three/fiber";
 import { Physics, RapierRigidBody } from "@react-three/rapier";
 import { Suspense, useEffect, useRef, useState } from "react";
@@ -33,6 +33,33 @@ function Camera() {
 
 export default function Game() {
   const spaceshipRef = useRef<RapierRigidBody>(null!);
+  const [isLoading, setIsLoading] = useState(true);
+  const [fadeOut, setFadeOut] = useState(false);
+  const { progress } = useProgress();
+  const [showLoader, setShowLoader] = useState(false);
+
+  useEffect(() => {
+    const showLoaderTimer = setTimeout(() => {
+      setShowLoader(true);
+    }, 100);
+
+    return () => clearTimeout(showLoaderTimer);
+  }, []);
+
+  // Handle loading state
+  useEffect(() => {
+    if (progress === 100) {
+      // Start fade out animation
+      setFadeOut(true);
+
+      // After fade completes, set loading to false
+      const timer = setTimeout(() => {
+        setIsLoading(false);
+      }, 1000); // Duration of the fade-out animation
+
+      return () => clearTimeout(timer);
+    }
+  }, [progress]);
 
   function randomValue(max: number, min: number) {
     const value = Math.random() * (max - min) + min;
@@ -105,29 +132,43 @@ export default function Game() {
 
   return (
     <>
-      <SettingsGame />
+      <div
+        className={`absolute inset-0 transition-opacity duration-1000 ${
+          isLoading ? "opacity-0" : "opacity-100"
+        }`}
+      >
+        <SettingsGame />
+        <Canvas shadows>
+          <Suspense fallback={null}>
+            <Preload />
+            <Camera />
+            <Physics gravity={[0, 0, 0]} paused={pause}>
+              {asteroidPosition.map((e) => (
+                <Asteroid
+                  scale={e.scale || 1.25}
+                  key={e.id}
+                  rotation={e.rotation as [number, number, number]}
+                  position={e.position as [number, number, number]}
+                />
+              ))}
 
-      <Canvas shadows>
-        <Suspense fallback={null}>
-          <Preload />
-          <Camera />
-          <Physics gravity={[0, 0, 0]} paused={pause}>
-            {asteroidPosition.map((e) => (
-              <Asteroid
-                scale={e.scale || 1.25}
-                key={e.id}
-                rotation={e.rotation as [number, number, number]}
-                position={e.position as [number, number, number]}
-              />
-            ))}
+              <Spaceship spaceshipRef={spaceshipRef} />
+            </Physics>
 
-            <Spaceship spaceshipRef={spaceshipRef} />
-          </Physics>
+            <Ambience />
+          </Suspense>
+        </Canvas>
+      </div>
 
-          <Ambience />
-        </Suspense>
-      </Canvas>
-      <CustomLoader />
+      {showLoader && isLoading && (
+        <div
+          className={`transition-opacity duration-700 ${
+            fadeOut ? "opacity-0" : ""
+          } ${showLoader ? "opacity-100" : "opacity-0"}`}
+        >
+          <CustomLoader />
+        </div>
+      )}
     </>
   );
 }

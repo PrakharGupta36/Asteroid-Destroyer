@@ -6,7 +6,7 @@ export default function Intro() {
   const { setStart } = useGame();
 
   return (
-    <div className='grid gap-7'>
+    <div className='grid gap-7 '>
       <ButtonFancy variant={"outline"} onClick={() => setStart(true)}>
         Start
       </ButtonFancy>
