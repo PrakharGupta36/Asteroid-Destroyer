@@ -17,7 +17,7 @@ function Switch({
       onClick={(event) => {
         if (settings[1].value) {
           clickAudio.currentTime = 0;
-          clickAudio.volume = 0.5;
+          clickAudio.volume = 0.25;
           clickAudio
             .play()
             .catch((err) => console.log("Click audio error:", err));

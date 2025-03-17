@@ -85,7 +85,7 @@ function ExoPlanet(props: JSX.IntrinsicElements["group"]) {
     <group
       {...props}
       dispose={null}
-      position={[2000, 1000, -3000]}
+      position={[2600, 1400, -3000]}
       scale={0.25}
       rotation={[0, 1.5, 0]}
     >
@@ -171,8 +171,8 @@ function PurplePlanet(props: JSX.IntrinsicElements["group"]) {
       {...props}
       dispose={null}
       animations={animations}
-      position={[5000, 2500, -5500]}
-      scale={900}
+      position={[7000, 3000, -5500]}
+      scale={1100}
       rotation={[0.0125, 2.2, 0]}
     >
       <group name='Sketchfab_Scene'>

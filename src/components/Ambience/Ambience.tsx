@@ -6,8 +6,8 @@ import PostProcessing from "./components/PostProcessing";
 function Lighting() {
   return (
     <>
-      <ambientLight intensity={1.65} />
-      <directionalLight position={[10, 15, 10]} intensity={1} />
+      <ambientLight intensity={0.65} />
+      <directionalLight position={[10, 15, 10]} intensity={0.75} />
     </>
   );
 }
@@ -24,14 +24,14 @@ export default function Ambience() {
       <Grid
         infiniteGrid
         fadeDistance={400}
-        fadeStrength={40}
-        cellSize={1}
+        fadeStrength={50}
+        cellSize={2}
         cellThickness={0.5}
         cellColor='#2563eb'
-        sectionSize={1.5}
-        sectionThickness={2.0}
+        sectionSize={2.95}
+        sectionThickness={4.0}
         sectionColor='#60a5fa'
-        position={[0, -2, -10]}
+        position={[0, -2.25, -10]}
         followCamera
       />
 

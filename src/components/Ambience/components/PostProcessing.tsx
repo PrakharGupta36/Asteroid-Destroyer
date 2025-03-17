@@ -22,7 +22,7 @@ export default function PostProcessing() {
         <></>
       )}
 
-      {settings[3].value ? <Noise opacity={0.2} /> : <></>}
+      {settings[3].value ? <Noise opacity={0.09} /> : <></>}
 
       {settings[3].value ? (
         <Vignette eskil={false} offset={0.1} darkness={0.45} />

@@ -6,7 +6,7 @@ import Intro from "./pages/Intro";
 
 export default function App() {
   const { start } = useGame();
-  const [allowed, setAllowed] = useState<null | boolean>(null); 
+  const [allowed, setAllowed] = useState<null | boolean>(null);
 
   useEffect(() => {
     const hasMouse = window.matchMedia("(pointer: fine)").matches;

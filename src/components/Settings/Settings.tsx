@@ -13,6 +13,7 @@ import { Separator } from "../ui/separator";
 import { Switch } from "../ui/switch";
 import { Button } from "../ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "../ui/tabs";
+import React from "react";
 
 export default function Settings({
   trigger,
@@ -24,11 +25,21 @@ export default function Settings({
   setPause?: (value: boolean) => void;
 }) {
   const { settings, setSettings } = useGame();
+  const clickAudio = React.useMemo(() => new Audio("/clickAudio.mp3"), []);
+
+  const handleTabChange = () => {
+    if (settings[1]?.value) {
+      // Ensure sound setting exists
+      clickAudio.currentTime = 0;
+      clickAudio.volume = 0.25;
+      clickAudio.play().catch((err) => console.log("Click audio error:", err));
+    }
+  };
 
   return (
     <Dialog open={pause} onOpenChange={setPause}>
       <DialogTrigger asChild>{trigger}</DialogTrigger>
-      <DialogContent className='bg-[#121212] text-white border-4 rounded-3xl border-[#333] '>
+      <DialogContent className='bg-[#121212] text-white border-4 rounded-3xl border-[#333]'>
         <DialogHeader>
           <DialogTitle className='text-white'>Settings</DialogTitle>
           <DialogDescription className='text-gray-400'>
@@ -39,7 +50,7 @@ export default function Settings({
         <Separator className='bg-[#333]' />
 
         {/* Tabs Section */}
-        <Tabs defaultValue='sounds'>
+        <Tabs defaultValue='sounds' onValueChange={handleTabChange}>
           <TabsList className='w-full bg-[#1d1d1d] text-gray-300'>
             <TabsTrigger
               value='sounds'
@@ -69,7 +80,18 @@ export default function Settings({
                     <Switch
                       disabled={e.id === 1}
                       checked={e.value}
-                      onClick={() => setSettings(e.id, !e.value)}
+                      onClick={() => {
+                        setSettings(e.id, !e.value);
+                        if (!settings[1].value) {
+                          clickAudio.currentTime = 0;
+                          clickAudio.volume = 0.25;
+                          clickAudio
+                            .play()
+                            .catch((err) =>
+                              console.log("Click audio error:", err)
+                            );
+                        }
+                      }}
                     />
                   </div>
                 ))}

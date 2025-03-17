@@ -123,7 +123,6 @@
 }
 
 * {
-  font-family: Poppins, serif;
   font-weight: 400;
   font-style: normal;
 
@@ -158,4 +157,31 @@ main,
   padding: 0;
   background-color: #101010;
   overflow: hidden !important;
+  font-family: Poppins, serif;
+}
+
+.word {
+  font-style: italic !important;
+
+  text-shadow: 6px 3px 10px rgba(4, 89, 237, 1);
+}
+
+.credit {
+  color: white;
+  text-decoration: underline;
+  font-size: 0.95rem;
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  margin: 2rem;
+  display: grid;
+
+  .credit-1 {
+    font-style: italic !important;
+    width: max-content;
+  }
+  .credit-2 {
+    font-style: italic !important;
+    width: max-content;
+  }
 }

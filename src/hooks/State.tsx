@@ -16,6 +16,9 @@ interface useGameTypes {
 
   pause: boolean;
   setPause: (value: boolean) => void;
+
+  isIntroAnimationFinish: boolean;
+  setIsIntroAnimationFinish: (value: boolean) => void;
 }
 
 const useGame = create<useGameTypes>()(
@@ -44,6 +47,10 @@ const useGame = create<useGameTypes>()(
 
       pause: false,
       setPause: (value: boolean) => set({ pause: value }),
+
+      isIntroAnimationFinish: false,
+      setIsIntroAnimationFinish: (value: boolean) =>
+        set({ isIntroAnimationFinish: value }),
     }),
 
     {
