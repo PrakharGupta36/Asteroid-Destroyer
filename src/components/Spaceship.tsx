@@ -8,6 +8,7 @@ import {
 import { forwardRef, useEffect, useRef, useState } from "react";
 import * as THREE from "three";
 import Laser from "./Laser";
+import useGame from "@/hooks/State";
 
 type GLTFResult = {
   nodes: {
@@ -31,35 +32,47 @@ const Spaceship = forwardRef<RapierRigidBody, SpaceshipProps>((props, ref) => {
   const spaceshipRef = (ref as React.RefObject<RapierRigidBody>) || localRef;
 
   const [key, setKey] = useState<string | null>(null);
-  const [horizontalAxis, setHorizontalAxis] = useState<number>(-Math.PI / 2);
+ const [horizontalAxis, setHorizontalAxis] = useState<number>(-Math.PI / 2);
+ const targetRotation = useRef<number>(-Math.PI / 2);
+  const { pause, setSpaceshipHealth } = useGame();
 
   useEffect(() => {
-    const handleKeyDown = (e: KeyboardEvent) => setKey(e.key);
-    const handleKeyUp = () => setKey(null);
+    if (!pause) {
+      const handleKeyDown = (e: KeyboardEvent) => setKey(e.key);
+      const handleKeyUp = () => setKey(null);
 
-    window.addEventListener("keydown", handleKeyDown);
-    window.addEventListener("keyup", handleKeyUp);
+      window.addEventListener("keydown", handleKeyDown);
+      window.addEventListener("keyup", handleKeyUp);
 
-    return () => {
-      window.removeEventListener("keydown", handleKeyDown);
-      window.removeEventListener("keyup", handleKeyUp);
-    };
-  }, []);
+      return () => {
+        window.removeEventListener("keydown", handleKeyDown);
+        window.removeEventListener("keyup", handleKeyUp);
+      };
+    }
+  }, [pause]);
 
   useFrame(() => {
+    if (!spaceshipRef.current) return;
+
     if (key === "a") {
-      if (!(horizontalAxis > -1.02)) {
-        setHorizontalAxis((prev) => prev + 0.07);
-      }
+      targetRotation.current = Math.min(-1.2, targetRotation.current + 0.07);
+    } else if (key === "d") {
+      targetRotation.current = Math.max(-1.9, targetRotation.current - 0.07);
     }
-    if (key === "d") {
-      if (!(horizontalAxis < -2.00)) {
-        setHorizontalAxis((prev) => prev - 0.07);
-      }
-    }
-    if (key === " ") {
-      console.log("Space");
-    }
+
+    setHorizontalAxis((prev) =>
+      THREE.MathUtils.lerp(prev, targetRotation.current, 0.2)
+    );
+
+    spaceshipRef.current.setRotation(
+      {
+        x: -Math.PI / 2,
+        y: 0,
+        z: horizontalAxis,
+        w: 0,
+      },
+      true
+    );
   });
 
   return (
@@ -71,17 +84,24 @@ const Spaceship = forwardRef<RapierRigidBody, SpaceshipProps>((props, ref) => {
         ref={spaceshipRef}
         colliders='cuboid'
         type='fixed'
-        rotation={[-Math.PI / 2, 0, horizontalAxis]}
+        onCollisionEnter={(e) => {
+          setSpaceshipHealth();
+          e.rigidBody?.sleep();
+
+          setTimeout(() => {
+            e.rigidBody?.wakeUp();
+          }, 50);
+        }}
       >
         <group {...props} dispose={null}>
           <group>
-            <group rotation={[Math.PI / 2, 0, 0]}>
+            <group rotation={[0, 0, 0]}>
               <mesh
                 castShadow
                 receiveShadow
                 geometry={nodes.defaultMaterial.geometry}
                 material={materials.Base}
-                rotation={[-Math.PI / 2, 0, 0]}
+                rotation={[-Math.PI / 2, Math.PI, Math.PI]}
                 scale={100}
               />
             </group>

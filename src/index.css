@@ -166,22 +166,35 @@ main,
   text-shadow: 6px 3px 10px rgba(4, 89, 237, 1);
 }
 
-.credit {
+.credit-1,
+.credit-2 {
+  font-style: italic !important;
+  width: max-content;
+
   color: white;
   text-decoration: underline;
   font-size: 0.95rem;
   position: absolute;
+
+  margin: 2rem;
+  font-size: 0.91rem;
+}
+
+.credit-1 {
+  bottom: 0;
+  left: 0;
+}
+
+.credit-2 {
   bottom: 0;
   right: 0;
-  margin: 2rem;
-  display: grid;
+}
 
-  .credit-1 {
-    font-style: italic !important;
-    width: max-content;
+@keyframes flicker {
+  0% {
+    opacity: 1;
   }
-  .credit-2 {
-    font-style: italic !important;
-    width: max-content;
+  100% {
+    opacity: 0.5;
   }
 }

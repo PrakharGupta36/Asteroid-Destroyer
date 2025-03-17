@@ -25,10 +25,13 @@ interface LaserProps extends RigidBodyProps {
 export default function Laser({ horizontalAxis, ...props }: LaserProps) {
   const { nodes, materials } = useGLTF("/Laser.glb") as unknown as GLTFResult;
   const laserRef = useRef<RapierRigidBody>(null);
-  const [xPosition, setXPosition] = useState<number>(horizontalAxis);
+  const [xPosition, setXPosition] = useState<number>(
+    getLaserXPosition(horizontalAxis)
+  );
 
   useFrame(() => {
-    setXPosition(getLaserXPosition(horizontalAxis));
+    const targetX = getLaserXPosition(horizontalAxis);
+    setXPosition((prev) => THREE.MathUtils.lerp(prev, targetX, 0.25));
   });
 
   return (
@@ -37,7 +40,7 @@ export default function Laser({ horizontalAxis, ...props }: LaserProps) {
       {...props}
       type='fixed'
       colliders='cuboid'
-      position={[xPosition, 0, -5]}
+      position={[xPosition, 0, -4.5]}
       rotation={[0, horizontalAxis, 0]}
       scale={0.025 / 1.5}
     >

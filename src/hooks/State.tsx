@@ -19,6 +19,9 @@ interface useGameTypes {
 
   isIntroAnimationFinish: boolean;
   setIsIntroAnimationFinish: (value: boolean) => void;
+
+  spaceshipHealth: number;
+  setSpaceshipHealth: () => void;
 }
 
 const useGame = create<useGameTypes>()(
@@ -51,6 +54,10 @@ const useGame = create<useGameTypes>()(
       isIntroAnimationFinish: false,
       setIsIntroAnimationFinish: (value: boolean) =>
         set({ isIntroAnimationFinish: value }),
+
+      spaceshipHealth: 100,
+      setSpaceshipHealth: () =>
+        set((state) => ({ spaceshipHealth: state.spaceshipHealth - 10 })),
     }),
 
     {

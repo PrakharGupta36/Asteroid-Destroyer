@@ -10,13 +10,13 @@ export default function PostProcessing() {
   const { settings } = useGame();
 
   return (
-    <EffectComposer multisampling={0} resolutionScale={0.75}>
+    <EffectComposer multisampling={0} resolutionScale={0.2}>
       {settings[2].value ? (
         <Bloom
           luminanceThreshold={0}
           luminanceSmoothing={1.0}
-          height={500}
-          intensity={1.0}
+          height={300}
+          intensity={0.5}
         />
       ) : (
         <></>

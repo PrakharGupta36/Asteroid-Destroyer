@@ -31,7 +31,7 @@ export default function Settings({
     if (settings[1]?.value) {
       // Ensure sound setting exists
       clickAudio.currentTime = 0;
-      clickAudio.volume = 0.25;
+      clickAudio.volume = 1;
       clickAudio.play().catch((err) => console.log("Click audio error:", err));
     }
   };
@@ -84,7 +84,7 @@ export default function Settings({
                         setSettings(e.id, !e.value);
                         if (!settings[1].value) {
                           clickAudio.currentTime = 0;
-                          clickAudio.volume = 0.25;
+                          clickAudio.volume = 1;
                           clickAudio
                             .play()
                             .catch((err) =>

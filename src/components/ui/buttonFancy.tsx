@@ -59,7 +59,7 @@ function ButtonFancy({
         buttonVariants({ variant, size }), // Base styles from cva
         className, // Ensure user-provided styles are applied last
         "px-6 py-7 text-lg relative overflow-hidden font-semibold tracking-wide rounded-lg text-white transition-all duration-300 ease-in-out",
-        "hover:scale-[1.03] active:scale-95 hover:rotate-[3deg] active:rotate-[-1deg]",
+        "hover:scale-[1.03] active:scale-80 hover:rotate-[2deg] active:rotate-[-2deg]",
         "before:rounded-xl before:absolute before:top-0 before:left-0 before:w-full before:h-full before:bg-gray-100 before:opacity-5 before:scale-150 before:translate-x-[-100%]",
         "before:rotate-12 before:transition-transform before:duration-300 hover:before:translate-x-[10%] hover:before:scale-100",
         "before:content-['']"

@@ -67,22 +67,21 @@ export default function Intro() {
           </ButtonFancy>
           <SettingsMenu />
 
-          <div className='credit'>
-            <a
-              href='https://x.com/___prakhar'
-              className='credit-1'
-              target='__blank'
-            >
-              ~ Made by Prakhar ❤️
-            </a>
-            <a
-              href='https://github.com/PrakharGupta36/Asteroid-Destroyer'
-              className='credit-2'
-              target='__blank'
-            >
-              Github
-            </a>
-          </div>
+          <a
+            href='https://x.com/___prakhar'
+            className='credit-1'
+            target='__blank'
+          >
+            ~ Made by Prakhar ❤️
+          </a>
+
+          <a
+            href='https://github.com/PrakharGupta36/Asteroid-Destroyer'
+            className='credit-2'
+            target='__blank'
+          >
+            Leave a star on Github ⭐️
+          </a>
         </motion.div>
       )}
     </AnimatePresence>
