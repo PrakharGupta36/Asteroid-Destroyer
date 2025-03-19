@@ -11,7 +11,7 @@ export default function SettingsGame() {
     <Settings
       trigger={
         <Button ref={btnRef} className='absolute top-0 z-10 m-4 border'>
-          Pause (ESC)
+          Pause (esc)
         </Button>
       }
       pause={pause}

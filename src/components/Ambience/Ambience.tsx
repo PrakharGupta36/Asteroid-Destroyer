@@ -1,8 +1,7 @@
 import { Stars, Environment, Grid } from "@react-three/drei";
 import { useRef } from "react";
 import { useFrame } from "@react-three/fiber";
-import SpaceDust from "./components/SpaceDust";
-import DistantPlanets from "../DistantPlanets";
+import DistantPlanets from "./components/DistantPlanets";
 import PostProcessing from "./components/PostProcessing";
 import * as THREE from "three";
 
@@ -27,11 +26,8 @@ export default function Ambience() {
   return (
     <>
       <Stars count={1000} factor={0.5} speed={0.25} radius={500} depth={0.5} />
-
       <Lighting />
       <DistantPlanets />
-      <SpaceDust count={20} size={0.005} />
-
       <Grid
         ref={gridRef}
         infiniteGrid

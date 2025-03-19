@@ -27,15 +27,6 @@ export default function Settings({
   const { settings, setSettings } = useGame();
   const clickAudio = React.useMemo(() => new Audio("/clickAudio.mp3"), []);
 
-  const handleTabChange = () => {
-    if (settings[1]?.value) {
-      // Ensure sound setting exists
-      clickAudio.currentTime = 0;
-      clickAudio.volume = 1;
-      clickAudio.play().catch((err) => console.log("Click audio error:", err));
-    }
-  };
-
   return (
     <Dialog open={pause} onOpenChange={setPause}>
       <DialogTrigger asChild>{trigger}</DialogTrigger>
@@ -50,7 +41,7 @@ export default function Settings({
         <Separator className='bg-[#333]' />
 
         {/* Tabs Section */}
-        <Tabs defaultValue='sounds' onValueChange={handleTabChange}>
+        <Tabs defaultValue='sounds'>
           <TabsList className='w-full bg-[#1d1d1d] text-gray-300'>
             <TabsTrigger
               value='sounds'

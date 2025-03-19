@@ -16,16 +16,16 @@ export default function PostProcessing() {
           luminanceThreshold={0}
           luminanceSmoothing={1.0}
           height={300}
-          intensity={0.5}
+          intensity={0.25}
         />
       ) : (
         <></>
       )}
 
-      {settings[3].value ? <Noise opacity={0.09} /> : <></>}
+      {settings[3].value ? <Noise opacity={0.07} /> : <></>}
 
       {settings[3].value ? (
-        <Vignette eskil={false} offset={0.1} darkness={0.45} />
+        <Vignette eskil={false} offset={0.1} darkness={0.35} />
       ) : (
         <></>
       )}

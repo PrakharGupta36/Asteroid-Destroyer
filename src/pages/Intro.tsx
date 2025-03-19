@@ -10,13 +10,17 @@ function IntroAnimation() {
   const [fadeOut, setFadeOut] = useState(false);
 
   useEffect(() => {
-    setTimeout(() => setFadeOut(true), 2000);
-    setTimeout(() => setIsIntroAnimationFinish(true), 2500);
+    setTimeout(() => setFadeOut(true), 2600);
+    setTimeout(() => setIsIntroAnimationFinish(true), 3000);
   }, [setIsIntroAnimationFinish]);
 
   return (
     <motion.div
-      className='flex gap-2 text-white italic text-4xl'
+      className='gap-2 text-white italic text-4xl absolute inset-0 flex items-center justify-center'
+      style={{
+        background: "linear-gradient(to bottom right, #000000, #000000)",
+        backdropFilter: "blur(50px)",
+      }}
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       exit={{ opacity: 0, transition: { duration: 0.5 } }}
@@ -27,13 +31,18 @@ function IntroAnimation() {
             <motion.span
               key={j}
               className='word'
-              initial={{ opacity: 0, y: -30, scale: 0.85 }}
+              initial={{ opacity: 0, x: -10, scale: 1, textShadow: "none" }}
               animate={
                 fadeOut
-                  ? { opacity: 0, y: 30, scale: 0.85 }
-                  : { opacity: 1, y: 0, scale: 1 }
+                  ? { opacity: 0, x: 10, scale: 1, textShadow: "none" }
+                  : {
+                      opacity: 1,
+                      x: 0,
+                      scale: 1,
+                      textShadow: "6px 3px 10px rgba(4, 89, 237, .75)",
+                    }
               }
-              transition={{ delay: i * 0.4 + j * 0.05, duration: 0.6 }}
+              transition={{ delay: i * 0.4 + j * 0.05, duration: 1 }}
             >
               {char}
             </motion.span>
@@ -62,11 +71,8 @@ export default function Intro() {
           transition={{ duration: 1, ease: "anticipate" }}
           className='grid gap-7'
         >
-          <ButtonFancy variant='outline' onClick={() => setStart(true)}>
-            Start
-          </ButtonFancy>
+          <ButtonFancy onClick={() => setStart(true)}>Start</ButtonFancy>
           <SettingsMenu />
-
           <a
             href='https://x.com/___prakhar'
             className='credit-1'

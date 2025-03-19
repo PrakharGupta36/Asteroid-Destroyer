@@ -155,15 +155,13 @@ main,
   height: 100%;
   margin: 0;
   padding: 0;
-  background-color: #101010;
+  background-color: #141414;
   overflow: hidden !important;
   font-family: Poppins, serif;
 }
 
 .word {
   font-style: italic !important;
-
-  text-shadow: 6px 3px 10px rgba(4, 89, 237, 1);
 }
 
 .credit-1,
@@ -171,6 +169,7 @@ main,
   font-style: italic !important;
   width: max-content;
 
+  /* color: #05a7a7; */
   color: white;
   text-decoration: underline;
   font-size: 0.95rem;
