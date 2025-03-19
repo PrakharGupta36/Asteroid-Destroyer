@@ -1,3 +1,4 @@
+import React, { useEffect, useMemo } from "react";
 import useGame from "@/hooks/State";
 import {
   Dialog,
@@ -13,7 +14,6 @@ import { Separator } from "../ui/separator";
 import { Switch } from "../ui/switch";
 import { Button } from "../ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "../ui/tabs";
-import React from "react";
 
 export default function Settings({
   trigger,
@@ -25,11 +25,30 @@ export default function Settings({
   setPause?: (value: boolean) => void;
 }) {
   const { settings, setSettings } = useGame();
-  const clickAudio = React.useMemo(() => new Audio("/clickAudio.mp3"), []);
+  const clickAudio = useMemo(() => new Audio("/clickAudio.mp3"), []);
+  const btnAudio = useMemo(() => new Audio("/btnAudio.mp3"), []);
+
+  useEffect(() => {
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.shiftKey && event.key.toLowerCase() === "s") {
+        setPause?.(!pause);
+        btnAudio.currentTime = 0;
+        btnAudio.play();
+      }
+    };
+
+    window.addEventListener("keydown", handleKeyDown);
+
+    return () => {
+      window.removeEventListener("keydown", handleKeyDown);
+    };
+  }, [pause, setPause, btnAudio]);
 
   return (
     <Dialog open={pause} onOpenChange={setPause}>
-      <DialogTrigger asChild>{trigger}</DialogTrigger>
+      <DialogTrigger autoFocus={false} asChild tabIndex={-1}>
+        {trigger}
+      </DialogTrigger>
       <DialogContent className='bg-[#121212] text-white border-4 rounded-3xl border-[#333]'>
         <DialogHeader>
           <DialogTitle className='text-white'>Settings</DialogTitle>

@@ -24,6 +24,7 @@ function Asteroids(props: RigidBodyProps) {
   ) as unknown as GLTFResult;
   const asteroidRef = useRef<RapierRigidBody>(null);
 
+
   useFrame(() => {
     if (asteroidRef.current) {
       const position = asteroidRef.current.translation();
@@ -86,7 +87,7 @@ export default function SpawnAsteroids() {
 
   // Spawn asteroids
   useEffect(() => {
-    if (!pause) {
+    if (pause === false) {
       const asteroidInterval = setInterval(() => {
         const asteroidX = randomValue(100, -100);
         const asteroidZ = -250 - Math.random() * 100;
