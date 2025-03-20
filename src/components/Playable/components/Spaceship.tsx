@@ -4,9 +4,10 @@ import {
   RigidBody,
   RigidBodyProps,
 } from "@react-three/rapier";
-import { forwardRef } from "react";
+import { forwardRef, useRef } from "react";
 import * as THREE from "three";
 import useGame from "@/hooks/State";
+// import Boosters from "./components/Boosters";
 
 type GLTFResult = {
   nodes: {
@@ -28,21 +29,22 @@ const Spaceship = forwardRef<RapierRigidBody, SpaceshipProps>(
     ) as unknown as GLTFResult;
 
     const { setSpaceshipHealth } = useGame();
+    const lastCollisionTime = useRef(0);
 
     return (
       <RigidBody
+        name='spaceship'
         scale={0.0125 / 2.2}
         position={[0, 0, 0]}
         ref={spaceshipRef}
-        colliders='cuboid'
+        colliders='trimesh'
         type='fixed'
-        onCollisionEnter={(e) => {
-          setSpaceshipHealth();
-          e.rigidBody?.sleep();
-
-          setTimeout(() => {
-            e.rigidBody?.wakeUp();
-          }, 50);
+        onCollisionEnter={() => {
+          const now = Date.now();
+          if (now - lastCollisionTime.current > 100) {
+            setSpaceshipHealth();
+            lastCollisionTime.current = now;
+          }
         }}
       >
         <group {...props} dispose={null}>
@@ -51,12 +53,13 @@ const Spaceship = forwardRef<RapierRigidBody, SpaceshipProps>(
               <mesh
                 geometry={nodes.defaultMaterial.geometry}
                 material={materials.Base}
-                rotation={[-Math.PI/2, Math.PI, Math.PI]}
+                rotation={[-Math.PI / 2, Math.PI, Math.PI]}
                 scale={100}
               />
             </group>
           </group>
         </group>
+        {/* <Boosters /> */}
       </RigidBody>
     );
   }

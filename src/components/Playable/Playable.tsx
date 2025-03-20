@@ -1,10 +1,4 @@
-import React, {
-  useEffect,
-  useRef,
-  useState,
-  useMemo,
-  useCallback,
-} from "react";
+import React, { useEffect, useRef, useState, useMemo } from "react";
 import Laser from "./components/Laser";
 import Spaceship from "./components/Spaceship";
 import useGame from "@/hooks/State";
@@ -35,28 +29,35 @@ export default function Playable() {
     [laserCount]
   );
 
-  const handleKeyDown = useCallback((e: KeyboardEvent) => {
-    if (e.key === " ") {
-      setLaserCount((prev) => prev + 1);
-    }
-  }, []);
-
   useEffect(() => {
     if (!pause) {
-      const keyDownListener = (e: KeyboardEvent) => setKey(e.key);
-      const keyUpListener = () => setKey(null);
+      const handleKeys = (e: KeyboardEvent) => {
+        // Set the current key for movement
+        if (e.key === "a" || e.key === "d") {
+          setKey(e.key);
+        }
 
-      window.addEventListener("keydown", keyDownListener);
+        // Only spawn laser on spacebar
+        if (e.key === " ") {
+          setLaserCount((prev) => prev + 1);
+        }
+      };
+
+      const keyUpListener = (e: KeyboardEvent) => {
+        if (e.key === "a" || e.key === "d") {
+          setKey(null);
+        }
+      };
+
+      window.addEventListener("keydown", handleKeys);
       window.addEventListener("keyup", keyUpListener);
-      window.addEventListener("keydown", handleKeyDown);
 
       return () => {
-        window.removeEventListener("keydown", keyDownListener);
+        window.removeEventListener("keydown", handleKeys);
         window.removeEventListener("keyup", keyUpListener);
-        window.removeEventListener("keydown", handleKeyDown);
       };
     }
-  }, [pause, handleKeyDown]);
+  }, [pause]);
 
   useFrame(() => {
     if (!spaceshipRef.current) return;
@@ -81,6 +82,7 @@ export default function Playable() {
     <group>
       {lasers.map((laser) => (
         <Laser
+          id={laser.id}
           key={laser.id}
           laserRef={laser.ref}
           horizontalAxis={horizontalAxis}
