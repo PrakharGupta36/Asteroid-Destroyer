@@ -20,10 +20,9 @@ type GLTFResult = {
 
 function Asteroids(props: RigidBodyProps) {
   const { nodes, materials } = useGLTF(
-    "/Asteroid.glb"
+    "/models/Asteroid.glb"
   ) as unknown as GLTFResult;
   const asteroidRef = useRef<RapierRigidBody>(null);
-
 
   useFrame(() => {
     if (asteroidRef.current) {
@@ -127,4 +126,4 @@ export default function SpawnAsteroids() {
   );
 }
 
-useGLTF.preload("/Asteroid.glb");
+useGLTF.preload("/models/Asteroid.glb");

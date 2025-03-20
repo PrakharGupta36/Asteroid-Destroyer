@@ -49,7 +49,7 @@ function ButtonFancy({
     asChild?: boolean;
   }) {
   const Comp = asChild ? Slot : "button";
-  const btnAudio = React.useMemo(() => new Audio("/btnAudio.mp3"), []);
+  const btnAudio = React.useMemo(() => new Audio("/sounds/btnAudio.mp3"), []);
   const { settings } = useGame();
 
   return (

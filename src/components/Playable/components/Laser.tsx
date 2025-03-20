@@ -28,7 +28,7 @@ export default function Laser({
   laserRef,
   ...props
 }: LaserProps) {
-  const { nodes, materials } = useGLTF("/Laser.glb") as unknown as GLTFResult;
+  const { nodes, materials } = useGLTF("/models/Laser.glb") as unknown as GLTFResult;
 
   const [xPosition, setXPosition] = useState<number>(
     getLaserXPosition(horizontalAxis)
@@ -40,10 +40,11 @@ export default function Laser({
 
     if (laserRef.current) {
       const speed = 50; // Speed of the laser
+      
       const direction = new THREE.Vector3(
-        Math.sin(xPosition/2) * speed, // X direction
-        0, // Y (no vertical movement)
-        -100 // -Math.cos(horizontalAxis) * speed - 50 // Z direction
+        Math.sin(xPosition/2) * speed,
+        0,
+        -100
       );
 
       laserRef.current.setLinvel(direction, true);
@@ -76,4 +77,4 @@ export default function Laser({
   );
 }
 
-useGLTF.preload("/Laser.glb");
+useGLTF.preload("/models/Laser.glb");

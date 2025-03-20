@@ -24,7 +24,7 @@ type SpaceshipProps = RigidBodyProps & {
 const Spaceship = forwardRef<RapierRigidBody, SpaceshipProps>(
   (props, spaceshipRef) => {
     const { nodes, materials } = useGLTF(
-      "/Spaceship.glb"
+      "/models/Spaceship.glb"
     ) as unknown as GLTFResult;
 
     const { setSpaceshipHealth } = useGame();
@@ -49,11 +49,9 @@ const Spaceship = forwardRef<RapierRigidBody, SpaceshipProps>(
           <group>
             <group rotation={[0, 0, 0]}>
               <mesh
-                castShadow
-                receiveShadow
                 geometry={nodes.defaultMaterial.geometry}
                 material={materials.Base}
-                rotation={[-Math.PI / 2, Math.PI, Math.PI]}
+                rotation={[-Math.PI/2, Math.PI, Math.PI]}
                 scale={100}
               />
             </group>
@@ -66,6 +64,6 @@ const Spaceship = forwardRef<RapierRigidBody, SpaceshipProps>(
 
 Spaceship.displayName = "Spaceship"; // Required for forwardRef components
 
-useGLTF.preload("/Spaceship.glb");
+useGLTF.preload("/models/Spaceship.glb");
 
 export default Spaceship;

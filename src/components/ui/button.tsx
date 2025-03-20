@@ -43,7 +43,7 @@ export interface ButtonProps
 
 const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
   ({ className, variant, size, onClick, asChild = false, ...props }, ref) => {
-    const btnAudio = React.useMemo(() => new Audio("/btnAudio.mp3"), []);
+    const btnAudio = React.useMemo(() => new Audio("/sounds/btnAudio.mp3"), []);
     const { settings } = useGame();
 
     const Comp = asChild ? Slot : "button";

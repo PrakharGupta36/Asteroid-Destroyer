@@ -1,6 +1,5 @@
 import useGame from "@/hooks/State";
-import SettingsGame from "../Settings/components/SettingsGame";
-
+import SettingsGame from "../settings/components/SettingsGame";
 
 function SpaceshipHealth() {
   const { spaceshipHealth } = useGame();

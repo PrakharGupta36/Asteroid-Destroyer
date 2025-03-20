@@ -1,7 +1,8 @@
 import useGame from "@/hooks/State";
 import { useRef } from "react";
-import Settings from "../Settings";
+
 import { Button } from "../../ui/button";
+import Settings from "../Settings";
 
 export default function SettingsGame() {
   const { pause, setPause } = useGame();

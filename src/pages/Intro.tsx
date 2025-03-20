@@ -1,4 +1,4 @@
-import SettingsMenu from "@/components/Settings/components/SettingsMenu";
+import SettingsMenu from "@/components/settings/components/SettingsMenu";
 import { ButtonFancy } from "@/components/ui/buttonFancy";
 import useGame from "@/hooks/State";
 import { motion, AnimatePresence } from "framer-motion";

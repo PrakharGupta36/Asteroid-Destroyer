@@ -62,13 +62,13 @@ export default function Playable() {
     if (!spaceshipRef.current) return;
 
     if (key === "a") {
-      targetRotation.current = Math.min(-1.2, targetRotation.current + 0.07);
+      targetRotation.current = Math.min(-0.75, targetRotation.current + 0.1);
     } else if (key === "d") {
-      targetRotation.current = Math.max(-1.9, targetRotation.current - 0.07);
+      targetRotation.current = Math.max(-2.75, targetRotation.current - 0.1);
     }
 
     setHorizontalAxis((prev) =>
-      THREE.MathUtils.lerp(prev, targetRotation.current, 0.2)
+      THREE.MathUtils.lerp(prev, targetRotation.current, 0.3)
     );
 
     spaceshipRef.current.setRotation(

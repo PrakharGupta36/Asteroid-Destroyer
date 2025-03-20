@@ -16,7 +16,7 @@ type GLTFResult_GasGiant = {
 
 function GasGiant(props: JSX.IntrinsicElements["group"]) {
   const { nodes, materials } = useGLTF(
-    "/Gas_Giant.glb"
+    "/models/Gas_Giant.glb"
   ) as unknown as GLTFResult_GasGiant;
 
   const ref = useRef<THREE.Group>(null);
@@ -57,86 +57,6 @@ function GasGiant(props: JSX.IntrinsicElements["group"]) {
   );
 }
 
-type GLTFResult_ExoPlanet = {
-  nodes: {
-    Sphere_Material002_0: THREE.Mesh;
-    Sphere_Material002_0_1: THREE.Mesh;
-  };
-  materials: {
-    ["Material.002"]: THREE.Material;
-  };
-};
-
-function ExoPlanet(props: JSX.IntrinsicElements["group"]) {
-  const { nodes, materials } = useGLTF(
-    "ExoPlanet/scene.gltf"
-  ) as unknown as GLTFResult_ExoPlanet;
-
-  const ref = useRef<THREE.Group>(null);
-
-  useFrame(({ clock }) => {
-    if (ref.current) {
-      ref.current.rotation.z = clock.getElapsedTime() * 0.05;
-      ref.current.position.z = clock.getElapsedTime() * 0.2;
-    }
-  });
-
-  return (
-    <group
-      {...props}
-      dispose={null}
-      position={[2600, 1400, -3000]}
-      scale={0.25}
-      rotation={[0, 1.5, 0]}
-    >
-      <group
-        ref={ref}
-        rotation={[-1.406, -0.007, -1.383]}
-        scale={[234.933, 234.934, 234.934]}
-      >
-        {/* Main planet */}
-        <mesh
-          castShadow
-          receiveShadow
-          geometry={nodes.Sphere_Material002_0.geometry}
-          material={materials["Material.002"]}
-        />
-        <mesh
-          castShadow
-          receiveShadow
-          geometry={nodes.Sphere_Material002_0_1.geometry}
-          material={materials["Material.002"]}
-        />
-
-        {/* 💡 Lights near the model */}
-      </group>
-
-      <pointLight
-        position={[0, 20, 0]}
-        intensity={15}
-        color={"purple"}
-        decay={2}
-        distance={300}
-      />
-      <pointLight
-        position={[20, 0, 0]}
-        intensity={13}
-        color={"blue"}
-        decay={2}
-        distance={250}
-      />
-      <spotLight
-        position={[-20, 0, 0]}
-        intensity={12}
-        color={"white"}
-        angle={0.5}
-        penumbra={0.3}
-        castShadow
-      />
-    </group>
-  );
-}
-
 type GLTFResult_PurplePlanet = {
   nodes: {
     Planet_0: THREE.Mesh;
@@ -154,7 +74,7 @@ type GLTFResult_PurplePlanet = {
 function PurplePlanet(props: JSX.IntrinsicElements["group"]) {
   const group = useRef(null);
   const { nodes, materials, animations } = useGLTF(
-    "/Purple Planet.glb"
+    "/models/Purple Planet.glb"
   ) as unknown as GLTFResult_PurplePlanet;
 
   const { actions } = useAnimations(animations, group);
@@ -221,11 +141,9 @@ export default function DistantPlanets() {
     <>
       <GasGiant />
       <PurplePlanet />
-      <ExoPlanet />
     </>
   );
 }
 
-useGLTF.preload("/Gas_Giant.glb");
-useGLTF.preload("/ExoPlanet/scene.gltf");
-useGLTF.preload("/Purple Planet.glb");
+useGLTF.preload("/models/Gas_Giant.glb");
+useGLTF.preload("/models/Purple Planet.glb");

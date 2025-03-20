@@ -9,7 +9,7 @@ function Switch({
   className,
   ...props
 }: React.ComponentProps<typeof SwitchPrimitive.Root>) {
-  const clickAudio = React.useMemo(() => new Audio("/clickAudio.mp3"), []);
+  const clickAudio = React.useMemo(() => new Audio("/sounds/clickAudio.mp3"), []);
   const { settings } = useGame();
 
   return (

@@ -6,11 +6,11 @@ import * as THREE from "three";
 
 import useGame from "@/hooks/State";
 
-import Playable from "@/components/Playable/Playable";
-import SpawnAsteroids from "@/components/Playable/Asteroids";
+import Playable from "@/components/playable/Playable";
+import SpawnAsteroids from "@/components/playable/Asteroids";
 import GameUI from "@/components/ux/GameUI";
 import CustomLoader from "@/components/ux/CustomLoader";
-import Ambience from "@/components/Ambience/Ambience";
+import Ambience from "@/components/ambience/Ambience";
 
 function Camera() {
   const cameraRef = useRef<THREE.PerspectiveCamera>(null);
