@@ -7,7 +7,7 @@ import {
 import { forwardRef, useRef } from "react";
 import * as THREE from "three";
 import useGame from "@/hooks/State";
-// import Boosters from "./components/Boosters";
+import Boosters from "./components/Boosters";
 
 type GLTFResult = {
   nodes: {
@@ -59,7 +59,7 @@ const Spaceship = forwardRef<RapierRigidBody, SpaceshipProps>(
             </group>
           </group>
         </group>
-        {/* <Boosters /> */}
+        <Boosters />
       </RigidBody>
     );
   }
