@@ -1,4 +1,4 @@
-import { ButtonFancy } from "../../UI/buttonFancy";
+import { ButtonFancy } from "../../ui/buttonFancy";
 import Settings from "../Settings";
 
 export default function SettingsMenu() {

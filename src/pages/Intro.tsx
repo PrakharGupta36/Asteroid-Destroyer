@@ -1,5 +1,5 @@
 import SettingsMenu from "@/components/Settings/components/SettingsMenu";
-import { ButtonFancy } from "@/components/UI/buttonFancy";
+import { ButtonFancy } from "@/components/ui/buttonFancy";
 import useGame from "@/hooks/State";
 import { motion, AnimatePresence } from "framer-motion";
 import { useEffect, useState } from "react";

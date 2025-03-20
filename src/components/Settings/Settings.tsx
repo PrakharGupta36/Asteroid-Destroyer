@@ -9,11 +9,11 @@ import {
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-} from "../UI/dialog";
-import { Separator } from "../UI/separator";
-import { Switch } from "../UI/switch";
-import { Button } from "../UI/button";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "../UI/tabs";
+} from "../ui/dialog";
+import { Separator } from "../ui/separator";
+import { Switch } from "../ui/switch";
+import { Button } from "../ui/button";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "../ui/tabs";
 
 export default function Settings({
   trigger,
