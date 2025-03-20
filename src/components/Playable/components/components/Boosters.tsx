@@ -37,7 +37,7 @@ export default function Boosters() {
         ref={leftBoosterMesh}
         rotation={[-Math.PI / 2, 0, 0]}
         scale={15}
-        position={[600, -20, -150]}
+        position={[600, -15, -150]}
       >
         <boxGeometry args={[10, 1.5, 1]} />
         <shaderMaterial
@@ -52,7 +52,7 @@ export default function Boosters() {
         ref={rightBoosterMesh}
         rotation={[-Math.PI / 2, Math.PI, 0]}
         scale={15}
-        position={[600, -20, 150]}
+        position={[600, -10, 150]}
       >
         <boxGeometry args={[10, 1.5, 1]} />
         <shaderMaterial

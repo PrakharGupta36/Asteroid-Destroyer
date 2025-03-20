@@ -18,10 +18,6 @@
 
 [![Gas Giant](https://img.shields.io/badge/View%20Model-%230098da?style=flat-square&logo=sketchfab)](https://sketchfab.com/3d-models/gas-giant-aa328c29ddb94b6db32e44a1c2bf6993)
 
-### **Exo Planet**
-
-[![Exo Planet](https://img.shields.io/badge/View%20Model-%230098da?style=flat-square&logo=sketchfab)](https://sketchfab.com/3d-models/terrestrial-planet-or-exo-planet-b15fcf8a65f64119a399bb5ecfc77ea3)
-
 ### **Purple Planet**
 
 [![Purple Planet](https://img.shields.io/badge/View%20Model-%230098da?style=flat-square&logo=sketchfab)](https://sketchfab.com/3d-models/purple-planet-264eb22207184fc99a5e3b1279a763b8)
