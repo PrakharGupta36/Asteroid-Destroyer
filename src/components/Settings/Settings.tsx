@@ -25,8 +25,8 @@ export default function Settings({
   setPause?: (value: boolean) => void;
 }) {
   const { settings, setSettings } = useGame();
-  const clickAudio = useMemo(() => new Audio("/clickAudio.mp3"), []);
-  const btnAudio = useMemo(() => new Audio("/btnAudio.mp3"), []);
+  const clickAudio = useMemo(() => new Audio("/sounds/clickAudio.mp3"), []);
+  const btnAudio = useMemo(() => new Audio("/sounds/btnAudio.mp3"), []);
 
   useEffect(() => {
     const handleKeyDown = (event: KeyboardEvent) => {
@@ -42,7 +42,7 @@ export default function Settings({
     return () => {
       window.removeEventListener("keydown", handleKeyDown);
     };
-  }, [pause, setPause, btnAudio]);
+  }, [pause, setPause, btnAudio, settings]);
 
   return (
     <Dialog open={pause} onOpenChange={setPause}>
@@ -94,12 +94,7 @@ export default function Settings({
                         setSettings(e.id, !e.value);
                         if (!settings[1].value) {
                           clickAudio.currentTime = 0;
-                          clickAudio.volume = 1;
-                          clickAudio
-                            .play()
-                            .catch((err) =>
-                              console.log("Click audio error:", err)
-                            );
+                          clickAudio.play();
                         }
                       }}
                     />
