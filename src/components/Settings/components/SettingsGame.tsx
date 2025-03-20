@@ -1,7 +1,7 @@
 import useGame from "@/hooks/State";
 import { useRef } from "react";
 
-import { Button } from "../../ui/button";
+import { Button } from "../../UI/button";
 import Settings from "../Settings";
 
 export default function SettingsGame() {
@@ -13,10 +13,10 @@ export default function SettingsGame() {
       trigger={
         <Button
           ref={btnRef}
-          className='absolute top-0 z-10 m-4 border pointer-events-none'
-          disabled
+          className='absolute top-0 z-10 m-4 border'
           tabIndex={-1}
-          onKeyDown={(e) => e.preventDefault()} 
+          onKeyDown={(e) => e.preventDefault()}
+          onMouseDown={(e) => e.preventDefault()} 
         >
           Pause (shift + s)
         </Button>

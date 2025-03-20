@@ -2,7 +2,7 @@ import { useProgress } from "@react-three/drei";
 import { useEffect, useState } from "react";
 
 import { cn } from "@/lib/utils";
-import { Progress } from "../ui/progress";
+import { Progress } from "../UI/progress";
 
 export default function CustomLoader({
   setIsLoading,

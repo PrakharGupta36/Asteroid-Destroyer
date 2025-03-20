@@ -1,7 +1,7 @@
 import { useEffect, useState, Suspense, lazy } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import useGame from "./hooks/State";
-import { Spinner } from "./components/ui/spinner";
+import { Spinner } from "./components/UI/spinner";
 
 const Game = lazy(() => import("./pages/Game"));
 const Intro = lazy(() => import("./pages/Intro"));

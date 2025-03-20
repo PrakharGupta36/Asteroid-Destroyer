@@ -4,13 +4,13 @@ import { Physics } from "@react-three/rapier";
 import { Suspense, lazy, useRef, useState } from "react";
 import * as THREE from "three";
 import useGame from "@/hooks/State";
-import { Spinner } from "@/components/ui/spinner";
+import { Spinner } from "@/components/UI/spinner";
 
-const SpawnAsteroids = lazy(() => import("@/components/playable/Asteroids"));
-const Playable = lazy(() => import("@/components/playable/Playable"));
-const Ambience = lazy(() => import("@/components/ambience/Ambience"));
-const GameUI = lazy(() => import("@/components/ux/GameUI"));
-const CustomLoader = lazy(() => import("@/components/ux/CustomLoader"));
+const SpawnAsteroids = lazy(() => import("@/components/Playable/Asteroids"));
+const Playable = lazy(() => import("@/components/Playable/Playable"));
+const Ambience = lazy(() => import("@/components/Ambience/Ambience"));
+const GameUI = lazy(() => import("@/components/UX/GameUI"));
+const CustomLoader = lazy(() => import("@/components/UX/CustomLoader"));
 
 function Camera() {
   const cameraRef = useRef<THREE.PerspectiveCamera>(null);
