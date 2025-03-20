@@ -1,16 +1,16 @@
 import { PerspectiveCamera, Preload } from "@react-three/drei";
 import { Canvas, useFrame } from "@react-three/fiber";
 import { Physics } from "@react-three/rapier";
-import { Suspense, useRef, useState } from "react";
+import { Suspense, lazy, useRef, useState } from "react";
 import * as THREE from "three";
-
 import useGame from "@/hooks/State";
+import { Spinner } from "@/components/ui/spinner";
 
-import SpawnAsteroids from "@/components/playable/Asteroids";
-import GameUI from "@/components/ux/GameUI";
-import CustomLoader from "@/components/ux/CustomLoader";
-import Ambience from "@/components/ambience/Ambience";
-import Playable from "@/components/playable/Playable";
+const SpawnAsteroids = lazy(() => import("@/components/playable/Asteroids"));
+const Playable = lazy(() => import("@/components/playable/Playable"));
+const Ambience = lazy(() => import("@/components/ambience/Ambience"));
+const GameUI = lazy(() => import("@/components/ux/GameUI"));
+const CustomLoader = lazy(() => import("@/components/ux/CustomLoader"));
 
 function Camera() {
   const cameraRef = useRef<THREE.PerspectiveCamera>(null);
@@ -47,20 +47,32 @@ export default function Game() {
           isLoading ? "opacity-0" : "opacity-100"
         }`}
       >
-        <GameUI />
+        <Suspense fallback={<Spinner size={"large"} />}>
+          <GameUI />
+        </Suspense>
+
         <Canvas className='w-[100dvw] h-[100dvh]'>
           <Suspense fallback={null}>
             <Preload />
             <Camera />
             <Physics gravity={[0, 0, 0]} paused={pause}>
-              <SpawnAsteroids />
-              <Playable />
+              <Suspense fallback={null}>
+                <SpawnAsteroids />
+              </Suspense>
+              <Suspense fallback={null}>
+                <Playable />
+              </Suspense>
             </Physics>
-            <Ambience />
+            <Suspense fallback={null}>
+              <Ambience />
+            </Suspense>
           </Suspense>
         </Canvas>
       </div>
-      {isLoading && <CustomLoader setIsLoading={setIsLoading} />}
+
+      <Suspense fallback={null}>
+        {isLoading && <CustomLoader setIsLoading={setIsLoading} />}
+      </Suspense>
     </>
   );
 }
