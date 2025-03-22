@@ -1,13 +1,17 @@
+// components/SpawnAsteroids.tsx
+"use client";
+
 import { useGLTF } from "@react-three/drei";
 import {
   RigidBody,
-  RigidBodyProps,
-  RapierRigidBody,
+  type RigidBodyProps,
+  type RapierRigidBody,
 } from "@react-three/rapier";
 import { useFrame } from "@react-three/fiber";
 import { useEffect, useRef, useState } from "react";
 import * as THREE from "three";
 import useGame from "@/hooks/State";
+import Explosion from "./components/Explosion";
 
 type GLTFResult = {
   nodes: {
@@ -19,7 +23,7 @@ type GLTFResult = {
 };
 
 type AsteroidProps = RigidBodyProps & {
-  onDestroy: (id: number) => void;
+  onDestroy: (id: number, position: [number, number, number]) => void;
   id: number;
 };
 
@@ -29,11 +33,14 @@ function Asteroid({ onDestroy, id, ...props }: AsteroidProps) {
   ) as unknown as GLTFResult;
   const asteroidRef = useRef<RapierRigidBody>(null);
   const [collided, setCollided] = useState(false);
+  const [position, setPosition] = useState<[number, number, number]>([0, 0, 0]);
 
   useFrame(() => {
     if (asteroidRef.current) {
-      const position = asteroidRef.current.translation();
-      const force = new THREE.Vector3(-position.x, -position.y, -position.z);
+      const pos = asteroidRef.current.translation();
+      setPosition([pos.x, pos.y, pos.z]);
+
+      const force = new THREE.Vector3(-pos.x, -pos.y, -pos.z);
       force.normalize().multiplyScalar(0.07);
 
       asteroidRef.current.applyImpulse(force, true);
@@ -51,12 +58,12 @@ function Asteroid({ onDestroy, id, ...props }: AsteroidProps) {
   useEffect(() => {
     if (collided) {
       const handle = requestAnimationFrame(() => {
-        onDestroy(id);
+        onDestroy(id, position);
       });
 
       return () => cancelAnimationFrame(handle);
     }
-  }, [collided, id, onDestroy]);
+  }, [collided, id, onDestroy, position]);
 
   const handleCollision = () => {
     setCollided(true);
@@ -93,8 +100,15 @@ type AsteroidData = {
   scale: number;
 };
 
+type ExplosionData = {
+  id: number;
+  position: [number, number, number];
+  scale: number;
+};
+
 export default function SpawnAsteroids() {
   const [asteroids, setAsteroids] = useState<AsteroidData[]>([]);
+  const [explosions, setExplosions] = useState<ExplosionData[]>([]);
   const { pause } = useGame();
 
   function randomValue(max: number, min: number) {
@@ -113,7 +127,6 @@ export default function SpawnAsteroids() {
     setAsteroids(initialAsteroids);
   }, []);
 
-  // Spawn asteroids
   useEffect(() => {
     if (pause === false) {
       const asteroidInterval = setInterval(() => {
@@ -148,8 +161,27 @@ export default function SpawnAsteroids() {
     }
   }, [pause]);
 
-  const destroyAsteroid = (id: number) => {
+  const destroyAsteroid = (id: number, position: [number, number, number]) => {
+    // Find the asteroid to get its scale
+    const asteroid = asteroids.find((ast) => ast.id === id);
+    const explosionScale = asteroid?.scale || 1;
+
+    // Create explosion at asteroid position
+    setExplosions((prev) => [
+      ...prev,
+      {
+        id: Date.now(),
+        position,
+        scale: explosionScale * 1.5, // Make explosion a bit larger than the asteroid
+      },
+    ]);
+
+    // Remove asteroid
     setAsteroids((prev) => prev.filter((asteroid) => asteroid.id !== id));
+  };
+
+  const removeExplosion = (id: number) => {
+    setExplosions((prev) => prev.filter((explosion) => explosion.id !== id));
   };
 
   return (
@@ -162,6 +194,16 @@ export default function SpawnAsteroids() {
           position={position}
           rotation={rotation}
           scale={scale}
+        />
+      ))}
+
+      {/* Render all explosions */}
+      {explosions.map(({ id, position, scale }) => (
+        <Explosion
+          key={id}
+          position={position}
+          scale={scale}
+          onComplete={() => removeExplosion(id)}
         />
       ))}
     </>

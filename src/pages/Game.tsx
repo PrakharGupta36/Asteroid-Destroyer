@@ -27,7 +27,7 @@ function Camera() {
 
   return (
     <PerspectiveCamera
-      position={[0, 3, 12.5]}
+      position={[0, 3, 11]}
       makeDefault
       near={0.05}
       far={10000}

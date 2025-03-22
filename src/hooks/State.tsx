@@ -11,6 +11,10 @@ interface Setting {
 interface useGameTypes {
   start: boolean;
   setStart: (value: boolean) => void;
+
+  horizontalAxis: number;
+  setHorizontalAxis: (value: number) => void;
+
   settings: Setting[];
   setSettings: (id: number, value: boolean) => void;
 
@@ -30,12 +34,14 @@ const useGame = create<useGameTypes>()(
       start: false,
       setStart: (value: boolean) => set(() => ({ start: value })),
 
+      horizontalAxis: Math.PI / 2,
+      setHorizontalAxis: (value: number) =>
+        set(() => ({ horizontalAxis: value })),
+
       settings: [
-        // 🎵 Sound Settings
         { id: 1, category: "sound", text: "Music", value: false },
         { id: 2, category: "sound", text: "Sounds", value: true },
 
-        // 🎨 Graphics Settings
         { id: 3, category: "graphics", text: "Bloom", value: true },
         { id: 4, category: "graphics", text: "Vignette", value: true },
         { id: 5, category: "graphics", text: "Noise", value: true },

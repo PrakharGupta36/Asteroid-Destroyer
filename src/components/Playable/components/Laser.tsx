@@ -61,14 +61,14 @@ export default function Laser({
 
   return (
     <RigidBody
-      name={`laser-${id}`} // Add name for collision identification
+      name={`laser-${id}`}
       ref={laserRef}
       {...props}
       type='kinematicVelocity'
       colliders='cuboid'
       position={[xPosition, 0, -4.5]}
       rotation={[0, horizontalAxis, 0]}
-      scale={0.025}
+      scale={0.025/1.5}
     >
       <group>
         <mesh
