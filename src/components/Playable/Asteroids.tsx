@@ -109,12 +109,27 @@ type ExplosionData = {
 export default function SpawnAsteroids() {
   const [asteroids, setAsteroids] = useState<AsteroidData[]>([]);
   const [explosions, setExplosions] = useState<ExplosionData[]>([]);
-  const { pause } = useGame();
+  const asteroidSound = new Audio("/sounds/asteroidSound.mp3");
+  const { pause, settings } = useGame();
 
   function randomValue(max: number, min: number) {
     const value = Math.random() * (max - min) + min;
     return Math.random() < 0.5 ? -value : value;
   }
+
+  useEffect(() => {
+    const cleanupInterval = setInterval(() => {
+      const now = Date.now();
+      setExplosions((prev) =>
+        prev.filter((explosion) => {
+          // Remove explosions older than 2 seconds (max lifetime + buffer)
+          return now - explosion.id < 2000;
+        })
+      );
+    }, 2000);
+
+    return () => clearInterval(cleanupInterval);
+  }, []);
 
   useEffect(() => {
     const initialAsteroids = Array.from({ length: 5 }, (_, id) => ({
@@ -165,6 +180,12 @@ export default function SpawnAsteroids() {
     // Find the asteroid to get its scale
     const asteroid = asteroids.find((ast) => ast.id === id);
     const explosionScale = asteroid?.scale || 1;
+
+    if (settings[1].value) {
+      asteroidSound.currentTime = 0;
+      asteroidSound.volume = 0.1;
+      asteroidSound.play();
+    }
 
     // Create explosion at asteroid position
     setExplosions((prev) => [

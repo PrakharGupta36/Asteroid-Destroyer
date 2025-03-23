@@ -1,5 +1,5 @@
 import useGame from "@/hooks/State";
-import { useRef } from "react";
+import { useEffect, useRef } from "react";
 
 import { Button } from "../../ui/button";
 import Settings from "../Settings";
@@ -7,6 +7,12 @@ import Settings from "../Settings";
 export default function SettingsGame() {
   const { pause, setPause } = useGame();
   const btnRef = useRef<HTMLButtonElement>(null);
+
+  useEffect(() => {
+    if (!pause) {
+      document.body.focus();
+    }
+  }, [pause]);
 
   return (
     <Settings

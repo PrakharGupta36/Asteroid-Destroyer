@@ -1,9 +1,8 @@
 import React from "react";
 import { cn } from "@/lib/utils";
 import { VariantProps, cva } from "class-variance-authority";
-import { Loader2 } from "lucide-react";
 
-const spinnerVariants = cva("flex-col items-center justify-center", {
+const spinnerVariants = cva("flex items-center justify-center", {
   variants: {
     show: {
       true: "flex",
@@ -15,12 +14,12 @@ const spinnerVariants = cva("flex-col items-center justify-center", {
   },
 });
 
-const loaderVariants = cva("animate-spin text-primary", {
+const loaderVariants = cva("animate-spin", {
   variants: {
     size: {
-      small: "size-6",
-      medium: "size-8",
-      large: "size-12",
+      small: "h-6 w-6",
+      medium: "h-8 w-8",
+      large: "h-12 w-12",
     },
   },
   defaultVariants: {
@@ -35,16 +34,35 @@ interface SpinnerContentProps
   children?: React.ReactNode;
 }
 
-export function Spinner({
+export default function Spinner({
   size,
   show,
   children,
   className,
 }: SpinnerContentProps) {
   return (
-    <span className={`absolute z-10 ${spinnerVariants({ show })}`}>
-      <Loader2 className={`text-white ${cn(loaderVariants({ size }), className)}`} />
-      {children}
-    </span>
+    <div className={cn("absolute z-10 ", spinnerVariants({ show }))}>
+      <svg
+        className={cn(loaderVariants({ size }), className)}
+        viewBox='0 0 24 24'
+        fill='none'
+        xmlns='http://www.w3.org/2000/svg'
+      >
+        <circle
+          className='opacity-25'
+          cx='12'
+          cy='12'
+          r='10'
+          stroke='white'
+          strokeWidth='4'
+        ></circle>
+        <path
+          className='opacity-75'
+          fill='white'
+          d='M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z'
+        ></path>
+      </svg>
+      {children && <div className='mt-2'>{children}</div>}
+    </div>
   );
 }

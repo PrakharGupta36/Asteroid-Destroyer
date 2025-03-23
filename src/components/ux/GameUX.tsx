@@ -55,7 +55,7 @@ function SpaceshipHealth() {
   );
 }
 
-export default function GameUI() {
+export default function GameUX() {
   return (
     <>
       <SpaceshipHealth />

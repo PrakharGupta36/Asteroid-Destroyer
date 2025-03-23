@@ -34,12 +34,12 @@ export default function Ambience() {
         fadeDistance={400}
         fadeStrength={70}
         cellSize={2}
-        cellThickness={0.5}
+        cellThickness={0.25}
         cellColor='#2563eb'
         sectionSize={2.95}
-        sectionThickness={8.0}
+        sectionThickness={10.0}
         sectionColor='#60a5fa'
-        position={[0, -2, -10]}
+        position={[0, -4, -10]}
         followCamera
       />
 

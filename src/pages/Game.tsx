@@ -4,12 +4,12 @@ import { Physics } from "@react-three/rapier";
 import { Suspense, lazy, useRef, useState } from "react";
 import * as THREE from "three";
 import useGame from "@/hooks/State";
-import { Spinner } from "@/components/ui/spinner";
+import Spinner from "@/components/ui/spinner";
 
 const SpawnAsteroids = lazy(() => import("@/components/Playable/Asteroids"));
 const Playable = lazy(() => import("@/components/Playable/Playable"));
 const Ambience = lazy(() => import("@/components/Ambience/Ambience"));
-const GameUI = lazy(() => import("@/components/ux/GameUI"));
+const GameUX = lazy(() => import("@/components/ux/GameUX"));
 const CustomLoader = lazy(() => import("@/components/ux/CustomLoader"));
 
 function Camera() {
@@ -26,13 +26,15 @@ function Camera() {
   });
 
   return (
-    <PerspectiveCamera
-      position={[0, 3, 11]}
-      makeDefault
-      near={0.05}
-      far={10000}
-      ref={cameraRef}
-    />
+    <>
+      <PerspectiveCamera
+        position={[0, 3, 11]}
+        makeDefault
+        near={0.05}
+        far={10000}
+        ref={cameraRef}
+      />
+    </>
   );
 }
 
@@ -48,7 +50,7 @@ export default function Game() {
         }`}
       >
         <Suspense fallback={<Spinner size={"large"} />}>
-          <GameUI />
+          <GameUX />
         </Suspense>
 
         <Canvas className='w-[100dvw] h-[100dvh]'>

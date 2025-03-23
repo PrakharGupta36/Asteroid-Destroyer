@@ -56,10 +56,6 @@ export default function Playable() {
     };
   }, [pause]);
 
-  useEffect(() => {
-    console.log({ horizontalAxis });
-  }, [horizontalAxis]);
-
   useFrame(() => {
     if (!spaceshipRef.current) return;
 
@@ -85,9 +81,9 @@ export default function Playable() {
         const position = laser.ref.current.translation();
         // Remove if laser has gone too far in any direction
         return (
-          Math.abs(position.x) < 150 &&
-          Math.abs(position.y) < 150 &&
-          Math.abs(position.z) < 150
+          Math.abs(position.x) < 250 &&
+          Math.abs(position.y) < 250 &&
+          Math.abs(position.z) < 250
         );
       })
     );
