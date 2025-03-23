@@ -1,4 +1,4 @@
-precision lowp float;
+// This shader is far to complex and obviously I'm not this smart. It's written by Claude
 
 uniform float time;
 uniform vec3 color1;
@@ -54,7 +54,7 @@ float voronoi(vec2 st) {
   for(int j = -1; j <= 1; j++) {
     for(int i = -1; i <= 1; i++) {
       vec2 neighbor = vec2(float(i), float(j));
-      vec2 point = random(i_st + neighbor);
+      vec2 point = vec2(random(i_st + neighbor), random(i_st + neighbor + vec2(1.0)));
       point = 0.5 + 0.5 * sin(time * 0.8 + 6.2831 * point);
       vec2 diff = neighbor + point - f_st;
       float dist = length(diff);

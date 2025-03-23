@@ -155,7 +155,7 @@ main,
   height: 100%;
   margin: 0;
   padding: 0;
-  background-color: #141414;
+  background-color: #0a0a0a;
   overflow: hidden !important;
   font-family: Poppins, serif;
 }
@@ -195,5 +195,31 @@ main,
   }
   100% {
     opacity: 0.5;
+  }
+}
+
+/* Succesfully stolen from https://x.com/argyleink/status/1902389218263122037 */
+
+.rainbow-button {
+  background: rgba(0, 0, 0, 1);
+  color: white;
+  border: 0.5px solid rgba(255, 255, 255, 0.5);
+  font-size: 0.97rem;
+  padding: 1.25rem 1.75rem;
+  border-radius: 0.45rem;
+  position: relative;
+  transition: all 250ms;
+  box-shadow: 0 8px 32px 0 rgba(30, 176, 201, 0.5);
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+  border-radius: 10px;
+  border: 1px solid rgba(255, 255, 255, 0.18);
+
+  &:hover {
+    scale: 1.125;
+  }
+
+  &:active {
+    scale: 0.9;
   }
 }

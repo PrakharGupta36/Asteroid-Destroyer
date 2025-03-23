@@ -6,7 +6,7 @@ import {
   RigidBody,
   RigidBodyProps,
 } from "@react-three/rapier";
-import React, { useState } from "react";
+import React, { useRef, useEffect } from "react";
 import * as THREE from "three";
 
 type GLTFResult = {
@@ -34,26 +34,29 @@ export default function Laser({
     "/models/Laser.glb"
   ) as unknown as GLTFResult;
 
-  const [xPosition, setXPosition] = useState<number>(
-    getLaserXPosition(horizontalAxis)
-  );
+  const initialPosition = useRef<number>(getLaserXPosition(horizontalAxis));
+  const laserDirection = useRef<THREE.Vector3>(new THREE.Vector3());
+  const initialRotation = useRef<number>(horizontalAxis);
+  const fired = useRef<boolean>(false);
+
+  useEffect(() => {
+    if (!fired.current) {
+      laserDirection.current
+        .set(
+          -Math.cos(initialRotation.current),
+          0,
+          Math.sin(initialRotation.current)
+        )
+        .normalize()
+        .multiplyScalar(100);
+
+      fired.current = true;
+    }
+  }, []);
 
   useFrame(() => {
-    const targetX = getLaserXPosition(horizontalAxis);
-    setXPosition((prev) => THREE.MathUtils.lerp(prev, targetX, 0.25));
-
     if (laserRef.current) {
-      const speed = 50; // Speed of the laser
-
-      const direction = new THREE.Vector3(
-        -Math.cos(horizontalAxis) * speed,
-        0,
-        Math.sin(horizontalAxis) * speed
-      );
-
-      laserRef.current.setLinvel(direction, true);
-
-      // Lock all rotations
+      laserRef.current.setLinvel(laserDirection.current, true);
       laserRef.current.setAngvel({ x: 0, y: 0, z: 0 }, true);
       laserRef.current.lockRotations(true, true);
     }
@@ -66,9 +69,9 @@ export default function Laser({
       {...props}
       type='kinematicVelocity'
       colliders='cuboid'
-      position={[xPosition, 0, -4.5]}
-      rotation={[0, horizontalAxis, 0]}
-      scale={0.025/1.5}
+      position={[initialPosition.current, 0, -4.5]}
+      rotation={[0, initialRotation.current, 0]}
+      scale={0.025 / 1.5}
     >
       <group>
         <mesh

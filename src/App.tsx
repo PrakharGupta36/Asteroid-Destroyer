@@ -1,20 +1,62 @@
-import { useEffect, useState, Suspense, lazy } from "react";
+import { useEffect, useState, useRef, Suspense, lazy } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import useGame from "./hooks/State";
-import Spinner  from "./components/ui/spinner";
+import Spinner from "./components/ui/spinner";
 
 const Game = lazy(() => import("./pages/Game"));
 const Intro = lazy(() => import("./pages/Intro"));
 
 export default function App() {
-  const { start } = useGame();
+  const { start, settings } = useGame();
   const [allowed, setAllowed] = useState<null | boolean>(null);
+  const musicRef = useRef<HTMLAudioElement | null>(null);
 
   useEffect(() => {
     const hasMouse = window.matchMedia("(pointer: fine)").matches;
     const hasKeyboard = "onkeydown" in window;
     setAllowed(hasMouse && hasKeyboard);
   }, []);
+
+  useEffect(() => {
+    const enableAudio = () => {
+      if (!musicRef.current) {
+        musicRef.current = new Audio("/sounds/music.mp3");
+        musicRef.current.loop = true;
+        musicRef.current.volume = 0.25;
+      }
+
+      if (settings[0].value) {
+        musicRef.current
+          .play()
+          .catch((err) => console.warn("Autoplay blocked:", err));
+      } else {
+        musicRef.current.pause();
+      }
+
+      document.removeEventListener("click", enableAudio);
+    };
+
+    document.addEventListener("click", enableAudio, { once: true });
+
+    return () => document.removeEventListener("click", enableAudio);
+  }, [settings]);
+
+  useEffect(() => {
+    const handleVisibilityChange = () => {
+      if (musicRef.current) {
+        if (document.hidden) {
+          musicRef.current.pause();
+        } else if (settings[0].value) {
+          musicRef.current.play().catch(() => {});
+        }
+      }
+    };
+
+    document.addEventListener("visibilitychange", handleVisibilityChange);
+    return () => {
+      document.removeEventListener("visibilitychange", handleVisibilityChange);
+    };
+  }, [settings]);
 
   if (allowed === null) return null;
 

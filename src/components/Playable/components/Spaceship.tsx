@@ -48,7 +48,6 @@ const Spaceship = forwardRef<RapierRigidBody, SpaceshipProps>(
     useFrame((_, delta) => {
       if (!modelRef.current) return;
 
-      // Smoothly reduce wobble intensity
       setWobbleIntensity((prev) =>
         THREE.MathUtils.lerp(prev, 0, delta * wobbleDecay)
       );
@@ -113,7 +112,7 @@ const Spaceship = forwardRef<RapierRigidBody, SpaceshipProps>(
   }
 );
 
-Spaceship.displayName = "Spaceship"; // Required for forwardRef components
+Spaceship.displayName = "Spaceship";
 
 useGLTF.preload("/models/Spaceship.glb");
 

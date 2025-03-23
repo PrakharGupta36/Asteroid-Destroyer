@@ -148,9 +148,9 @@ export default function CustomLoader({
           <Progress
             value={progressValue}
             className={cn(
-              "h-0.25",
+              "h-1",
               "bg-white", // Override background
-              "[&>div]:bg-gradient-to-r [&>div]:from-blue-600 [&>div]:to-indigo-600" // Style the indicator
+              "[&>div]:bg-gradient-to-r [&>div]:from-blue-600 [&>div]:to-indigo-600"
             )}
           />
 

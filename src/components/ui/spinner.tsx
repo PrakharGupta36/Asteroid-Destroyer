@@ -1,6 +1,8 @@
-import React from "react";
+"use client";
+
+import type React from "react";
 import { cn } from "@/lib/utils";
-import { VariantProps, cva } from "class-variance-authority";
+import { type VariantProps, cva } from "class-variance-authority";
 
 const spinnerVariants = cva("flex items-center justify-center", {
   variants: {
@@ -32,6 +34,7 @@ interface SpinnerContentProps
     VariantProps<typeof loaderVariants> {
   className?: string;
   children?: React.ReactNode;
+  color?: string;
 }
 
 export default function Spinner({
@@ -39,28 +42,39 @@ export default function Spinner({
   show,
   children,
   className,
+  color = "#8E8E93",
 }: SpinnerContentProps) {
+  // Create 12 lines for the iOS spinner
+  const lines = Array.from({ length: 12 }, (_, i) => {
+    // Calculate opacity for each line (iOS style fades from most opaque to least)
+    const opacity = (12 - i) / 12;
+
+    return (
+      <rect
+        key={i}
+        x='11'
+        y='1'
+        width='2'
+        height='5'
+        rx='1'
+        fill={color}
+        style={{
+          opacity,
+          transform: `rotate(${i * 30}deg)`,
+          transformOrigin: "center center",
+        }}
+      />
+    );
+  });
+
   return (
-    <div className={cn("absolute z-10 ", spinnerVariants({ show }))}>
+    <div className={cn("absolute z-10", spinnerVariants({ show }))}>
       <svg
         className={cn(loaderVariants({ size }), className)}
         viewBox='0 0 24 24'
-        fill='none'
         xmlns='http://www.w3.org/2000/svg'
       >
-        <circle
-          className='opacity-25'
-          cx='12'
-          cy='12'
-          r='10'
-          stroke='white'
-          strokeWidth='4'
-        ></circle>
-        <path
-          className='opacity-75'
-          fill='white'
-          d='M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z'
-        ></path>
+        {lines}
       </svg>
       {children && <div className='mt-2'>{children}</div>}
     </div>

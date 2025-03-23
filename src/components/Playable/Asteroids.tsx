@@ -1,7 +1,7 @@
 // components/SpawnAsteroids.tsx
 "use client";
 
-import { useGLTF } from "@react-three/drei";
+import { useGLTF, useProgress } from "@react-three/drei";
 import {
   RigidBody,
   type RigidBodyProps,
@@ -111,6 +111,7 @@ export default function SpawnAsteroids() {
   const [explosions, setExplosions] = useState<ExplosionData[]>([]);
   const asteroidSound = new Audio("/sounds/asteroidSound.mp3");
   const { pause, settings } = useGame();
+  const { progress } = useProgress();
 
   function randomValue(max: number, min: number) {
     const value = Math.random() * (max - min) + min;
@@ -207,16 +208,17 @@ export default function SpawnAsteroids() {
 
   return (
     <>
-      {asteroids.map(({ id, position, rotation, scale }) => (
-        <Asteroid
-          key={id}
-          id={id}
-          onDestroy={destroyAsteroid}
-          position={position}
-          rotation={rotation}
-          scale={scale}
-        />
-      ))}
+      {progress >= 100 &&
+        asteroids.map(({ id, position, rotation, scale }) => (
+          <Asteroid
+            key={id}
+            id={id}
+            onDestroy={destroyAsteroid}
+            position={position}
+            rotation={rotation}
+            scale={scale}
+          />
+        ))}
 
       {/* Render all explosions */}
       {explosions.map(({ id, position, scale }) => (

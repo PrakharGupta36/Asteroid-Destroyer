@@ -1,5 +1,5 @@
 import * as THREE from "three";
-import { useMemo, useRef, useState, useEffect } from "react";
+import { useMemo, useRef, useState } from "react";
 import explosionVertexShader from "./shaders/explosion-vertex.vert";
 import explosionFragmentShader from "./shaders/explosion-fragment.frag";
 import { useFrame } from "@react-three/fiber";
@@ -24,6 +24,8 @@ function Particles({
   const points = useRef<THREE.Points>(null);
 
   const particlesPosition = useMemo(() => {
+    if (!count) return new Float32Array();
+
     const positions = new Float32Array(count * 10);
 
     if (shape === "box") {
@@ -40,8 +42,12 @@ function Particles({
       const distance = 1;
 
       for (let i = 0; i < count; i++) {
-        const theta = THREE.MathUtils.randFloatSpread(360);
-        const phi = THREE.MathUtils.randFloatSpread(360);
+        const theta = THREE.MathUtils.degToRad(
+          THREE.MathUtils.randFloatSpread(360)
+        );
+        const phi = THREE.MathUtils.degToRad(
+          THREE.MathUtils.randFloatSpread(360)
+        );
 
         const x = distance * Math.sin(theta) * Math.cos(phi);
         const y = distance * Math.sin(theta) * Math.sin(phi);
@@ -60,7 +66,7 @@ function Particles({
         <bufferAttribute
           key={Math.random()}
           attach='attributes-position'
-          count={particlesPosition.length / 3}
+          count={count}
           array={particlesPosition}
           itemSize={3}
           args={[particlesPosition, 3]}
@@ -88,20 +94,6 @@ export default function Explosion({
   const maxLifetime = 1.5;
   const completedRef = useRef(false);
 
-  // Ensure we clean up even if animation frames are dropped
-  useEffect(() => {
-    const timeoutId = setTimeout(() => {
-      if (!completedRef.current) {
-        completedRef.current = true;
-        onComplete();
-      }
-    }, maxLifetime * 1000 + 100); // Add a small buffer to ensure it runs after the max lifetime
-
-    return () => {
-      clearTimeout(timeoutId);
-    };
-  }, [maxLifetime, onComplete]);
-
   const explosionMaterial = useMemo(() => {
     return new THREE.ShaderMaterial({
       uniforms: {
@@ -128,10 +120,8 @@ export default function Explosion({
       material.uniforms.u_time.value += delta;
     }
 
-    // Update lifetime
     const newLifetime = lifetime + delta;
 
-    // Check if explosion should be complete
     if (newLifetime >= maxLifetime && !completedRef.current) {
       completedRef.current = true;
       onComplete();
@@ -140,12 +130,10 @@ export default function Explosion({
       setLifetime(newLifetime);
     }
 
-    // Update explosion material
     if (explosionMaterial.uniforms?.u_time) {
       explosionMaterial.uniforms.u_time.value = lifetime / maxLifetime;
     }
 
-    // Scale the explosion
     if (groupRef.current) {
       const currentScale = scale * (1 + lifetime * 1.5);
       groupRef.current.scale.set(currentScale, currentScale, currentScale);

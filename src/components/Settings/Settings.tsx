@@ -88,7 +88,6 @@ export default function Settings({
                   >
                     <div className='text-gray-300'>{e.text}</div>
                     <Switch
-                      disabled={e.id === 1}
                       checked={e.value}
                       onClick={() => {
                         setSettings(e.id, !e.value);
