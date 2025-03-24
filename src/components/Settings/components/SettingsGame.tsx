@@ -19,14 +19,14 @@ export default function SettingsGame() {
       trigger={
         <Button
           ref={btnRef}
-          className='absolute top-0 z-10 m-4 border'
+          className='absolute top-0 z-10 m-4 border pause-btn'
           tabIndex={-1}
           onKeyDown={(e: React.KeyboardEvent<HTMLButtonElement>) =>
             e.preventDefault()
           }
           onMouseDown={(e) => e.preventDefault()}
         >
-          Pause (shift + s)
+          Pause (Shift + S)
         </Button>
       }
       pause={pause}

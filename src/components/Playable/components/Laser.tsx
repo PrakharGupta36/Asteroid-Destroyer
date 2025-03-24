@@ -9,6 +9,11 @@ import {
 import React, { useRef, useEffect } from "react";
 import * as THREE from "three";
 
+// Singleton laser audio instance (preloaded)
+const laserSound = new Audio("/sounds/laserSound.mp3");
+laserSound.preload = "auto";
+laserSound.volume = 0.5;
+
 type GLTFResult = {
   nodes: {
     imagetostl_mesh3: THREE.Mesh;
@@ -51,6 +56,10 @@ export default function Laser({
         .multiplyScalar(100);
 
       fired.current = true;
+
+      // Play preloaded sound exactly when firing
+      laserSound.currentTime = 0;
+      laserSound.play();
     }
   }, []);
 
@@ -75,8 +84,6 @@ export default function Laser({
     >
       <group>
         <mesh
-          castShadow
-          receiveShadow
           geometry={nodes.imagetostl_mesh3.geometry}
           material={materials.mat3}
         />

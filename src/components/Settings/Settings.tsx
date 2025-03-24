@@ -60,8 +60,14 @@ export default function Settings({
         <Separator className='bg-[#333]' />
 
         {/* Tabs Section */}
-        <Tabs defaultValue='sounds'>
+        <Tabs defaultValue='general'>
           <TabsList className='w-full bg-[#1d1d1d] text-gray-300'>
+            <TabsTrigger
+              value='general'
+              className='data-[state=active]:bg-[#333] data-[state=active]:text-white'
+            >
+              General
+            </TabsTrigger>
             <TabsTrigger
               value='sounds'
               className='data-[state=active]:bg-[#333] data-[state=active]:text-white'
@@ -76,7 +82,39 @@ export default function Settings({
             </TabsTrigger>
           </TabsList>
 
-          {/* Sounds Settings */}
+          <TabsContent value='general'>
+            <div className='grid gap-3'>
+              {settings
+                .filter((e) => e.category === "general")
+                .map((e) => {
+                  return (
+                    <div
+                      key={e.id}
+                      className='flex justify-between items-center bg-[#222] p-3 rounded-lg'
+                    >
+                      <div className='text-gray-300'>
+                        {e.text === "Restart" ? "Restart Game" : e.text}
+                      </div>
+                      {e.text === "Restart" ? (
+                        <Button
+                          onClick={() => {
+                            window.location.reload(); // or a custom reset logic
+                          }}
+                        >
+                          Restart
+                        </Button>
+                      ) : (
+                        <Switch
+                          checked={e.value}
+                          onClick={() => setSettings(e.id, !e.value)}
+                        />
+                      )}
+                    </div>
+                  );
+                })}
+            </div>
+          </TabsContent>
+
           <TabsContent value='sounds'>
             <div className='grid gap-3'>
               {settings
@@ -102,7 +140,6 @@ export default function Settings({
             </div>
           </TabsContent>
 
-          {/* Graphics Settings */}
           <TabsContent value='graphics'>
             <div className='grid gap-3'>
               {settings

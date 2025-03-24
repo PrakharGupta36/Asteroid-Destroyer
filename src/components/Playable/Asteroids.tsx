@@ -82,8 +82,6 @@ function Asteroid({ onDestroy, id, ...props }: AsteroidProps) {
     >
       <group dispose={null}>
         <mesh
-          castShadow
-          receiveShadow
           geometry={nodes.Object_2.geometry}
           material={materials["Material.003"]}
           rotation={[0, 0, 0]}
@@ -220,7 +218,6 @@ export default function SpawnAsteroids() {
           />
         ))}
 
-      {/* Render all explosions */}
       {explosions.map(({ id, position, scale }) => (
         <Explosion
           key={id}

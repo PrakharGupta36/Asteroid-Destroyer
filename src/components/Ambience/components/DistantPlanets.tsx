@@ -39,14 +39,10 @@ function GasGiant(props: JSX.IntrinsicElements["group"]) {
         <group rotation={[Math.PI / 2, 0, 0]}>
           <group ref={ref} rotation={[-Math.PI / 2, 0, 0]}>
             <mesh
-              castShadow
-              receiveShadow
               geometry={nodes.gas_giant_gas_giant_mat_0.geometry}
               material={materials.gas_giant_mat}
             />
             <mesh
-              castShadow
-              receiveShadow
               geometry={nodes.gas_giant_rings_mat_0.geometry}
               material={materials.rings_mat}
             />
@@ -101,8 +97,6 @@ function PurplePlanet(props: JSX.IntrinsicElements["group"]) {
             <group name='Planet' rotation={[0, 0, Math.PI / 2]}>
               <mesh
                 name='Planet_0'
-                castShadow
-                receiveShadow
                 geometry={nodes.Planet_0.geometry}
                 material={materials.PurplePlanet}
               />
@@ -113,8 +107,6 @@ function PurplePlanet(props: JSX.IntrinsicElements["group"]) {
               >
                 <mesh
                   name='Clouds_0_0'
-                  castShadow
-                  receiveShadow
                   geometry={nodes.Clouds_0_0.geometry}
                   material={materials.Clouds_0}
                 />
@@ -123,8 +115,6 @@ function PurplePlanet(props: JSX.IntrinsicElements["group"]) {
             <group name='Clouds_1' scale={1.019}>
               <mesh
                 name='Clouds_1_0'
-                castShadow
-                receiveShadow
                 geometry={nodes.Clouds_1_0.geometry}
                 material={materials.Clouds_1}
               />

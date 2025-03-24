@@ -3,7 +3,7 @@ import { persist } from "zustand/middleware";
 
 interface Setting {
   id: number;
-  category: "sound" | "graphics";
+  category: "general" | "sound" | "graphics";
   text: string;
   value: boolean;
 }
@@ -43,8 +43,10 @@ const useGame = create<useGameTypes>()(
         { id: 2, category: "sound", text: "Sounds", value: true },
 
         { id: 3, category: "graphics", text: "Bloom", value: true },
-        { id: 4, category: "graphics", text: "Vignette", value: true },
-        { id: 5, category: "graphics", text: "Noise", value: true },
+        { id: 4, category: "graphics", text: "Vignette", value: false },
+        { id: 5, category: "graphics", text: "Noise", value: false },
+
+        { id: 6, category: "general", text: "Restart", value: false },
       ],
 
       setSettings: (id: number, value: boolean) =>
@@ -67,7 +69,7 @@ const useGame = create<useGameTypes>()(
     }),
 
     {
-      name: "game-settings-----01",
+      name: "game-settings-----02",
       partialize: (state) => ({ settings: state.settings }),
     }
   )
