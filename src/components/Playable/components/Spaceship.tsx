@@ -83,7 +83,7 @@ const Spaceship = forwardRef<RapierRigidBody, SpaceshipProps>(
     };
 
     return (
-      <>
+      <group>
         <RigidBody
           name='spaceship'
           scale={0.0125 / 2.2}
@@ -107,7 +107,7 @@ const Spaceship = forwardRef<RapierRigidBody, SpaceshipProps>(
             {settings[2].value && <Boosters />}
           </group>
         </RigidBody>
-      </>
+      </group>
     );
   }
 );

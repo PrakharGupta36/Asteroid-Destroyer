@@ -35,7 +35,7 @@ function SpaceshipHealth() {
   const { spaceshipHealth } = useGame();
 
   return (
-    <div className='absolute bottom-0 left-0 z-10 m-6 grid gap-2 py-5 px-3 health border border-gray-300/50 shadow-md'>
+    <div className='absolute bottom-0 left-0 z-10 m-8 grid gap-2 py-5 px-3 health border border-gray-300/50 shadow-md'>
       <span className='text-white font-bold text-lg tracking-wide drop-shadow-md'>
         Spaceship Health
       </span>
@@ -57,13 +57,13 @@ function SpaceshipControls() {
       </span>
       <ul className='space-y-2 text-gray-300 font-medium'>
         <li className='hover:text-white transition duration-200'>
-          A - Turn Left
+          A / Arrow Left - Turn Left
         </li>
         <li className='hover:text-white transition duration-200'>
-          D - Turn Right
+          D / Arrow Right - Turn Right
         </li>
         <li className='hover:text-red-400 transition duration-200'>
-          Space - Lasers
+          Space / Left Mouse - Lasers
         </li>
       </ul>
     </div>

@@ -121,7 +121,6 @@ export default function SpawnAsteroids() {
       const now = Date.now();
       setExplosions((prev) =>
         prev.filter((explosion) => {
-          // Remove explosions older than 2 seconds (max lifetime + buffer)
           return now - explosion.id < 2000;
         })
       );
@@ -131,15 +130,17 @@ export default function SpawnAsteroids() {
   }, []);
 
   useEffect(() => {
-    const initialAsteroids = Array.from({ length: 5 }, (_, id) => ({
-      id,
-      position: [randomValue(80, -80), 0, -300] as [number, number, number],
-      rotation: [0, 0, 0] as [number, number, number],
-      scale: 0.5,
-    }));
+    if (progress >= 100) {
+      const initialAsteroids = Array.from({ length: 5 }, (_, id) => ({
+        id,
+        position: [randomValue(80, -80), 0, -300] as [number, number, number],
+        rotation: [0, 0, 0] as [number, number, number],
+        scale: 0.5,
+      }));
 
-    setAsteroids(initialAsteroids);
-  }, []);
+      setAsteroids(initialAsteroids);
+    }
+  }, [progress]);
 
   useEffect(() => {
     if (pause === false) {
@@ -176,7 +177,6 @@ export default function SpawnAsteroids() {
   }, [pause]);
 
   const destroyAsteroid = (id: number, position: [number, number, number]) => {
-    // Find the asteroid to get its scale
     const asteroid = asteroids.find((ast) => ast.id === id);
     const explosionScale = asteroid?.scale || 1;
 
@@ -186,23 +186,23 @@ export default function SpawnAsteroids() {
       asteroidSound.play();
     }
 
-    // Create explosion at asteroid position
     setExplosions((prev) => [
       ...prev,
       {
-        id: Date.now(),
+        id: Date.now() * Math.random(),
         position,
-        scale: explosionScale * 1.5, // Make explosion a bit larger than the asteroid
+        scale: explosionScale * 1.5,
       },
     ]);
 
-    // Remove asteroid
     setAsteroids((prev) => prev.filter((asteroid) => asteroid.id !== id));
   };
 
   const removeExplosion = (id: number) => {
     setExplosions((prev) => prev.filter((explosion) => explosion.id !== id));
   };
+
+  
 
   return (
     <>

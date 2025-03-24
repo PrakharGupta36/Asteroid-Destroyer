@@ -22,49 +22,66 @@ function Particles({
   maxLifetime: number;
 }) {
   const points = useRef<THREE.Points>(null);
+  const velocities = useRef<Float32Array>(new Float32Array(count * 3));
 
   const particlesPosition = useMemo(() => {
-    if (!count) return new Float32Array();
+    const positions = new Float32Array(count * 3);
 
-    const positions = new Float32Array(count * 10);
+    for (let i = 0; i < count; i++) {
+      let x, y, z;
 
-    if (shape === "box") {
-      for (let i = 0; i < count; i++) {
-        const x = (Math.random() - 0.5) * 8;
-        const y = (Math.random() - 0.5) * 10;
-        const z = (Math.random() - 0.5) * 12;
+      if (shape === "box") {
+        x = (Math.random() - 0.5) * 8;
+        y = (Math.random() - 0.5) * 10;
+        z = (Math.random() - 0.5) * 12;
+      } else {
+        // Sphere explosion
+        const theta = Math.random() * Math.PI * 2;
+        const phi = Math.acos(2 * Math.random() - 1);
+        const radius = Math.random() * 2;
 
-        positions.set([x, y, z], i * 3);
+        x = radius * Math.sin(phi) * Math.cos(theta);
+        y = radius * Math.sin(phi) * Math.sin(theta);
+        z = radius * Math.cos(phi);
       }
-    }
 
-    if (shape === "sphere") {
-      const distance = 1;
+      positions.set([x, y, z], i * 3);
 
-      for (let i = 0; i < count; i++) {
-        const theta = THREE.MathUtils.degToRad(
-          THREE.MathUtils.randFloatSpread(360)
-        );
-        const phi = THREE.MathUtils.degToRad(
-          THREE.MathUtils.randFloatSpread(360)
-        );
-
-        const x = distance * Math.sin(theta) * Math.cos(phi);
-        const y = distance * Math.sin(theta) * Math.sin(phi);
-        const z = distance * Math.cos(theta);
-
-        positions.set([x, y, z], i * 3);
-      }
+      velocities.current[i * 3] = (Math.random() - 0.5) * 3;
+      velocities.current[i * 3 + 1] = Math.random() * 6;
+      velocities.current[i * 3 + 2] = (Math.random() - 0.5) * 3;
     }
 
     return positions;
   }, [count, shape]);
 
+  useFrame((_, delta) => {
+    if (!points.current) return;
+
+    const positions = points.current.geometry.attributes.position
+      .array as Float32Array;
+    const gravity = -9.81 * delta * 0.2;
+
+    for (let i = 0; i < count; i++) {
+      const index = i * 3;
+      positions[index] += velocities.current[index] * delta; // X
+      positions[index + 1] += velocities.current[index + 1] * delta; // Y
+      positions[index + 2] += velocities.current[index + 2] * delta; // Z
+
+      velocities.current[index + 1] += gravity;
+
+      velocities.current[index] *= 0.98;
+      velocities.current[index + 1] *= 0.98;
+      velocities.current[index + 2] *= 0.98;
+    }
+
+    points.current.geometry.attributes.position.needsUpdate = true;
+  });
+
   return (
     <points ref={points}>
       <bufferGeometry>
         <bufferAttribute
-          key={Math.random()}
           attach='attributes-position'
           count={count}
           array={particlesPosition}
@@ -73,11 +90,12 @@ function Particles({
         />
       </bufferGeometry>
       <pointsMaterial
-        size={0.5}
-        color='#ff5500'
+        size={0.2}
+        vertexColors={true}
         transparent={true}
+        color={"red"}
         blending={THREE.AdditiveBlending}
-        opacity={1 - lifetime / maxLifetime}
+        opacity={Math.max(0, 1 - lifetime / maxLifetime)}
       />
     </points>
   );
@@ -98,8 +116,10 @@ export default function Explosion({
     return new THREE.ShaderMaterial({
       uniforms: {
         u_time: { value: 0 },
-        u_color1: { value: new THREE.Color("#ff9500") },
-        u_color2: { value: new THREE.Color("#ff0000") },
+        u_mouse: { value: new THREE.Vector2() },
+        u_resolution: {
+          value: new THREE.Vector2(0.1, 1),
+        },
       },
       vertexShader: explosionVertexShader,
       fragmentShader: explosionFragmentShader,

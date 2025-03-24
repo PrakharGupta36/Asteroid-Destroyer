@@ -1,10 +1,8 @@
-varying vec2 vUv;
-varying vec3 vPosition;
-varying vec3 vNormal;
+precision mediump float;
+
+out vec2 v_uv;
 
 void main() {
-  vUv = uv;
-  vPosition = position;
-  vNormal = normalize(normalMatrix * normal);
+  v_uv = uv;
   gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
 }

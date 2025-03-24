@@ -1,3 +1,4 @@
+import useGame from "@/hooks/State";
 import getLaserXPosition from "@/utils/getLaserXPosition";
 import { useGLTF } from "@react-three/drei";
 import { useFrame } from "@react-three/fiber";
@@ -9,7 +10,6 @@ import {
 import React, { useRef, useEffect } from "react";
 import * as THREE from "three";
 
-// Singleton laser audio instance (preloaded)
 const laserSound = new Audio("/sounds/laserSound.mp3");
 laserSound.preload = "auto";
 laserSound.volume = 0.5;
@@ -44,6 +44,8 @@ export default function Laser({
   const initialRotation = useRef<number>(horizontalAxis);
   const fired = useRef<boolean>(false);
 
+  const { settings } = useGame();
+
   useEffect(() => {
     if (!fired.current) {
       laserDirection.current
@@ -57,11 +59,12 @@ export default function Laser({
 
       fired.current = true;
 
-      // Play preloaded sound exactly when firing
-      laserSound.currentTime = 0;
-      laserSound.play();
+      if (settings[1].value) {
+        laserSound.currentTime = 0;
+        laserSound.play();
+      }
     }
-  }, []);
+  }, [settings]);
 
   useFrame(() => {
     if (laserRef.current) {
@@ -72,23 +75,25 @@ export default function Laser({
   });
 
   return (
-    <RigidBody
-      name={`laser-${id}`}
-      ref={laserRef}
-      {...props}
-      type='kinematicVelocity'
-      colliders='cuboid'
-      position={[initialPosition.current, 0, -4.5]}
-      rotation={[0, initialRotation.current, 0]}
-      scale={0.025 / 1.5}
-    >
-      <group>
-        <mesh
-          geometry={nodes.imagetostl_mesh3.geometry}
-          material={materials.mat3}
-        />
-      </group>
-    </RigidBody>
+    <group>
+      <RigidBody
+        name={`laser-${id}`}
+        ref={laserRef}
+        {...props}
+        type='kinematicVelocity'
+        colliders='cuboid'
+        scale={0.025 / 1.5}
+        position={[initialPosition.current, 0, -4.5]}
+        rotation={[0, initialRotation.current, 0]}
+      >
+        <group>
+          <mesh
+            geometry={nodes.imagetostl_mesh3.geometry}
+            material={materials.mat3}
+          />
+        </group>
+      </RigidBody>
+    </group>
   );
 }
 

@@ -3,19 +3,24 @@ import { AnimatePresence, motion } from "framer-motion";
 import useGame from "./hooks/State";
 import Spinner from "./components/ui/spinner";
 
+// Lazy load pages
 const Game = lazy(() => import("./pages/Game"));
 const Intro = lazy(() => import("./pages/Intro"));
 
 export default function App() {
-  const { start, settings } = useGame();
+  const { start, settings, setPause } = useGame();
   const [allowed, setAllowed] = useState<null | boolean>(null);
   const musicRef = useRef<HTMLAudioElement | null>(null);
 
   useEffect(() => {
     const hasMouse = window.matchMedia("(pointer: fine)").matches;
     const hasKeyboard = "onkeydown" in window;
-    setAllowed(hasMouse && hasKeyboard);
-  }, []);
+    const newAllowed = hasMouse && hasKeyboard;
+
+    if (allowed !== newAllowed) {
+      setAllowed(newAllowed);
+    }
+  }, [allowed]);
 
   useEffect(() => {
     const enableAudio = () => {
@@ -25,7 +30,7 @@ export default function App() {
         musicRef.current.volume = 0.25;
       }
 
-      if (settings[0].value) {
+      if (settings[0]?.value) {
         musicRef.current
           .play()
           .catch((err) => console.warn("Autoplay blocked:", err));
@@ -42,21 +47,29 @@ export default function App() {
   }, [settings]);
 
   useEffect(() => {
+    let timeoutId: NodeJS.Timeout;
+
     const handleVisibilityChange = () => {
-      if (musicRef.current) {
+      if (!musicRef.current) return;
+
+      clearTimeout(timeoutId);
+      timeoutId = setTimeout(() => {
         if (document.hidden) {
-          musicRef.current.pause();
-        } else if (settings[0].value) {
-          musicRef.current.play().catch(() => {});
+          setPause(true);
+          musicRef.current?.pause();
+        } else if (settings[0]?.value) {
+          setPause(false);
+          musicRef.current?.play().catch(() => {});
         }
-      }
+      }, 100);
     };
 
     document.addEventListener("visibilitychange", handleVisibilityChange);
     return () => {
+      clearTimeout(timeoutId);
       document.removeEventListener("visibilitychange", handleVisibilityChange);
     };
-  }, [settings]);
+  }, [setPause, settings]);
 
   if (allowed === null) return null;
 
@@ -73,8 +86,14 @@ export default function App() {
 
   return (
     <main className='grid place-items-center w-[100dvw] h-[100dvh]'>
-      <AnimatePresence mode='wait'>
-        <Suspense fallback={<Spinner size={"large"} />}>
+      <AnimatePresence mode='sync'>
+        <Suspense
+          fallback={
+            <div className='grid place-items-center h-[100dvh]'>
+              <Spinner size='large' />
+            </div>
+          }
+        >
           {start ? (
             <motion.div
               key='game'
