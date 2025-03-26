@@ -26,6 +26,9 @@ interface useGameTypes {
 
   spaceshipHealth: number;
   setSpaceshipHealth: () => void;
+
+  isOverAsteroid: boolean;
+  setIsOverAsteroid: (value:boolean) => void;
 }
 
 const useGame = create<useGameTypes>()(
@@ -65,6 +68,9 @@ const useGame = create<useGameTypes>()(
       spaceshipHealth: 100,
       setSpaceshipHealth: () =>
         set((state) => ({ spaceshipHealth: state.spaceshipHealth - 10 })),
+
+      isOverAsteroid: false,
+      setIsOverAsteroid: (value: boolean) => set({ isOverAsteroid: value }),
     }),
 
     {

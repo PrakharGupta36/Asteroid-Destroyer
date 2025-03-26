@@ -29,8 +29,10 @@ function Asteroid({ onDestroy, id, ...props }: AsteroidProps) {
     "/models/Asteroid.glb"
   ) as unknown as GLTFResult;
   const asteroidRef = useRef<RapierRigidBody>(null);
+  const meshRef = useRef<THREE.Mesh>(null);
   const [collided, setCollided] = useState(false);
   const [position, setPosition] = useState<[number, number, number]>([0, 0, 0]);
+  const { setIsOverAsteroid } = useGame();
 
   useFrame(() => {
     if (asteroidRef.current) {
@@ -77,13 +79,20 @@ function Asteroid({ onDestroy, id, ...props }: AsteroidProps) {
       onCollisionEnter={handleCollision}
       {...props}
     >
-      <group dispose={null}>
-        <mesh
-          geometry={nodes.Object_2.geometry}
-          material={materials["Material.003"]}
-          rotation={[0, 0, 0]}
-        />
-      </group>
+      <mesh
+        ref={meshRef}
+        geometry={nodes.Object_2.geometry}
+        material={materials["Material.003"]}
+        rotation={[0, 0, 0]}
+        onPointerOver={(e) => {
+          e.stopPropagation();
+          setIsOverAsteroid(true);
+        }}
+        onPointerOut={(e) => {
+          e.stopPropagation();
+          setIsOverAsteroid(false);
+        }}
+      />
     </RigidBody>
   );
 }
