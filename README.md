@@ -1,5 +1,7 @@
 # **Asteroid Destroyer 🚀**
 
+---
+
 ## **Models Credit:**
 
 ### **Asteroid**
@@ -21,5 +23,10 @@
 ### **Purple Planet**
 
 [![Purple Planet](https://img.shields.io/badge/View%20Model-%230098da?style=flat-square&logo=sketchfab)](https://sketchfab.com/3d-models/purple-planet-264eb22207184fc99a5e3b1279a763b8)
+
+---
+
+## **All sounds and music are from:**
+[Pixabay](https://pixabay.com/)
 
 ---

@@ -86,7 +86,7 @@ export default function App() {
 
   return (
     <main className='grid place-items-center w-[100dvw] h-[100dvh]'>
-      <AnimatePresence mode='sync'>
+      <AnimatePresence mode='wait'>
         <Suspense
           fallback={
             <div className='grid place-items-center h-[100dvh]'>

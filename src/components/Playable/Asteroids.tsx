@@ -1,6 +1,3 @@
-// components/SpawnAsteroids.tsx
-"use client";
-
 import { useGLTF, useProgress } from "@react-three/drei";
 import {
   RigidBody,
@@ -201,8 +198,6 @@ export default function SpawnAsteroids() {
   const removeExplosion = (id: number) => {
     setExplosions((prev) => prev.filter((explosion) => explosion.id !== id));
   };
-
-  
 
   return (
     <>

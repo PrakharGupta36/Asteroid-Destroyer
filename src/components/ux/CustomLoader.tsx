@@ -4,11 +4,28 @@ import { useEffect, useState } from "react";
 import { cn } from "@/lib/utils";
 import { Progress } from "../ui/progress";
 
-export default function Loader() {
+export default function CustomLoader({
+  setIsLoading,
+}: {
+  setIsLoading: React.Dispatch<React.SetStateAction<boolean>>;
+}) {
   const { progress, loaded, total } = useProgress();
   const [visible, setVisible] = useState(true);
   const [progressValue, setProgressValue] = useState(0);
+  const [fadeOut, setFadeOut] = useState(false);
   const [showLoader, setShowLoader] = useState(false);
+
+  useEffect(() => {
+    if (progress === 100) {
+      setFadeOut(true);
+
+      const timer = setTimeout(() => {
+        setIsLoading(false);
+      }, 1000);
+
+      return () => clearTimeout(timer);
+    }
+  }, [progress, setIsLoading]);
 
   useEffect(() => {
     const timeout = setTimeout(() => {
@@ -38,9 +55,9 @@ export default function Loader() {
 
   return (
     <div
-      className={`transition-opacity duration-700  ${
-        showLoader ? "opacity-100" : "opacity-0"
-      }`}
+      className={`transition-opacity duration-700 ${
+        fadeOut ? "opacity-0" : ""
+      } ${showLoader ? "opacity-100" : "opacity-0"}`}
     >
       <div className='fixed inset-0 flex flex-col items-center justify-center bg-[#101010] backdrop-blur-sm z-1'>
         <div className='relative w-32 h-32 '>
@@ -131,9 +148,9 @@ export default function Loader() {
           <Progress
             value={progressValue}
             className={cn(
-              "h-1",
+              "h-0.25",
               "bg-white", // Override background
-              "[&>div]:bg-gradient-to-r [&>div]:from-blue-600 [&>div]:to-indigo-600"
+              "[&>div]:bg-gradient-to-r [&>div]:from-blue-600 [&>div]:to-indigo-600" // Style the indicator
             )}
           />
 
