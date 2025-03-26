@@ -31,7 +31,7 @@ const GameCamera = () => {
   return (
     <PerspectiveCamera
       ref={cameraRef}
-      position={[0, 3, 12.5]}
+      position={[0, 3, 11]}
       makeDefault
       near={0.05}
       far={10000}
@@ -47,7 +47,7 @@ export default function Game() {
     <>
       {/* Game Canvas */}
       <div
-        className={`absolute inset-0 transition-opacity duration-1000 ${
+        className={`absolute inset-0 transition-opacity duration-500 ${
           isLoading ? "opacity-0" : "opacity-100"
         }`}
       >
