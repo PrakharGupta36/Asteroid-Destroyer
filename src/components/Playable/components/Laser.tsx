@@ -1,11 +1,14 @@
+"use client";
+
 import { useGLTF } from "@react-three/drei";
 import { useFrame } from "@react-three/fiber";
 import {
-  RapierRigidBody,
+  type RapierRigidBody,
   RigidBody,
-  RigidBodyProps,
+  type RigidBodyProps,
 } from "@react-three/rapier";
-import React, { useRef, useEffect } from "react";
+import type React from "react";
+import { useRef, useEffect } from "react";
 import * as THREE from "three";
 
 const laserSound = new Audio("/sounds/laserSound.mp3");
@@ -17,47 +20,87 @@ type GLTFResult = {
   materials: { mat3: THREE.Material };
 };
 
-interface LaserProps extends Omit<RigidBodyProps, "position"> {
+interface LaserProps extends RigidBodyProps {
   laserRef: React.RefObject<RapierRigidBody | null>;
   id: number;
-  targetRotationX: number;
-  targetRotationY: number;
+  direction: THREE.Vector3;
+  spaceshipRef: React.RefObject<RapierRigidBody>;
 }
 
 export default function Laser({
   laserRef,
   id,
-  targetRotationX,
-  targetRotationY,
+  direction,
+  spaceshipRef,
   ...props
 }: LaserProps) {
   const { nodes, materials } = useGLTF(
     "/models/Laser.glb"
   ) as unknown as GLTFResult;
-  const laserDirection = useRef<THREE.Vector3>(new THREE.Vector3());
-  const fired = useRef<boolean>(false);
+  const initialized = useRef<boolean>(false);
+  const speed = 100; // Laser speed
 
   useEffect(() => {
-    if (!fired.current && laserRef.current) {
-      laserDirection.current
-        .set(targetRotationX, targetRotationY, -100)
-        .normalize()
-        .multiplyScalar(100);
-
-      fired.current = true;
-
-      // Play laser sound
-      laserSound.currentTime = 0;
-      laserSound.play();
-    }
-  }, [laserRef, targetRotationX, targetRotationY]);
+    // Play laser sound when component mounts
+    laserSound.currentTime = 0;
+    laserSound.play().catch((e) => console.log("Audio play failed:", e));
+  }, []);
 
   useFrame(() => {
-    if (laserRef.current) {
-      laserRef.current.setLinvel(laserDirection.current, true);
-      laserRef.current.setAngvel({ x: 0, y: 0, z: 0 }, true);
-      laserRef.current.lockRotations(true, true);
+    if (!laserRef.current || !spaceshipRef.current) return;
+
+    if (!initialized.current) {
+      // Get spaceship position for initial laser position
+      const shipPos = spaceshipRef.current.translation();
+
+      // Set initial position slightly in front of the spaceship in the direction of fire
+      const offset = direction.clone().multiplyScalar(4.5);
+
+      laserRef.current.setTranslation(
+        {
+          x: shipPos.x + offset.x,
+          y: shipPos.y + offset.y,
+          z: shipPos.z + offset.z,
+        },
+        true
+      );
+
+      // Calculate rotation to face the direction
+      const quaternion = new THREE.Quaternion();
+      const up = new THREE.Vector3(0, 1, 0);
+      const matrix = new THREE.Matrix4().lookAt(
+        new THREE.Vector3(0, 0, 0),
+        direction,
+        up
+      );
+      quaternion.setFromRotationMatrix(matrix);
+
+      laserRef.current.setRotation(
+        {
+          x: quaternion.x,
+          y: quaternion.y,
+          z: quaternion.z,
+          w: quaternion.w,
+        },
+        true
+      );
+
+      initialized.current = true;
     }
+
+    // Apply velocity in the direction
+    const velocity = direction.clone().multiplyScalar(speed);
+    laserRef.current.setLinvel(
+      {
+        x: velocity.x,
+        y: velocity.y,
+        z: velocity.z,
+      },
+      true
+    );
+
+    // Lock rotations to prevent physics from affecting rotation
+    laserRef.current.lockRotations(true, true);
   });
 
   return (
@@ -67,7 +110,6 @@ export default function Laser({
       {...props}
       type='kinematicVelocity'
       colliders='cuboid'
-      position={[0, 0, -4.5]}
       scale={0.025 / 1.5}
     >
       <group>

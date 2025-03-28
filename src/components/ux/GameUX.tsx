@@ -57,13 +57,10 @@ function SpaceshipControls() {
       </span>
       <ul className='space-y-2 text-gray-300 font-medium'>
         <li className='hover:text-white transition duration-200'>
-          A / Arrow Left - Turn Left
-        </li>
-        <li className='hover:text-white transition duration-200'>
-          D / Arrow Right - Turn Right
+          Rotate mouse - rotate spaceship
         </li>
         <li className='hover:text-red-400 transition duration-200'>
-          Space / Left Mouse - Lasers
+          Left mouse click - shoot lasers
         </li>
       </ul>
     </div>
