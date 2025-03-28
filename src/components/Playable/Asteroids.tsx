@@ -210,7 +210,7 @@ export default function SpawnAsteroids() {
 
   return (
     <>
-      {progress >= 100 &&
+      {/* {progress >= 100 &&
         asteroids.map(({ id, position, rotation, scale }) => (
           <Asteroid
             key={id}
@@ -220,7 +220,7 @@ export default function SpawnAsteroids() {
             rotation={rotation}
             scale={scale}
           />
-        ))}
+        ))} */}
 
       {explosions.map(({ id, position, scale }) => (
         <Explosion

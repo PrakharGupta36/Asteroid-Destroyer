@@ -12,9 +12,6 @@ interface useGameTypes {
   start: boolean;
   setStart: (value: boolean) => void;
 
-  horizontalAxis: number;
-  setHorizontalAxis: (value: number) => void;
-
   settings: Setting[];
   setSettings: (id: number, value: boolean) => void;
 
@@ -28,7 +25,7 @@ interface useGameTypes {
   setSpaceshipHealth: () => void;
 
   isOverAsteroid: boolean;
-  setIsOverAsteroid: (value:boolean) => void;
+  setIsOverAsteroid: (value: boolean) => void;
 }
 
 const useGame = create<useGameTypes>()(
@@ -36,10 +33,6 @@ const useGame = create<useGameTypes>()(
     (set) => ({
       start: false,
       setStart: (value: boolean) => set(() => ({ start: value })),
-
-      horizontalAxis: Math.PI / 2,
-      setHorizontalAxis: (value: number) =>
-        set(() => ({ horizontalAxis: value })),
 
       settings: [
         { id: 1, category: "sound", text: "Music", value: false },

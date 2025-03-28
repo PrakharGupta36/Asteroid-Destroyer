@@ -4,42 +4,42 @@ import Spaceship from "./components/Spaceship";
 import useGame from "@/hooks/State";
 import { useFrame } from "@react-three/fiber";
 import * as THREE from "three";
-import type { RapierRigidBody } from "@react-three/rapier";
+import { RapierRigidBody } from "@react-three/rapier";
 
 type LaserType = {
   id: number;
   ref: React.RefObject<RapierRigidBody | null>;
+  position: { x: number; y: number; z: number };
+  quaternion: { x: number; y: number; z: number; w: number };
 };
 
 export default function Playable() {
   const spaceshipRef = useRef<RapierRigidBody>(null!);
-  const [key, setKey] = useState<string | null>(null);
-  const targetRotation = useRef<number>(-Math.PI / 2);
+  const targetRotationX = useRef<number>(-Math.PI / 2);
+  const targetRotationY = useRef<number>(0);
   const [lasers, setLasers] = useState<LaserType[]>([]);
   const nextLaserId = useRef(1);
 
-  const { horizontalAxis, setHorizontalAxis, pause } = useGame();
+  const { pause } = useGame();
 
   useEffect(() => {
     if (pause) return;
 
     const shootLaser = () => {
+      if (!spaceshipRef.current) return;
+
+      const spaceshipPos = spaceshipRef.current.translation(); // Get spaceship position
+      const spaceshipRot = spaceshipRef.current.rotation(); // Get spaceship rotation
+
       const newLaser = {
         id: nextLaserId.current,
         ref: React.createRef<RapierRigidBody>(),
+        position: { x: spaceshipPos.x, y: spaceshipPos.y, z: spaceshipPos.z },
+        quaternion: spaceshipRot,
       };
 
       setLasers((prev) => [...prev, newLaser]);
       nextLaserId.current += 1;
-    };
-
-    const handleKeys = (e: KeyboardEvent) => {
-      if (["a", "d", "ArrowLeft", "ArrowRight"].includes(e.key)) {
-        setKey(e.key);
-      }
-      if (e.key === " ") {
-        shootLaser();
-      }
     };
 
     const handleMouseDown = (e: MouseEvent) => {
@@ -48,38 +48,35 @@ export default function Playable() {
       }
     };
 
-    const keyUpListener = (e: KeyboardEvent) => {
-      if (["a", "d", "ArrowLeft", "ArrowRight"].includes(e.key)) {
-        setKey(null);
-      }
-    };
-
-    window.addEventListener("keydown", handleKeys);
-    window.addEventListener("keyup", keyUpListener);
     window.addEventListener("mousedown", handleMouseDown);
-
-    return () => {
-      window.removeEventListener("keydown", handleKeys);
-      window.removeEventListener("keyup", keyUpListener);
-      window.removeEventListener("mousedown", handleMouseDown);
-    };
+    return () => window.removeEventListener("mousedown", handleMouseDown);
   }, [pause]);
 
-  useFrame(() => {
+  useFrame(({ pointer }) => {
     if (!spaceshipRef.current) return;
 
-    if (key === "a" || key === "ArrowLeft") {
-      targetRotation.current = Math.min(-0.75, targetRotation.current + 0.1);
-    } else if (key === "d" || key === "ArrowRight") {
-      targetRotation.current = Math.max(-2.75, targetRotation.current - 0.1);
-    }
+    const sensitivityX = 0.5;
+    const sensitivityY = 0.5;
 
-    setHorizontalAxis(
-      THREE.MathUtils.lerp(horizontalAxis, targetRotation.current, 0.3)
+    targetRotationX.current = -Math.PI / 2 + pointer.y * sensitivityY;
+    targetRotationY.current = pointer.x * sensitivityX;
+
+    const euler = new THREE.Euler(
+      targetRotationX.current,
+      -targetRotationY.current,
+      0,
+      "YXZ"
     );
 
+    const quaternion = new THREE.Quaternion().setFromEuler(euler);
+
     spaceshipRef.current.setRotation(
-      { x: -Math.PI / 2, y: 0, z: targetRotation.current, w: 0 },
+      {
+        x: quaternion.x,
+        y: quaternion.y,
+        z: quaternion.z,
+        w: quaternion.w,
+      },
       true
     );
 
@@ -88,7 +85,6 @@ export default function Playable() {
         if (!laser.ref.current) return true;
 
         const position = laser.ref.current.translation();
-        // Remove if laser has gone too far in any direction
         return (
           Math.abs(position.x) < 400 &&
           Math.abs(position.y) < 400 &&
@@ -102,13 +98,13 @@ export default function Playable() {
     <group>
       {lasers.map((laser) => (
         <Laser
-          id={laser.id}
           key={laser.id}
+          id={laser.id}
           laserRef={laser.ref}
-          horizontalAxis={horizontalAxis}
+          targetRotationX={targetRotationX.current}
+          targetRotationY={targetRotationY.current}
         />
       ))}
-
       <Spaceship ref={spaceshipRef} />
     </group>
   );

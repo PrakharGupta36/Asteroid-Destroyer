@@ -1,5 +1,3 @@
-import useGame from "@/hooks/State";
-import getLaserXPosition from "@/utils/getLaserXPosition";
 import { useGLTF } from "@react-three/drei";
 import { useFrame } from "@react-three/fiber";
 import {
@@ -15,56 +13,44 @@ laserSound.preload = "auto";
 laserSound.volume = 0.5;
 
 type GLTFResult = {
-  nodes: {
-    imagetostl_mesh3: THREE.Mesh;
-  };
-  materials: {
-    mat3: THREE.Material;
-  };
+  nodes: { imagetostl_mesh3: THREE.Mesh };
+  materials: { mat3: THREE.Material };
 };
 
-interface LaserProps extends RigidBodyProps {
-  horizontalAxis: number;
+interface LaserProps extends Omit<RigidBodyProps, "position"> {
   laserRef: React.RefObject<RapierRigidBody | null>;
   id: number;
+  targetRotationX: number;
+  targetRotationY: number;
 }
 
 export default function Laser({
-  horizontalAxis,
   laserRef,
   id,
+  targetRotationX,
+  targetRotationY,
   ...props
 }: LaserProps) {
   const { nodes, materials } = useGLTF(
     "/models/Laser.glb"
   ) as unknown as GLTFResult;
-
-  const initialPosition = useRef<number>(getLaserXPosition(horizontalAxis));
   const laserDirection = useRef<THREE.Vector3>(new THREE.Vector3());
-  const initialRotation = useRef<number>(horizontalAxis);
   const fired = useRef<boolean>(false);
 
-  const { settings } = useGame();
-
   useEffect(() => {
-    if (!fired.current) {
+    if (!fired.current && laserRef.current) {
       laserDirection.current
-        .set(
-          -Math.cos(initialRotation.current),
-          0,
-          Math.sin(initialRotation.current)
-        )
+        .set(targetRotationX, targetRotationY, -100)
         .normalize()
         .multiplyScalar(100);
 
       fired.current = true;
 
-      if (settings[1].value) {
-        laserSound.currentTime = 0;
-        laserSound.play();
-      }
+      // Play laser sound
+      laserSound.currentTime = 0;
+      laserSound.play();
     }
-  }, [settings]);
+  }, [laserRef, targetRotationX, targetRotationY]);
 
   useFrame(() => {
     if (laserRef.current) {
@@ -75,25 +61,25 @@ export default function Laser({
   });
 
   return (
-    <group>
-      <RigidBody
-        name={`laser-${id}`}
-        ref={laserRef}
-        {...props}
-        type='kinematicVelocity'
-        colliders='cuboid'
-        scale={0.025 / 1.5}
-        position={[initialPosition.current, 0, -4.5]}
-        rotation={[0, initialRotation.current, 0]}
-      >
-        <group>
-          <mesh
-            geometry={nodes.imagetostl_mesh3.geometry}
-            material={materials.mat3}
-          />
-        </group>
-      </RigidBody>
-    </group>
+    <RigidBody
+      name={`laser-${id}`}
+      ref={laserRef}
+      {...props}
+      type='kinematicVelocity'
+      colliders='cuboid'
+      position={[0, 0, -4.5]}
+      scale={0.025 / 1.5}
+    >
+      <group>
+        <mesh
+          castShadow
+          receiveShadow
+          geometry={nodes.imagetostl_mesh3.geometry}
+          material={materials.mat3}
+          rotation={[-Math.PI / 2, Math.PI, Math.PI / 2]}
+        />
+      </group>
+    </RigidBody>
   );
 }
 
