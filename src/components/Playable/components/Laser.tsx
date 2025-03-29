@@ -1,5 +1,4 @@
-"use client";
-
+import useGame from "@/hooks/State";
 import { useGLTF } from "@react-three/drei";
 import { useFrame } from "@react-three/fiber";
 import {
@@ -41,12 +40,15 @@ export default function Laser({
   ) as unknown as GLTFResult;
   const initialized = useRef<boolean>(false);
   const speed = 100; // Laser speed
+  const { settings } = useGame();
 
   useEffect(() => {
     // Play laser sound when component mounts
-    laserSound.currentTime = 0;
-    laserSound.play().catch((e) => console.log("Audio play failed:", e));
-  }, []);
+    if (settings[1].value) {
+      laserSound.currentTime = 0;
+      laserSound.play().catch((e) => console.log("Audio play failed:", e));
+    }
+  }, [settings]);
 
   useFrame(() => {
     if (!laserRef.current || !spaceshipRef.current) return;

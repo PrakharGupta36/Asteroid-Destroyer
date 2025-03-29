@@ -30,7 +30,7 @@ export default function Settings({
 
   useEffect(() => {
     const handleKeyDown = (event: KeyboardEvent) => {
-      if (event.shiftKey && event.key.toLowerCase() === "s") {
+      if (event.shiftKey && event.key.toLowerCase() === "s" && settings[1].value) {
         setPause?.(!pause);
         btnAudio.currentTime = 0;
         btnAudio.play();
