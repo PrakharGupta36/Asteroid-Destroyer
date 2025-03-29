@@ -2,9 +2,9 @@ import React, { useEffect, useRef, useState } from "react";
 import Laser from "./components/Laser";
 import Spaceship from "./components/Spaceship";
 import useGame from "@/hooks/State";
-import { useFrame, useThree } from "@react-three/fiber";
+import { useFrame } from "@react-three/fiber";
 import * as THREE from "three";
-import { RapierRigidBody } from "@react-three/rapier";
+import type { RapierRigidBody } from "@react-three/rapier";
 
 type LaserType = {
   id: number;
@@ -14,15 +14,18 @@ type LaserType = {
 
 export default function Playable() {
   const spaceshipRef = useRef<RapierRigidBody>(null!);
-  const targetRotationX = useRef<number>(-Math.PI / 2);
-  const targetRotationY = useRef<number>(0);
   const [lasers, setLasers] = useState<LaserType[]>([]);
   const nextLaserId = useRef(1);
-  const raycaster = useRef(new THREE.Raycaster());
-  const { camera } = useThree();
+
   const cursorPosition = useRef(new THREE.Vector2());
+  const targetPoint = useRef(new THREE.Vector3());
 
   const { pause } = useGame();
+
+  // Create a plane at z=-100 to project cursor onto
+  const targetPlane = useRef(new THREE.Plane(new THREE.Vector3(0, 0, 1), 100));
+
+  const raycaster = useRef(new THREE.Raycaster());
 
   useEffect(() => {
     if (pause) return;
@@ -33,16 +36,9 @@ export default function Playable() {
         const shipPos = spaceshipRef.current.translation();
         const shipPosition = new THREE.Vector3(shipPos.x, shipPos.y, shipPos.z);
 
-        // Update raycaster with current mouse position
-        raycaster.current.setFromCamera(cursorPosition.current, camera);
-
-        // Calculate the point in 3D space (using a far plane)
-        const targetPoint = new THREE.Vector3();
-        raycaster.current.ray.at(1000, targetPoint);
-
         // Calculate direction from spaceship to target point
         const direction = new THREE.Vector3()
-          .subVectors(targetPoint, shipPosition)
+          .subVectors(targetPoint.current, shipPosition)
           .normalize();
 
         const newLaser = {
@@ -58,29 +54,41 @@ export default function Playable() {
 
     window.addEventListener("mousedown", handleMouseDown);
     return () => window.removeEventListener("mousedown", handleMouseDown);
-  }, [pause, camera]);
+  }, [pause]);
 
-  useFrame(({ pointer }) => {
+  useFrame(({ pointer, camera }) => {
     if (!spaceshipRef.current) return;
 
-    // Store current pointer position for use in mouse down handler
+    // Update cursor position
     cursorPosition.current.set(pointer.x, pointer.y);
 
-    const sensitivityX = 0.5;
-    const sensitivityY = 0.5;
+    // Update raycaster with current mouse position
+    raycaster.current.setFromCamera(cursorPosition.current, camera);
 
-    targetRotationX.current = -Math.PI / 2 + pointer.y * sensitivityY;
-    targetRotationY.current = pointer.x * sensitivityX;
-
-    const euler = new THREE.Euler(
-      targetRotationX.current,
-      -targetRotationY.current,
-      0,
-      "YXZ"
+    // Calculate the target point in 3D space
+    // We'll use a plane at a fixed distance from the camera
+    raycaster.current.ray.intersectPlane(
+      targetPlane.current,
+      targetPoint.current
     );
 
-    const quaternion = new THREE.Quaternion().setFromEuler(euler);
+    // Calculate rotation to look at the target point
+    const shipPos = spaceshipRef.current.translation();
+    const shipPosition = new THREE.Vector3(shipPos.x, shipPos.y, shipPos.z);
 
+    // Create a look-at matrix
+    const lookAtMatrix = new THREE.Matrix4();
+    lookAtMatrix.lookAt(
+      shipPosition,
+      targetPoint.current,
+      new THREE.Vector3(0, 1, 0)
+    );
+
+    // Convert to quaternion
+    const quaternion = new THREE.Quaternion();
+    quaternion.setFromRotationMatrix(lookAtMatrix);
+
+    // Apply rotation to spaceship
     spaceshipRef.current.setRotation(
       {
         x: quaternion.x,
@@ -115,6 +123,7 @@ export default function Playable() {
           laserRef={laser.ref}
           direction={laser.direction}
           spaceshipRef={spaceshipRef}
+          targetPoint={targetPoint.current}
         />
       ))}
       <Spaceship ref={spaceshipRef} />

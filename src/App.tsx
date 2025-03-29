@@ -2,13 +2,15 @@ import { useEffect, useState, useRef, Suspense, lazy } from "react";
 import { AnimatePresence } from "framer-motion";
 import useGame from "./hooks/State";
 import Spinner from "./components/ui/spinner";
+import GameOver from "./components/ux/GameOver";
 
 // Lazy load pages
 const Game = lazy(() => import("./pages/Game"));
 const Intro = lazy(() => import("./pages/Intro"));
 
 export default function App() {
-  const { start, settings, setPause } = useGame();
+  const { start, settings, setPause, spaceshipHealth, resetSpaceShipHealth } =
+    useGame();
   const [allowed, setAllowed] = useState<null | boolean>(null);
   const musicRef = useRef<HTMLAudioElement | null>(null);
 
@@ -82,6 +84,10 @@ export default function App() {
         </p>
       </main>
     );
+  }
+
+  if (spaceshipHealth <= 0) {
+    return <GameOver onRestart={resetSpaceShipHealth} />;
   }
 
   return (

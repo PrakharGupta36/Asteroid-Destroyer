@@ -95,11 +95,11 @@ const Spaceship = forwardRef<RapierRigidBody, SpaceshipProps>(
         >
           <group ref={modelRef} {...props} dispose={null}>
             <group>
-              <group rotation={[0, 0, 0]}>
+              <group>
                 <mesh
                   geometry={nodes.defaultMaterial.geometry}
                   material={materials.Base}
-                  rotation={[-Math.PI, Math.PI, Math.PI/2]}
+                  rotation={[-Math.PI / 2, 0, -Math.PI / 2]}
                   scale={100}
                 />
               </group>

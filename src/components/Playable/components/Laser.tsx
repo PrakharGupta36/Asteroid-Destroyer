@@ -25,6 +25,7 @@ interface LaserProps extends RigidBodyProps {
   id: number;
   direction: THREE.Vector3;
   spaceshipRef: React.RefObject<RapierRigidBody>;
+  targetPoint: THREE.Vector3;
 }
 
 export default function Laser({
@@ -32,6 +33,7 @@ export default function Laser({
   id,
   direction,
   spaceshipRef,
+  targetPoint,
   ...props
 }: LaserProps) {
   const { nodes, materials } = useGLTF(
@@ -52,9 +54,15 @@ export default function Laser({
     if (!initialized.current) {
       // Get spaceship position for initial laser position
       const shipPos = spaceshipRef.current.translation();
+      const shipPosition = new THREE.Vector3(shipPos.x, shipPos.y, shipPos.z);
+
+      // Calculate exact direction to target
+      const exactDirection = new THREE.Vector3()
+        .subVectors(targetPoint, shipPosition)
+        .normalize();
 
       // Set initial position slightly in front of the spaceship in the direction of fire
-      const offset = direction.clone().multiplyScalar(4.5);
+      const offset = exactDirection.clone().multiplyScalar(5);
 
       laserRef.current.setTranslation(
         {
@@ -65,15 +73,16 @@ export default function Laser({
         true
       );
 
-      // Calculate rotation to face the direction
-      const quaternion = new THREE.Quaternion();
-      const up = new THREE.Vector3(0, 1, 0);
-      const matrix = new THREE.Matrix4().lookAt(
-        new THREE.Vector3(0, 0, 0),
-        direction,
-        up
+      // Calculate rotation to face the target
+      const lookAtMatrix = new THREE.Matrix4();
+      lookAtMatrix.lookAt(
+        shipPosition,
+        targetPoint,
+        new THREE.Vector3(0, 1, 0)
       );
-      quaternion.setFromRotationMatrix(matrix);
+
+      const quaternion = new THREE.Quaternion();
+      quaternion.setFromRotationMatrix(lookAtMatrix);
 
       laserRef.current.setRotation(
         {

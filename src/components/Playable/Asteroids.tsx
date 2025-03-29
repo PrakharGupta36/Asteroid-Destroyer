@@ -3,6 +3,8 @@ import {
   RigidBody,
   type RigidBodyProps,
   type RapierRigidBody,
+  CuboidCollider,
+  CollisionEnterHandler,
 } from "@react-three/rapier";
 import { useFrame } from "@react-three/fiber";
 import { useEffect, useRef, useState } from "react";
@@ -40,14 +42,14 @@ function Asteroid({ onDestroy, id, ...props }: AsteroidProps) {
       setPosition([pos.x, pos.y, pos.z]);
 
       const force = new THREE.Vector3(-pos.x, -pos.y, -pos.z);
-      force.normalize().multiplyScalar(0.07);
+      force.normalize().multiplyScalar(0.3);
 
       asteroidRef.current.applyImpulse(force, true);
 
       const rotationForce = new THREE.Vector3(
-        Math.random() * 0.02 - 0.01,
-        Math.random() * 0.02 - 0.01,
-        Math.random() * 0.02 - 0.01
+        Math.random() * 0.05 - 0.01,
+        Math.random() * 0.05 - 0.01,
+        Math.random() * 0.05 - 0.01
       );
 
       asteroidRef.current.applyTorqueImpulse(rotationForce, true);
@@ -64,8 +66,19 @@ function Asteroid({ onDestroy, id, ...props }: AsteroidProps) {
     }
   }, [collided, id, onDestroy, position]);
 
-  const handleCollision = () => {
-    setCollided(true);
+  const handleCollision: CollisionEnterHandler = ({
+    other,
+    rigidBodyObject,
+  }) => {
+    if (!rigidBodyObject) return;
+    if (
+      other.rigidBodyObject?.name?.includes("laser") ||
+      other.rigidBodyObject?.name?.includes("spaceship") ||
+      other.rigidBodyObject?.name?.includes(`${rigidBodyObject.name}`)
+    ) {
+      console.log("Asteroid hit by laser:", other.rigidBodyObject.name);
+      setCollided(true);
+    }
   };
 
   return (
@@ -75,10 +88,16 @@ function Asteroid({ onDestroy, id, ...props }: AsteroidProps) {
       mass={1}
       canSleep={false}
       linearDamping={0}
-      angularDamping={0}
+      angularDamping={ 0 }
+      scale={2}
       onCollisionEnter={handleCollision}
+      name={`asteroid-${id}`}
+      colliders={false} // Disable automatic colliders
       {...props}
     >
+      {/* Add an explicit collider that matches the asteroid shape better */}
+      <CuboidCollider args={[2, 2, 2]} />
+
       <mesh
         ref={meshRef}
         geometry={nodes.Object_2.geometry}
