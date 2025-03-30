@@ -245,7 +245,6 @@ main,
   will-change: border;
   z-index: 999;
   pointer-events: none;
-
 }
 
 .line-1 {
@@ -308,4 +307,19 @@ main,
   &:active {
     scale: 0.9;
   }
+}
+
+.overlay_container {
+  background-color: rgba(0, 0, 0, 0.711);
+  color: white;
+  width: 100dvw !important;
+  height: 105dvh !important;
+  position: absolute;
+  top: -245px;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  display: grid;
+  place-items: center;
+  font-size: 4rem;
+  position: fixed;
 }

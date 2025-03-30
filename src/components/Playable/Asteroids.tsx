@@ -34,7 +34,7 @@ function Asteroid({ onDestroy, id, ...props }: AsteroidProps) {
   const meshRef = useRef<THREE.Mesh>(null);
   const [collided, setCollided] = useState(false);
   const [position, setPosition] = useState<[number, number, number]>([0, 0, 0]);
-  const { setIsOverAsteroid } = useGame();
+  const { setIsOverAsteroid, asteroidDestroyed, setAsteroidDestroyed } = useGame();
 
   useFrame(() => {
     if (asteroidRef.current) {
@@ -72,12 +72,13 @@ function Asteroid({ onDestroy, id, ...props }: AsteroidProps) {
   }) => {
     if (!rigidBodyObject) return;
     if (
-      other.rigidBodyObject?.name?.includes("laser") ||
       other.rigidBodyObject?.name?.includes("spaceship") ||
       other.rigidBodyObject?.name?.includes(`${rigidBodyObject.name}`)
     ) {
-      console.log("Asteroid hit by laser:", other.rigidBodyObject.name);
       setCollided(true);
+    } else if (other.rigidBodyObject?.name?.includes("laser")) {
+      setCollided(true);
+      setAsteroidDestroyed(asteroidDestroyed + 1);
     }
   };
 
@@ -88,7 +89,7 @@ function Asteroid({ onDestroy, id, ...props }: AsteroidProps) {
       mass={1}
       canSleep={false}
       linearDamping={0}
-      angularDamping={ 0 }
+      angularDamping={0}
       scale={2}
       onCollisionEnter={handleCollision}
       name={`asteroid-${id}`}

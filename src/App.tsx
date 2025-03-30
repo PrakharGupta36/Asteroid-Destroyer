@@ -9,8 +9,15 @@ const Game = lazy(() => import("./pages/Game"));
 const Intro = lazy(() => import("./pages/Intro"));
 
 export default function App() {
-  const { start, settings, setPause, spaceshipHealth, resetSpaceShipHealth } =
-    useGame();
+  const {
+    start,
+    settings,
+    showStory,
+    overlay,
+    setPause,
+    spaceshipHealth,
+    resetSpaceShipHealth,
+  } = useGame();
   const [allowed, setAllowed] = useState<null | boolean>(null);
   const musicRef = useRef<HTMLAudioElement | null>(null);
 
@@ -57,10 +64,14 @@ export default function App() {
       clearTimeout(timeoutId);
       timeoutId = setTimeout(() => {
         if (document.hidden) {
-          setPause(true);
+          if (start && !showStory && !overlay) {
+            setPause(true);
+          }
           musicRef.current?.pause();
         } else if (settings[0]?.value) {
-          setPause(false);
+          if (!start && showStory && overlay) {
+            setPause(false);
+          }
           musicRef.current?.play().catch(() => {});
         }
       }, 100);
@@ -71,7 +82,7 @@ export default function App() {
       clearTimeout(timeoutId);
       document.removeEventListener("visibilitychange", handleVisibilityChange);
     };
-  }, [setPause, settings]);
+  }, [overlay, setPause, settings, showStory, start]);
 
   if (allowed === null) return null;
 
@@ -90,8 +101,10 @@ export default function App() {
     return <GameOver onRestart={resetSpaceShipHealth} />;
   }
 
+
+
   return (
-    <main className='grid place-items-center w-[100dvw] h-[100dvh]'>
+    <main className={`grid place-items-center w-[100dvw] h-[100dvh]`}>
       <AnimatePresence mode='wait'>
         <Suspense
           fallback={

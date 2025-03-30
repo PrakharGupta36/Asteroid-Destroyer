@@ -6,6 +6,8 @@ import * as THREE from "three";
 
 import useGame from "@/hooks/State";
 import Cursor from "@/components/ux/Cursor";
+import Story from "./Story";
+import Overlay from "@/utils/overlay";
 
 // Lazy-loaded components
 const SpawnAsteroids = lazy(() => import("@/components/Playable/Asteroids"));
@@ -17,9 +19,10 @@ const CustomLoader = lazy(() => import("@/components/ux/CustomLoader"));
 // Camera component with mouse-tracking rotation
 const GameCamera = () => {
   const cameraRef = useRef<THREE.PerspectiveCamera>(null);
+  const { showStory, overlay } = useGame();
 
   useFrame(({ pointer }) => {
-    if (cameraRef.current) {
+    if (cameraRef.current && !showStory && !overlay) {
       cameraRef.current.rotation.y = THREE.MathUtils.lerp(
         cameraRef.current.rotation.y,
         -pointer.x / 2.75,
@@ -41,7 +44,7 @@ const GameCamera = () => {
 
 export default function Game() {
   const [isLoading, setIsLoading] = useState(true);
-  const { isOverAsteroid, pause } = useGame();
+  const { isOverAsteroid, showStory, pause, overlay } = useGame();
 
   return (
     <>
@@ -55,17 +58,20 @@ export default function Game() {
         <GameUX />
 
         {/* Crosshair Cursor */}
-        {!pause && <Cursor isOverAsteroid={isOverAsteroid} />}
+        {!pause && !showStory && !overlay && (
+          <Cursor isOverAsteroid={isOverAsteroid} />
+        )}
 
         {/* 3D Canvas */}
         <Canvas className='w-[100dvw] h-[100dvh]'>
           <Suspense fallback={null}>
+            {showStory ? <Story /> : overlay && <Overlay />}
             <Preload />
             <GameCamera />
 
             {/* Physics Environment */}
-            <Physics gravity={[0, 0, 0]} paused={pause}>
-              <SpawnAsteroids />
+            <Physics gravity={[0, 0, 0]} paused={showStory || overlay || pause}>
+              {!showStory && !overlay && <SpawnAsteroids />}
               <Playable />
             </Physics>
 

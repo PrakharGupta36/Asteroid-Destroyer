@@ -24,13 +24,19 @@ export default function Settings({
   pause?: boolean;
   setPause?: (value: boolean) => void;
 }) {
-  const { settings, setSettings } = useGame();
+  const { settings, setSettings, showStory, overlay } = useGame();
   const clickAudio = useMemo(() => new Audio("/sounds/clickAudio.mp3"), []);
   const btnAudio = useMemo(() => new Audio("/sounds/btnAudio.mp3"), []);
 
   useEffect(() => {
     const handleKeyDown = (event: KeyboardEvent) => {
-      if (event.shiftKey && event.key.toLowerCase() === "s" && settings[1].value) {
+      if (
+        event.shiftKey &&
+        event.key.toLowerCase() === "s" &&
+        settings[1].value &&
+        !showStory &&
+        !overlay
+      ) {
         setPause?.(!pause);
         btnAudio.currentTime = 0;
         btnAudio.play();
@@ -42,7 +48,7 @@ export default function Settings({
     return () => {
       window.removeEventListener("keydown", handleKeyDown);
     };
-  }, [pause, setPause, btnAudio, settings]);
+  }, [pause, setPause, btnAudio, settings, showStory, overlay]);
 
   return (
     <Dialog open={pause} onOpenChange={setPause}>
