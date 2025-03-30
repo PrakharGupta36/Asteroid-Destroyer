@@ -34,7 +34,8 @@ function Asteroid({ onDestroy, id, ...props }: AsteroidProps) {
   const meshRef = useRef<THREE.Mesh>(null);
   const [collided, setCollided] = useState(false);
   const [position, setPosition] = useState<[number, number, number]>([0, 0, 0]);
-  const { setIsOverAsteroid, asteroidDestroyed, setAsteroidDestroyed } = useGame();
+  const { setIsOverAsteroid, asteroidDestroyed, setAsteroidDestroyed } =
+    useGame();
 
   useFrame(() => {
     if (asteroidRef.current) {
@@ -76,9 +77,10 @@ function Asteroid({ onDestroy, id, ...props }: AsteroidProps) {
       other.rigidBodyObject?.name?.includes(`${rigidBodyObject.name}`)
     ) {
       setCollided(true);
-    } else if (other.rigidBodyObject?.name?.includes("laser")) {
-      setCollided(true);
+    }
+    if (other.rigidBodyObject?.name?.includes("laser")) {
       setAsteroidDestroyed(asteroidDestroyed + 1);
+      setCollided(true);
     }
   };
 
@@ -93,7 +95,7 @@ function Asteroid({ onDestroy, id, ...props }: AsteroidProps) {
       scale={2}
       onCollisionEnter={handleCollision}
       name={`asteroid-${id}`}
-      colliders={false} // Disable automatic colliders
+      colliders={false} 
       {...props}
     >
       {/* Add an explicit collider that matches the asteroid shape better */}

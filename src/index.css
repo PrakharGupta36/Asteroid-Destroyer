@@ -309,6 +309,33 @@ main,
   }
 }
 
+.html_story {
+  background-color: rgba(0, 0, 0, 0.4);
+  width: 100dvw;
+  height: 100dvh;
+  position: absolute;
+  top: -242px;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.story_container {
+  width: 512px;
+  display: grid;
+  gap: 1rem;
+  line-height: 2rem;
+  border-radius: 0.85rem;
+  background-color: transparent;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.story {
+  background-color: rgb(13, 13, 13);
+}
+
 .overlay_container {
   background-color: rgba(0, 0, 0, 0.711);
   color: white;

@@ -74,7 +74,7 @@ function Objective() {
     <div className='absolute top-0 right-0 z-10 mx-7 my-8 grid gap-2 border-2 p-4 rounded-lg bg-black/80 text-white text-sm controls shadow-lg'>
       {currentLevel === 1 ? (
         <div>
-          <p> Objective destroy 50 asteroids </p>
+          <p> Objective: Destroy 50 asteroids </p>
           <p> {asteroidDestroyed}/50 </p>
         </div>
       ) : null}

@@ -101,8 +101,6 @@ export default function App() {
     return <GameOver onRestart={resetSpaceShipHealth} />;
   }
 
-
-
   return (
     <main className={`grid place-items-center w-[100dvw] h-[100dvh]`}>
       <AnimatePresence mode='wait'>

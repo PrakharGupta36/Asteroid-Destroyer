@@ -40,20 +40,20 @@ export default function Laser({
   ) as unknown as GLTFResult;
   const initialized = useRef<boolean>(false);
   const speed = 100; // Laser speed
-  const { settings } = useGame();
+  const { settings, overlay, showStory } = useGame();
 
   useEffect(() => {
     // Play laser sound when component mounts
-    if (settings[1].value) {
+    if (settings[1].value && !showStory && !overlay) {
       laserSound.currentTime = 0;
       laserSound.play().catch((e) => console.log("Audio play failed:", e));
     }
-  }, [settings]);
+  }, [overlay, settings, showStory]);
 
   useFrame(() => {
     if (!laserRef.current || !spaceshipRef.current) return;
 
-    if (!initialized.current) {
+    if (!initialized.current && !showStory && !overlay) {
       // Get spaceship position for initial laser position
       const shipPos = spaceshipRef.current.translation();
       const shipPosition = new THREE.Vector3(shipPos.x, shipPos.y, shipPos.z);
