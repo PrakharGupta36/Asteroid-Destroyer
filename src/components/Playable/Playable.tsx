@@ -22,7 +22,6 @@ export default function Playable() {
 
   const { pause, overlay, showStory } = useGame();
 
-  // Create a plane at z=-100 to project cursor onto
   const targetPlane = useRef(new THREE.Plane(new THREE.Vector3(0, 0, 1), 100));
 
   const raycaster = useRef(new THREE.Raycaster());
@@ -31,7 +30,7 @@ export default function Playable() {
     if (pause) return;
 
     const handleMouseDown = (e: MouseEvent) => {
-      if (e.button === 0 && spaceshipRef.current) {
+      if (e.button === 0 && spaceshipRef.current && !showStory && !overlay) {
         // Get spaceship position
         const shipPos = spaceshipRef.current.translation();
         const shipPosition = new THREE.Vector3(shipPos.x, shipPos.y, shipPos.z);
@@ -54,57 +53,55 @@ export default function Playable() {
 
     window.addEventListener("mousedown", handleMouseDown);
     return () => window.removeEventListener("mousedown", handleMouseDown);
-  }, [pause]);
+  }, [overlay, pause, showStory]);
 
   useFrame(({ pointer, camera }) => {
     if (!spaceshipRef.current) return;
 
-    if (!showStory && !overlay) {
-      cursorPosition.current.set(pointer.x, pointer.y);
+    cursorPosition.current.set(pointer.x, pointer.y);
 
-      raycaster.current.setFromCamera(cursorPosition.current, camera);
+    raycaster.current.setFromCamera(cursorPosition.current, camera);
 
-      raycaster.current.ray.intersectPlane(
-        targetPlane.current,
-        targetPoint.current
-      );
+    raycaster.current.ray.intersectPlane(
+      targetPlane.current,
+      targetPoint.current
+    );
 
-      const shipPos = spaceshipRef.current.translation();
-      const shipPosition = new THREE.Vector3(shipPos.x, shipPos.y, shipPos.z);
+    const shipPos = spaceshipRef.current.translation();
+    const shipPosition = new THREE.Vector3(shipPos.x, shipPos.y, shipPos.z);
 
-      const lookAtMatrix = new THREE.Matrix4();
-      lookAtMatrix.lookAt(
-        shipPosition,
-        targetPoint.current,
-        new THREE.Vector3(0, 1, 0)
-      );
+    const lookAtMatrix = new THREE.Matrix4();
+    lookAtMatrix.lookAt(
+      shipPosition,
+      targetPoint.current,
+      new THREE.Vector3(0, 1, 0)
+    );
 
-      const quaternion = new THREE.Quaternion();
-      quaternion.setFromRotationMatrix(lookAtMatrix);
+    const quaternion = new THREE.Quaternion();
+    quaternion.setFromRotationMatrix(lookAtMatrix);
 
-      spaceshipRef.current.setRotation(
-        {
-          x: quaternion.x,
-          y: quaternion.y,
-          z: quaternion.z,
-          w: quaternion.w,
-        },
-        true
-      );
+    spaceshipRef.current.setRotation(
+      {
+        x: quaternion.x,
+        y: quaternion.y,
+        z: quaternion.z,
+        w: quaternion.w,
+      },
+      true
+    );
 
-      setLasers((prev) =>
-        prev.filter((laser) => {
-          if (!laser.ref.current) return true;
+    setLasers((prev) =>
+      prev.filter((laser) => {
+        if (!laser.ref.current) return true;
 
-          const position = laser.ref.current.translation();
-          return (
-            Math.abs(position.x) < 400 &&
-            Math.abs(position.y) < 400 &&
-            Math.abs(position.z) < 400
-          );
-        })
-      );
-    }
+        const position = laser.ref.current.translation();
+        return (
+          Math.abs(position.x) < 400 &&
+          Math.abs(position.y) < 400 &&
+          Math.abs(position.z) < 400
+        );
+      })
+    );
   });
 
   return (

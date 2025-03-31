@@ -83,7 +83,7 @@ const useGame = create<useGameTypes>()(
           showStory: value,
         })),
 
-      countdown: 3,
+      countdown: 5,
       setCountdown: (value: number | ((prev: number) => number)) =>
         set((state) => ({
           countdown:
@@ -109,7 +109,7 @@ const useGame = create<useGameTypes>()(
     }),
 
     {
-      name: "game-settings-----",
+      name: "game-settings-----12",
       partialize: (state) => ({ settings: state.settings }),
     }
   )

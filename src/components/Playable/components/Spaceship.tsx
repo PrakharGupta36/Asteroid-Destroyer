@@ -88,6 +88,7 @@ const Spaceship = forwardRef<RapierRigidBody, SpaceshipProps>(
           name='spaceship'
           scale={0.0125 / 2.2}
           position={[0, 0, 0]}
+            
           ref={spaceshipRef}
           colliders='trimesh'
           type='fixed'

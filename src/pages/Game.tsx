@@ -1,4 +1,4 @@
-import { lazy, Suspense, useRef, useState } from "react";
+import { lazy, Suspense, useEffect, useRef, useState } from "react";
 import { Canvas, useFrame } from "@react-three/fiber";
 import { PerspectiveCamera, Preload } from "@react-three/drei";
 import { Physics } from "@react-three/rapier";
@@ -16,18 +16,40 @@ const Ambience = lazy(() => import("@/components/Ambience/Ambience"));
 const GameUX = lazy(() => import("@/components/ux/GameUX"));
 const CustomLoader = lazy(() => import("@/components/ux/CustomLoader"));
 
-// Camera component with mouse-tracking rotation
-const GameCamera = () => {
+function GameCamera() {
   const cameraRef = useRef<THREE.PerspectiveCamera>(null);
+  const lastPointerRotation = useRef(0);
   const { showStory, overlay } = useGame();
 
   useFrame(({ pointer }) => {
-    if (cameraRef.current && !showStory && !overlay) {
+    if (!cameraRef.current) return;
+
+    if (!showStory && !overlay) {
       cameraRef.current.rotation.y = THREE.MathUtils.lerp(
         cameraRef.current.rotation.y,
-        -pointer.x / 2.75,
+        lastPointerRotation.current || -pointer.x / 2.75,
         0.05
       );
+
+      lastPointerRotation.current = -pointer.x / 2.75;
+    } else {
+      cameraRef.current.rotation.y = THREE.MathUtils.lerp(
+        cameraRef.current.rotation.y,
+        0,
+        0.05
+      );
+      cameraRef.current.rotation.x = THREE.MathUtils.lerp(
+        cameraRef.current.rotation.x,
+        0,
+        0.05
+      );
+      cameraRef.current.rotation.z = THREE.MathUtils.lerp(
+        cameraRef.current.rotation.z,
+        0,
+        0.05
+      );
+
+      lastPointerRotation.current = cameraRef.current.rotation.y;
     }
   });
 
@@ -35,16 +57,46 @@ const GameCamera = () => {
     <PerspectiveCamera
       ref={cameraRef}
       position={[0, 3, 11]}
+      rotation={[0, 0, 0]}
       makeDefault
       near={0.05}
       far={10000}
     />
   );
-};
+}
 
 export default function Game() {
   const [isLoading, setIsLoading] = useState(true);
-  const { isOverAsteroid, showStory, pause, overlay } = useGame();
+  const {
+    asteroidDestroyed,
+    isOverAsteroid,
+    showStory,
+    pause,
+    overlay,
+    currentLevel,
+    setCurrentLevel,
+    setShowStory,
+    setOverlay,
+    setCountdown,
+  } = useGame();
+
+  useEffect(() => {
+    if (asteroidDestroyed >= 30 && currentLevel === 1) {
+      setTimeout(() => {
+        setCurrentLevel(2);
+        setShowStory(true);
+        setCountdown(3);
+        setOverlay(false);
+      }, 150);
+    }
+  }, [
+    asteroidDestroyed,
+    currentLevel,
+    setCountdown,
+    setCurrentLevel,
+    setOverlay,
+    setShowStory,
+  ]);
 
   return (
     <>

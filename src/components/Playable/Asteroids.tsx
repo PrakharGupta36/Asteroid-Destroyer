@@ -72,10 +72,7 @@ function Asteroid({ onDestroy, id, ...props }: AsteroidProps) {
     rigidBodyObject,
   }) => {
     if (!rigidBodyObject) return;
-    if (
-      other.rigidBodyObject?.name?.includes("spaceship") ||
-      other.rigidBodyObject?.name?.includes(`${rigidBodyObject.name}`)
-    ) {
+    if (other.rigidBodyObject?.name?.includes("spaceship")) {
       setCollided(true);
     }
     if (other.rigidBodyObject?.name?.includes("laser")) {
@@ -95,7 +92,7 @@ function Asteroid({ onDestroy, id, ...props }: AsteroidProps) {
       scale={2}
       onCollisionEnter={handleCollision}
       name={`asteroid-${id}`}
-      colliders={false} 
+      colliders={false}
       {...props}
     >
       {/* Add an explicit collider that matches the asteroid shape better */}

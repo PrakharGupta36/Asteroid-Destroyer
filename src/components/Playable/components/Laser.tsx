@@ -51,19 +51,19 @@ export default function Laser({
   }, [overlay, settings, showStory]);
 
   useFrame(() => {
-    if (!laserRef.current || !spaceshipRef.current) return;
+    if (!laserRef.current || !spaceshipRef.current || showStory || overlay)
+      return;
 
     if (!initialized.current && !showStory && !overlay) {
-      // Get spaceship position for initial laser position
       const shipPos = spaceshipRef.current.translation();
       const shipPosition = new THREE.Vector3(shipPos.x, shipPos.y, shipPos.z);
 
-      // Calculate exact direction to target
+
+
       const exactDirection = new THREE.Vector3()
         .subVectors(targetPoint, shipPosition)
         .normalize();
 
-      // Set initial position slightly in front of the spaceship in the direction of fire
       const offset = exactDirection.clone().multiplyScalar(5);
 
       laserRef.current.setTranslation(
@@ -75,7 +75,6 @@ export default function Laser({
         true
       );
 
-      // Calculate rotation to face the target
       const lookAtMatrix = new THREE.Matrix4();
       lookAtMatrix.lookAt(
         shipPosition,
@@ -99,7 +98,6 @@ export default function Laser({
       initialized.current = true;
     }
 
-    // Apply velocity in the direction
     const velocity = direction.clone().multiplyScalar(speed);
     laserRef.current.setLinvel(
       {
@@ -110,7 +108,6 @@ export default function Laser({
       true
     );
 
-    // Lock rotations to prevent physics from affecting rotation
     laserRef.current.lockRotations(true, true);
   });
 
@@ -121,7 +118,8 @@ export default function Laser({
       {...props}
       type='kinematicVelocity'
       colliders='cuboid'
-      scale={0.025 / 1.5}
+      scale={0.025}
+      rotation={[-Math.PI / 2, Math.PI, Math.PI / 2]}
     >
       <group>
         <mesh

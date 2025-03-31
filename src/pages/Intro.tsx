@@ -11,8 +11,8 @@ function IntroAnimation({ onFinish }: { onFinish: () => void }) {
 
   const handleEnterClick = () => {
     setFadeOut(true);
-    setTimeout(onFinish, 500); // Ensure smooth transition before setting finished
-  };
+    setTimeout(onFinish, 500);
+  }
 
   return (
     <motion.div

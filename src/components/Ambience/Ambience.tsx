@@ -8,8 +8,8 @@ import * as THREE from "three";
 function Lighting() {
   return (
     <>
-      <ambientLight intensity={0.65} />
-      <directionalLight position={[10, 15, 10]} intensity={0.75} />
+      <directionalLight position={[10, 15, 10]} intensity={2.75} />
+      <directionalLight position={[-5, 5, 10]} intensity={2.75} />
     </>
   );
 }
@@ -19,27 +19,27 @@ export default function Ambience() {
 
   useFrame(({ clock }) => {
     if (gridRef.current) {
-      gridRef.current.position.z = (clock.elapsedTime * 5) % 500; // Moves the grid forward
+      gridRef.current.position.z = (clock.elapsedTime * 5) % 500;
     }
   });
 
   return (
     <>
-      <Stars count={1000} factor={0.5} speed={0.25} radius={500} depth={0.5} />
+      <Stars count={1500} factor={0.9} speed={1.25} radius={1900} depth={1.0} />
       <Lighting />
       <DistantPlanets />
       <Grid
         ref={gridRef}
         infiniteGrid
-        fadeDistance={400}
+        fadeDistance={300}
         fadeStrength={70}
-        cellSize={2}
+        cellSize={10}
         cellThickness={0.25}
         cellColor='#2563eb'
-        sectionSize={2.95}
-        sectionThickness={10.0}
+        sectionSize={2.0}
+        sectionThickness={7.0}
         sectionColor='#60a5fa'
-        position={[0, -4, -10]}
+        position={[0, -2, -10]}
         followCamera
       />
 
