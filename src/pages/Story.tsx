@@ -6,9 +6,10 @@ import Typewriter from "@/utils/typewriter";
 import { Html } from "@react-three/drei";
 
 const storyTexts = [
-  "Pilot, we need you in the cockpit now! We're trapped in an asteroid belt, and you're the only one skilled enough to get us out. Take control, destroy 30 asteroids.",
-  
-  "Good job, pilot! But the radar just picked up another wave—faster and denser than before. We need to upgrade our laser system immediately if we want to make it through.",
+  "Pilot, we need you in the cockpit now! We're trapped in an asteroid belt, and you're the only one skilled enough to get us out. Take control, destroy 15 asteroids.",
+
+  "Good job, pilot! But the radar just picked up another wave—faster and denser than before. The speed of our laser is upgraded ",
+
   "That was close… too close. But hold on—our scanners are detecting one final wave. This is it, pilot. Stay sharp, this one’s not going to be easy.",
 ];
 
@@ -90,7 +91,7 @@ export default function Story() {
                 setOverlay(true);
               }}
             >
-              Begin
+              {`Begin level ${currentLevel}`}
             </Button>
           </CardFooter>
         </Card>

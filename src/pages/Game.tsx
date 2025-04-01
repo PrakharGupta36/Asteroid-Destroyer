@@ -69,6 +69,7 @@ export default function Game() {
   const [isLoading, setIsLoading] = useState(true);
   const {
     asteroidDestroyed,
+    setAsteroidDestroyed,
     isOverAsteroid,
     showStory,
     pause,
@@ -78,29 +79,47 @@ export default function Game() {
     setShowStory,
     setOverlay,
     setCountdown,
+    setIsGameCompleted,
   } = useGame();
 
   useEffect(() => {
-    if (asteroidDestroyed >= 30 && currentLevel === 1) {
+    if (asteroidDestroyed >= 15 && currentLevel === 1) {
       setTimeout(() => {
         setCurrentLevel(2);
         setShowStory(true);
         setCountdown(3);
+        setAsteroidDestroyed(0);
         setOverlay(false);
+      }, 150);
+    }
+    if (asteroidDestroyed >= 25 && currentLevel === 2) {
+      setTimeout(() => {
+        setCurrentLevel(3);
+        setShowStory(true);
+        setCountdown(3);
+        setAsteroidDestroyed(0);
+        setOverlay(false);
+      }, 150);
+    }
+    if (asteroidDestroyed >= 35 && currentLevel === 3) {
+      setTimeout(() => {
+        setIsGameCompleted(true);
       }, 150);
     }
   }, [
     asteroidDestroyed,
     currentLevel,
+    setAsteroidDestroyed,
     setCountdown,
     setCurrentLevel,
     setOverlay,
     setShowStory,
+    setIsGameCompleted,
   ]);
 
   return (
     <>
-      {/* Game Canvas */}
+      {/* Game Container... Kind of */}
       <div
         className={`absolute inset-0 transition-opacity duration-500 ${
           isLoading ? "opacity-0" : "opacity-100"

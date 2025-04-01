@@ -1,15 +1,11 @@
-import { AnimatePresence, motion } from "framer-motion";
-import { useState, useEffect } from "react";
-import { Button } from "../ui/button";
+import { Button } from "@/components/ui/button";
 import useGame from "@/hooks/State";
+import { AnimatePresence, motion } from "framer-motion";
+import { useEffect, useState } from "react";
 
-interface GameOverProps {
-  onRestart: () => void;
-}
-
-export default function GameOver({ onRestart }: GameOverProps) {
+export default function GameCompleted() {
   const [showGameOver, setShowGameOver] = useState(false);
-  const { setPause } = useGame();
+  const { reset } = useGame();
 
   useEffect(() => {
     const timeout = setTimeout(() => setShowGameOver(true), 200); // Delay before showing
@@ -33,8 +29,16 @@ export default function GameOver({ onRestart }: GameOverProps) {
               animate={{ y: 0, opacity: 1 }}
               transition={{ delay: 0.3, duration: 0.4 }}
             >
-              Game Over
+              Game Completed
             </motion.h1>
+            <motion.h3
+              className='text-white text-3xl italic'
+              initial={{ y: -20, opacity: 0 }}
+              animate={{ y: 0, opacity: 1 }}
+              transition={{ delay: 0.3, duration: 0.4 }}
+            >
+              Thanks for playing
+            </motion.h3>
             <motion.div
               initial={{ scale: 0.5, opacity: 0 }}
               animate={{ scale: 1, opacity: 1 }}
@@ -44,13 +48,29 @@ export default function GameOver({ onRestart }: GameOverProps) {
                 variant='ghost'
                 className='rainbow-button'
                 onClick={() => {
-                  onRestart();
-                  setPause(false);
+                  reset();
                 }}
               >
                 Play Again
               </Button>
             </motion.div>
+          </div>
+          <div>
+            <a
+              href='https://x.com/___prakhar'
+              className='credit-1'
+              target='__blank'
+            >
+              ~ Made by Prakhar ❤️
+            </a>
+
+            <a
+              href='https://github.com/PrakharGupta36/Asteroid-Destroyer'
+              className='credit-2'
+              target='__blank'
+            >
+              Leave a star on Github ⭐️
+            </a>
           </div>
         </motion.main>
       )}

@@ -7,7 +7,7 @@ import {
   type RigidBodyProps,
 } from "@react-three/rapier";
 import type React from "react";
-import { useRef, useEffect } from "react";
+import { useRef, useEffect, useState } from "react";
 import * as THREE from "three";
 
 const laserSound = new Audio("/sounds/laserSound.mp3");
@@ -39,26 +39,36 @@ export default function Laser({
     "/models/Laser.glb"
   ) as unknown as GLTFResult;
   const initialized = useRef<boolean>(false);
-  const speed = 100; // Laser speed
-  const { settings, overlay, showStory } = useGame();
+
+  const { settings, overlay, showStory, pause, currentLevel } = useGame();
+  const [speed, setSpeed] = useState<number>(100);
 
   useEffect(() => {
-    // Play laser sound when component mounts
-    if (settings[1].value && !showStory && !overlay) {
+    if (currentLevel === 2) {
+      setSpeed(150);
+    }
+  }, [currentLevel]);
+
+  useEffect(() => {
+    if (settings[1].value && !showStory && !overlay && !pause) {
       laserSound.currentTime = 0;
       laserSound.play().catch((e) => console.log("Audio play failed:", e));
     }
-  }, [overlay, settings, showStory]);
+  }, [overlay, pause, settings, showStory]);
 
   useFrame(() => {
-    if (!laserRef.current || !spaceshipRef.current || showStory || overlay)
+    if (
+      !laserRef.current ||
+      !spaceshipRef.current ||
+      showStory ||
+      overlay ||
+      pause
+    )
       return;
 
-    if (!initialized.current && !showStory && !overlay) {
+    if (!initialized.current && !showStory && !overlay && !pause) {
       const shipPos = spaceshipRef.current.translation();
       const shipPosition = new THREE.Vector3(shipPos.x, shipPos.y, shipPos.z);
-
-
 
       const exactDirection = new THREE.Vector3()
         .subVectors(targetPoint, shipPosition)

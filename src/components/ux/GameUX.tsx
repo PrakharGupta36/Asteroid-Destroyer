@@ -74,15 +74,22 @@ function Objective() {
     <div className='absolute top-0 right-0 z-10 mx-7 my-8 grid gap-2 border-2 p-4 rounded-lg bg-black/80 text-white text-sm controls shadow-lg'>
       {currentLevel === 1 ? (
         <div>
-          <p> Objective: Destroy 30 asteroids </p>
-          <p> {asteroidDestroyed}/ 30 </p>
+          <p> Objective: Destroy 15 asteroids </p>
+          <p> {asteroidDestroyed}/ 15 </p>
         </div>
       ) : currentLevel === 2 ? (
         <div>
-          <p> Objective: Destroy 50 asteroids </p>
-          <p> {asteroidDestroyed} / 50 </p>
+          <p> Objective: Destroy 25 asteroids </p>
+          <p> {asteroidDestroyed} / 25 </p>
         </div>
-      ) : null}
+      ) : (
+        currentLevel === 3 && (
+          <div>
+            <p> Objective: Destroy 40 asteroids </p>
+            <p> {asteroidDestroyed} / 35 </p>
+          </div>
+        )
+      )}
     </div>
   );
 }

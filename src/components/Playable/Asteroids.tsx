@@ -34,8 +34,12 @@ function Asteroid({ onDestroy, id, ...props }: AsteroidProps) {
   const meshRef = useRef<THREE.Mesh>(null);
   const [collided, setCollided] = useState(false);
   const [position, setPosition] = useState<[number, number, number]>([0, 0, 0]);
-  const { setIsOverAsteroid, asteroidDestroyed, setAsteroidDestroyed } =
-    useGame();
+  const {
+    setIsOverAsteroid,
+    asteroidDestroyed,
+    setAsteroidDestroyed,
+    currentLevel,
+  } = useGame();
 
   useFrame(() => {
     if (asteroidRef.current) {
@@ -43,14 +47,24 @@ function Asteroid({ onDestroy, id, ...props }: AsteroidProps) {
       setPosition([pos.x, pos.y, pos.z]);
 
       const force = new THREE.Vector3(-pos.x, -pos.y, -pos.z);
-      force.normalize().multiplyScalar(0.3);
+      force
+        .normalize()
+        .multiplyScalar(
+          currentLevel === 1
+            ? 0.3
+            : currentLevel === 2
+            ? 0.4
+            : currentLevel === 3
+            ? 0.5
+            : 0.3
+        );
 
       asteroidRef.current.applyImpulse(force, true);
 
       const rotationForce = new THREE.Vector3(
-        Math.random() * 0.05 - 0.01,
-        Math.random() * 0.05 - 0.01,
-        Math.random() * 0.05 - 0.01
+        Math.random() * 0.5 - 0.01,
+        Math.random() * 0.5 - 0.01,
+        Math.random() * 0.5 - 0.01
       );
 
       asteroidRef.current.applyTorqueImpulse(rotationForce, true);
@@ -72,7 +86,10 @@ function Asteroid({ onDestroy, id, ...props }: AsteroidProps) {
     rigidBodyObject,
   }) => {
     if (!rigidBodyObject) return;
-    if (other.rigidBodyObject?.name?.includes("spaceship")) {
+    if (
+      other.rigidBodyObject?.name?.includes("spaceship") ||
+      rigidBodyObject?.name?.includes("asteroid")
+    ) {
       setCollided(true);
     }
     if (other.rigidBodyObject?.name?.includes("laser")) {
@@ -95,7 +112,6 @@ function Asteroid({ onDestroy, id, ...props }: AsteroidProps) {
       colliders={false}
       {...props}
     >
-      {/* Add an explicit collider that matches the asteroid shape better */}
       <CuboidCollider args={[2, 2, 2]} />
 
       <mesh
@@ -133,7 +149,7 @@ export default function SpawnAsteroids() {
   const [asteroids, setAsteroids] = useState<AsteroidData[]>([]);
   const [explosions, setExplosions] = useState<ExplosionData[]>([]);
   const asteroidSound = new Audio("/sounds/asteroidSound.mp3");
-  const { pause, settings } = useGame();
+  const { pause, settings, currentLevel } = useGame();
   const { progress } = useProgress();
 
   function randomValue(max: number, min: number) {
@@ -169,37 +185,46 @@ export default function SpawnAsteroids() {
 
   useEffect(() => {
     if (pause === false) {
-      const asteroidInterval = setInterval(() => {
-        const asteroidX = randomValue(100, -100);
-        const asteroidZ = -250 - Math.random() * 100;
-        const scale = 0.5 + Math.random() * 0.5;
+      const asteroidInterval = setInterval(
+        () => {
+          const asteroidX = randomValue(100, -100);
+          const asteroidZ = -250 - Math.random() * 100;
+          const scale = 0.5 + Math.random() * 0.75;
 
-        setAsteroids((prev) => {
-          const newAsteroids = [
-            ...prev,
-            {
-              id: Date.now(),
-              position: [asteroidX, 0, asteroidZ] as [number, number, number],
-              rotation: [
-                randomValue(-Math.random() / 2, Math.random() / 2),
-                randomValue(-Math.random() / 2, Math.random() / 2),
-                randomValue(-Math.random() / 2, Math.random() / 2),
-              ] as [number, number, number],
-              scale,
-            },
-          ];
+          setAsteroids((prev) => {
+            const newAsteroids = [
+              ...prev,
+              {
+                id: Date.now(),
+                position: [asteroidX, 0, asteroidZ] as [number, number, number],
+                rotation: [
+                  randomValue(-Math.random() / 2, Math.random() / 2),
+                  randomValue(-Math.random() / 2, Math.random() / 2),
+                  randomValue(-Math.random() / 2, Math.random() / 2),
+                ] as [number, number, number],
+                scale,
+              },
+            ];
 
-          if (newAsteroids.length > 20) {
-            return newAsteroids.slice(-20);
-          }
+            if (newAsteroids.length > 20) {
+              return newAsteroids.slice(-20);
+            }
 
-          return newAsteroids;
-        });
-      }, 3000);
+            return newAsteroids;
+          });
+        },
+        currentLevel == 1
+          ? 3000
+          : currentLevel === 2
+          ? 2000
+          : currentLevel === 3
+          ? 5000
+          : 3000
+      );
 
       return () => clearInterval(asteroidInterval);
     }
-  }, [pause]);
+  }, [currentLevel, pause]);
 
   const destroyAsteroid = (id: number, position: [number, number, number]) => {
     const asteroid = asteroids.find((ast) => ast.id === id);

@@ -33,13 +33,15 @@ export default function Settings({
       if (
         event.shiftKey &&
         event.key.toLowerCase() === "s" &&
-        settings[1].value &&
         !showStory &&
         !overlay
       ) {
         setPause?.(!pause);
-        btnAudio.currentTime = 0;
-        btnAudio.play();
+
+        if (settings[1].value) {
+          btnAudio.currentTime = 0;
+          btnAudio.play();
+        }
       }
     };
 

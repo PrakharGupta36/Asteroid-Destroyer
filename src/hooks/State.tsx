@@ -35,13 +35,17 @@ interface useGameTypes {
 
   spaceshipHealth: number;
   setSpaceshipHealth: () => void;
-  resetSpaceShipHealth: () => void;
 
   asteroidDestroyed: number;
   setAsteroidDestroyed: (value: number) => void;
 
   isOverAsteroid: boolean;
   setIsOverAsteroid: (value: boolean) => void;
+
+  isGameCompleted: boolean;
+  setIsGameCompleted: (value: boolean) => void;
+
+  reset: () => void;
 }
 
 const useGame = create<useGameTypes>()(
@@ -94,22 +98,32 @@ const useGame = create<useGameTypes>()(
       setOverlay: (value: boolean) => set(() => ({ overlay: value })),
 
       asteroidDestroyed: 0,
-      setAsteroidDestroyed: (value: number) => set(() => ({ asteroidDestroyed: value })),
+      setAsteroidDestroyed: (value: number) =>
+        set(() => ({ asteroidDestroyed: value })),
 
       spaceshipHealth: 100,
       setSpaceshipHealth: () =>
         set((state) => ({ spaceshipHealth: state.spaceshipHealth - 10 })),
-      resetSpaceShipHealth: () =>
-        set(() => ({
-          spaceshipHealth: 100,
-        })),
 
       isOverAsteroid: false,
       setIsOverAsteroid: (value: boolean) => set({ isOverAsteroid: value }),
+
+      isGameCompleted: false,
+      setIsGameCompleted: (value: boolean) => set({ isGameCompleted: value }),
+
+      reset: () =>
+        set(() => ({
+          spaceshipHealth: 100,
+          asteroidDestroyed: 0,
+          countdown: 0,
+          currentLevel: 1,
+          showStory: true,
+          overlay: false,
+        })),
     }),
 
     {
-      name: "game-settings-----12",
+      name: "game-settings-----14",
       partialize: (state) => ({ settings: state.settings }),
     }
   )
