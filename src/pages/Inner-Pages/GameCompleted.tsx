@@ -8,7 +8,7 @@ export default function GameCompleted() {
   const { reset } = useGame();
 
   useEffect(() => {
-    const timeout = setTimeout(() => setShowGameOver(true), 200); // Delay before showing
+    const timeout = setTimeout(() => setShowGameOver(true), 200); 
     return () => clearTimeout(timeout);
   }, []);
 

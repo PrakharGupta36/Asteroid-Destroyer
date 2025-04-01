@@ -85,7 +85,7 @@ function Objective() {
       ) : (
         currentLevel === 3 && (
           <div>
-            <p> Objective: Destroy 40 asteroids </p>
+            <p> Objective: Destroy 35 asteroids </p>
             <p> {asteroidDestroyed} / 35 </p>
           </div>
         )
