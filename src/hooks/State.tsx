@@ -108,7 +108,7 @@ const useGame = create<useGameTypes>()(
       isOverAsteroid: false,
       setIsOverAsteroid: (value: boolean) => set({ isOverAsteroid: value }),
 
-      isGameCompleted: true,
+      isGameCompleted: false,
       setIsGameCompleted: (value: boolean) => set({ isGameCompleted: value }),
 
       reset: () =>

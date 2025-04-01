@@ -2,8 +2,7 @@ import { useEffect, useState, useRef, Suspense, lazy } from "react";
 import { AnimatePresence } from "framer-motion";
 import useGame from "./hooks/State";
 import Spinner from "./components/ui/spinner";
-import GameOver from "./pages/Inner-Pages/GameOver";
-import GameCompleted from "./pages/Inner-Pages/GameCompleted";
+import Completed from "./pages/Completed";
 
 // Lazy load pages
 const Game = lazy(() => import("./pages/Game"));
@@ -99,11 +98,11 @@ export default function App() {
   }
 
   if (isGameCompleted) {
-    return <GameCompleted />;
+    return <Completed isGameOver={false} />;
   }
 
   if (spaceshipHealth <= 0) {
-    return <GameOver />;
+    return <Completed isGameOver={true} />;
   }
 
   return (
