@@ -62,9 +62,9 @@ function Asteroid({ onDestroy, id, ...props }: AsteroidProps) {
       asteroidRef.current.applyImpulse(force, true);
 
       const rotationForce = new THREE.Vector3(
-        Math.random() * 0.5 - 0.01,
-        Math.random() * 0.5 - 0.01,
-        Math.random() * 0.5 - 0.01
+        Math.random() * 0.25 - 0.01,
+        Math.random() * 0.25 - 0.01,
+        Math.random() * 0.25 - 0.01
       );
 
       asteroidRef.current.applyTorqueImpulse(rotationForce, true);

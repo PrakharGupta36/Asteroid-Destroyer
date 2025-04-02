@@ -45,6 +45,9 @@ interface useGameTypes {
   isGameCompleted: boolean;
   setIsGameCompleted: (value: boolean) => void;
 
+  isSpaceshipHit: boolean;
+  setIsSpaceshipHit: (value: boolean) => void;
+
   reset: () => void;
 }
 
@@ -62,6 +65,11 @@ const useGame = create<useGameTypes>()(
         { id: 4, category: "graphics", text: "Noise", value: false },
 
         { id: 5, category: "general", text: "Restart", value: false },
+        { id: 6, category: "graphics", text: "Vignette", value: true },
+        { id: 7, category: "graphics", text: "Contrast", value: false },
+        { id: 8, category: "graphics", text: "Saturation", value: false },
+        { id: 9, category: "graphics", text: "Glitch Effect", value: true },
+        { id: 10, category: "graphics", text: "Scanline Effect", value: true },
       ],
 
       setSettings: (id: number, value: boolean) =>
@@ -111,6 +119,9 @@ const useGame = create<useGameTypes>()(
       isGameCompleted: false,
       setIsGameCompleted: (value: boolean) => set({ isGameCompleted: value }),
 
+      isSpaceshipHit: false,
+      setIsSpaceshipHit: (value: boolean) => set({ isSpaceshipHit: value }),
+
       reset: () =>
         set(() => ({
           start: true,
@@ -125,7 +136,7 @@ const useGame = create<useGameTypes>()(
     }),
 
     {
-      name: "game-settings-----14",
+      name: "game-settings-----15",
       partialize: (state) => ({ settings: state.settings }),
     }
   )

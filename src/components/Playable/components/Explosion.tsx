@@ -175,7 +175,7 @@ export default function Explosion({
       </mesh>
 
       <Particles
-        count={2000}
+        count={4000}
         shape='sphere'
         lifetime={lifetime}
         maxLifetime={maxLifetime}

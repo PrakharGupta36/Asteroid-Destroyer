@@ -35,7 +35,7 @@ export default function Completed({ isGameOver }: { isGameOver: boolean }) {
                   ? "Hard luck pilot, your spaceship was destroyed was asteroids"
                   : "Good job pilot, you have completed your objective"}
                 <span className='!italic'>
-                  {isGameOver ? "or did it?" : "or did you"}...
+                  {isGameOver ? " or did it?" : " or did you"}...
                 </span>
               </motion.h1>
               <Separator className='opacity-15' />

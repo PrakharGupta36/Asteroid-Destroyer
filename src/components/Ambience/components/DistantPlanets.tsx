@@ -87,8 +87,8 @@ function PurplePlanet(props: JSX.IntrinsicElements["group"]) {
       {...props}
       dispose={null}
       animations={animations}
-      position={[7000, 3000, -5500]}
-      scale={1100}
+      position={[6000, 4000, -5500]}
+      scale={2100}
       rotation={[0.0125, 2.2, 0]}
     >
       <group name='Sketchfab_Scene'>

@@ -8,8 +8,10 @@ import * as THREE from "three";
 function Lighting() {
   return (
     <>
+      <directionalLight position={[-10, 15, 10]} intensity={1.75} />
       <directionalLight position={[10, 15, 10]} intensity={2.75} />
       <directionalLight position={[-5, 5, 10]} intensity={2.75} />
+      <directionalLight position={[5, 5, 10]} intensity={1.75} />
     </>
   );
 }
@@ -25,7 +27,7 @@ export default function Ambience() {
 
   return (
     <>
-      <Stars count={1500} factor={0.9} speed={1.25} radius={1900} depth={1.0} />
+      <Stars count={1500} factor={1.0} speed={0.1} radius={2900} depth={1.0} />
       <Lighting />
       <DistantPlanets />
       <Grid
