@@ -106,13 +106,13 @@ function Asteroid({ onDestroy, id, ...props }: AsteroidProps) {
       canSleep={false}
       linearDamping={0}
       angularDamping={0}
-      scale={2}
+      scale={3}
       onCollisionEnter={handleCollision}
       name={`asteroid-${id}`}
       colliders={false}
       {...props}
     >
-      <CuboidCollider args={[2, 2, 2]} />
+      <CuboidCollider args={[3, 3, 3]} />
 
       <mesh
         ref={meshRef}

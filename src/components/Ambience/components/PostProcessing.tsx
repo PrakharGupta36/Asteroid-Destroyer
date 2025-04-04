@@ -5,7 +5,6 @@ import {
   Glitch,
   HueSaturation,
   Noise,
-  Pixelation,
   Scanline,
   Vignette,
 } from "@react-three/postprocessing";
@@ -56,8 +55,6 @@ export default function PostProcessing() {
         <></>
       )}
 
-      <Pixelation granularity={4} />
-
       {/* Spaceship hit effect 👇 */}
 
       {settings[8].value ? (
@@ -68,7 +65,7 @@ export default function PostProcessing() {
         />
       ) : (
         <></>
-      ) }
+      )}
 
       {settings[9].value ? (
         <Scanline
@@ -78,8 +75,7 @@ export default function PostProcessing() {
         />
       ) : (
         <></>
-      ) }
-
+      )}
     </EffectComposer>
   );
 }

@@ -141,7 +141,7 @@ export default function Game() {
             <GameCamera />
 
             {/* Physics Environment */}
-            <Physics gravity={[0, 0, 0]} paused={showStory || overlay || pause}>
+            <Physics gravity={[0, 0, 0]} paused={pause}>
               {!showStory && !overlay && <SpawnAsteroids />}
               <Playable />
             </Physics>

@@ -27,7 +27,7 @@ export default function Ambience() {
 
   return (
     <>
-      <Stars count={1500} factor={1.0} speed={0.1} radius={2900} depth={1.0} />
+      <Stars count={5000} factor={0.1} speed={0.1} radius={900} depth={2.0} />
       <Lighting />
       <DistantPlanets />
       <Grid
@@ -36,12 +36,12 @@ export default function Ambience() {
         fadeDistance={300}
         fadeStrength={70}
         cellSize={10}
-        cellThickness={0.25}
+        cellThickness={1.25}
         cellColor='#2563eb'
         sectionSize={2.0}
-        sectionThickness={7.0}
+        sectionThickness={10.0}
         sectionColor='#60a5fa'
-        position={[0, -2, -10]}
+        position={[0, -1, -10]}
         followCamera
       />
 
