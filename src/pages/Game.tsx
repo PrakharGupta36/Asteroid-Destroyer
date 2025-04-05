@@ -129,14 +129,13 @@ export default function Game() {
         <GameUX />
 
         {/* Crosshair Cursor */}
-        {!pause && !showStory && !overlay && (
-          <Cursor isOverAsteroid={isOverAsteroid} />
-        )}
+        {!pause && !showStory && <Cursor isOverAsteroid={isOverAsteroid} />}
+
+        {!isLoading && showStory ? <Story /> : overlay ? <Overlay /> : null}
 
         {/* 3D Canvas */}
         <Canvas className='w-[100dvw] h-[100dvh]'>
           <Suspense fallback={null}>
-            {showStory ? <Story /> : overlay && <Overlay />}
             <Preload />
             <GameCamera />
 

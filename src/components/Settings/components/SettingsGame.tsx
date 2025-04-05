@@ -5,7 +5,7 @@ import { Button } from "../../ui/button";
 import Settings from "../Settings";
 
 export default function SettingsGame() {
-  const { pause, setPause } = useGame();
+  const { pause, setPause, overlay, showStory } = useGame();
   const btnRef = useRef<HTMLButtonElement>(null);
 
   useEffect(() => {
@@ -18,6 +18,7 @@ export default function SettingsGame() {
     <Settings
       trigger={
         <Button
+          disabled={!showStory || !overlay}
           ref={btnRef}
           className='absolute top-0 z-10 m-4 border pause-btn'
           tabIndex={-1}

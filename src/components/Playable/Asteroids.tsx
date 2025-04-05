@@ -216,9 +216,9 @@ export default function SpawnAsteroids() {
         currentLevel == 1
           ? 3000
           : currentLevel === 2
-          ? 2000
+          ? 1500
           : currentLevel === 3
-          ? 5000
+          ? 1000
           : 3000
       );
 

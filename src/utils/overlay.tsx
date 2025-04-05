@@ -1,5 +1,4 @@
 import useGame from "@/hooks/State";
-import { Html } from "@react-three/drei";
 import { useEffect } from "react";
 
 export default function Overlay() {
@@ -23,10 +22,10 @@ export default function Overlay() {
   }, [countdown, setCountdown, setOverlay]);
 
   return (
-    <Html as='section' center className='overlay_container'>
+    <section className='overlay_container'>
       <div className='text-center text-4xl font-bold grid place-items-center relative -top-50'>
         <div className={`overlay !italic`}>{countdown}</div>
       </div>
-    </Html>
+    </section>
   );
 }

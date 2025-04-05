@@ -3,8 +3,6 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardFooter } from "@/components/ui/card";
 import useGame from "@/hooks/State";
 import Typewriter from "@/utils/typewriter";
-import { Html } from "@react-three/drei";
-// import * as THREE from "three";
 
 const storyTexts = [
   "Pilot, we need you in the cockpit now! We're trapped in an asteroid belt, and you're the only one skilled enough to get us out. Take control, destroy 15 asteroids.",
@@ -17,6 +15,7 @@ const storyTexts = [
 export default function Story() {
   const { settings, currentLevel, showStory, setShowStory, setOverlay } =
     useGame();
+
   const [showNextButton, setShowNextButton] = useState<boolean>(false);
   const muffledTalkingAudioRef = useRef<HTMLAudioElement | null>(null);
   const [isTabActive, setIsTabActive] = useState<boolean>(true);
@@ -53,7 +52,7 @@ export default function Story() {
   }, []);
 
   return (
-    <Html as='section' center className='html_story'>
+    <section className='html_story'>
       <div className='story_container'>
         <Card className='story bg-black/70 border border-gray-500 shadow-lg shadow-blue-500/30  rounded-xl max-w-lg'>
           <CardContent>
@@ -97,6 +96,6 @@ export default function Story() {
           </CardFooter>
         </Card>
       </div>
-    </Html>
+    </section>
   );
 }

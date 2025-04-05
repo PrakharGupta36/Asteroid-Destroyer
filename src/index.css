@@ -314,9 +314,10 @@ main,
   width: 100dvw;
   height: 105dvh;
   position: absolute;
-  top: -242px;
+  top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
+  z-index: 2;
 }
 
 .story_container {
@@ -342,12 +343,12 @@ main,
   width: 100dvw !important;
   height: 105dvh !important;
   position: absolute;
-  top: -245px;
+  top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
   display: grid;
   place-items: center;
   font-size: 4rem;
   position: fixed;
+  z-index: 2;
 }
-
