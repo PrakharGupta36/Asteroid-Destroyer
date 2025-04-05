@@ -37,7 +37,10 @@
       name="twitter:description"
       content="Blast through space and destroy asteroids. Play now!"
     />
-    <meta name="twitter:image" content="/wallpaper.png" />
+    <meta
+      name="twitter:image"
+      content="https://r3f-asteroid-destroyer.vercel.app/wallpaper.png"
+    />
     <meta name="twitter:site" content="@___prakhar" />
     <meta name="twitter:creator" content="@___prakhar" />
 
@@ -45,16 +48,32 @@
     <meta name="robots" content="index, follow" />
     <meta name="theme-color" content="#000000" />
     <link rel="canonical" href="https://r3f-asteroid-destroyer.vercel.app/" />
-
-    <!-- ✅ Correct Preload for Immediate Resources -->
-    <link rel="preload" as="image" href="/wallpaper.png" />
-
-    <!-- ✅ Prefetch for Non-Essential Resources -->
-    <link rel="prefetch" href="/wallpaper.png" />
+    <meta
+      name="keywords"
+      content="asteroid game, space shooter, online game, 3D space, React Three Fiber"
+    />
   </head>
   <body>
     <div id="root">
-      <!-- ✅ Async Loading for Performance -->
+      <script type="application/ld+json">
+        {
+          "@context": "https://schema.org",
+          "@type": "VideoGame",
+          "name": "Asteroid Destroyer",
+          "url": "https://r3f-asteroid-destroyer.vercel.app/",
+          "image": "https://r3f-asteroid-destroyer.vercel.app/wallpaper.png",
+          "description": "Blast through space and destroy asteroids. Play now!",
+          "author": {
+            "@type": "Person",
+            "name": "Prakhar"
+          },
+          "publisher": {
+            "@type": "Organization",
+            "name": "Asteroid Games"
+          },
+          "inLanguage": "en"
+        }
+      </script>
 
       <script type="module" src="/src/main.tsx" defer></script>
     </div>

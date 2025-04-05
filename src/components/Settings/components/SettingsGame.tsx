@@ -18,7 +18,7 @@ export default function SettingsGame() {
     <Settings
       trigger={
         <Button
-          disabled={!showStory || !overlay}
+          disabled={showStory || overlay}
           ref={btnRef}
           className='absolute top-0 z-10 m-4 border pause-btn'
           tabIndex={-1}
