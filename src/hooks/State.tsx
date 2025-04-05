@@ -111,7 +111,7 @@ const useGame = create<useGameTypes>()(
 
       spaceshipHealth: 100,
       setSpaceshipHealth: () =>
-        set((state) => ({ spaceshipHealth: state.spaceshipHealth - 10 })),
+        set((state) => ({ spaceshipHealth: state.spaceshipHealth - 30 })),
 
       isOverAsteroid: false,
       setIsOverAsteroid: (value: boolean) => set({ isOverAsteroid: value }),
